@@ -1,0 +1,1006 @@
+{
+  "levels": [
+    {
+      "name": "Certification 1",
+      "category": "Certification Words",
+      "words": [
+        {
+          "word": "animal",
+          "definition": "My pet is an animal."
+        },
+        {
+          "word": "armchair",
+          "definition": "An armchair is similar to a sofa, but it’s smaller."
+        },
+        {
+          "word": "baby",
+          "definition": "A baby can’t walk."
+        },
+        {
+          "word": "bath",
+          "definition": "Don’t use the bath, it wastes too much water."
+        },
+        {
+          "word": "bathroom",
+          "definition": "My bathroom doesn’t have a bath."
+        },
+        {
+          "word": "bed",
+          "definition": "Today I made my bed."
+        },
+        {
+          "word": "bedroom",
+          "definition": "My toys are in my bedroom."
+        },
+        {
+          "word": "bird",
+          "definition": "That bird sings beautifully."
+        },
+        {
+          "word": "big",
+          "definition": "I have a big ball to play with."
+        },
+        {
+          "word": "book",
+          "definition": "My favorite book is that yellow one."
+        }
+      ]
+    },
+    {
+      "name": "Certification 2",
+      "category": "Certification Words",
+      "words": [
+        {
+          "word": "bookcase",
+          "definition": "Our bookcase is blue."
+        },
+        {
+          "word": "box",
+          "definition": "This box is bigger than the other one."
+        },
+        {
+          "word": "boy",
+          "definition": "Mark is a polite boy."
+        },
+        {
+          "word": "cake",
+          "definition": "I loved having a cake for my birthday."
+        },
+        {
+          "word": "cat",
+          "definition": "My cat is brown."
+        },
+        {
+          "word": "chair",
+          "definition": "She sits down in that blue chair."
+        },
+        {
+          "word": "child",
+          "definition": "That child is rude."
+        },
+        {
+          "word": "clean",
+          "definition": "Please! Clean your bedroom."
+        },
+        {
+          "word": "colour",
+          "definition": "My favourite colour is pink."
+        },
+        {
+          "word": "crocodile",
+          "definition": "That crocodile is the biggest one in the zoo."
+        }
+      ]
+    },
+    {
+      "name": "Certification 3",
+      "category": "Certification Words",
+      "words": [
+        {
+          "word": "cupboard",
+          "definition": "In our cupboard, we can keep many school supplies."
+        },
+        {
+          "word": "dad",
+          "definition": "My dad is taller than me."
+        },
+        {
+          "word": "desk",
+          "definition": "She has a yellow desk."
+        },
+        {
+          "word": "dining room",
+          "definition": "We eat dinner in our dining room."
+        },
+        {
+          "word": "donkey",
+          "definition": "A donkey is similar to a horse but smaller."
+        },
+        {
+          "word": "door",
+          "definition": "Please! Open the door."
+        },
+        {
+          "word": "duck",
+          "definition": "My toy duck is yellow."
+        },
+        {
+          "word": "elephant",
+          "definition": "This elephant is the fattest one."
+        },
+        {
+          "word": "face",
+          "definition": "The eyes, nose, and mouth are in the face."
+        },
+        {
+          "word": "family",
+          "definition": "Linda’s family is the largest."
+        }
+      ]
+    },
+    {
+      "name": "Certification 4",
+      "category": "Certification Words",
+      "words": [
+        {
+          "word": "flat",
+          "definition": "A flat is smaller than a house."
+        },
+        {
+          "word": "flower",
+          "definition": "This yellow flower is my favorite."
+        },
+        {
+          "word": "football",
+          "definition": "My favorite sport is football."
+        },
+        {
+          "word": "fries",
+          "definition": "I love fries with ketchup."
+        },
+        {
+          "word": "frog",
+          "definition": "That frog jumps funny."
+        },
+        {
+          "word": "game",
+          "definition": "That game is fun."
+        },
+        {
+          "word": "garden",
+          "definition": "Elisa’s garden is the most beautiful."
+        },
+        {
+          "word": "grandfather",
+          "definition": "Lucas is my grandfather."
+        },
+        {
+          "word": "grandma",
+          "definition": "Their grandma is old, but so sweet."
+        },
+        {
+          "word": "grandmother",
+          "definition": "Your grandmother is younger than my grandma."
+        }
+      ]
+    },
+    {
+      "name": "Certification 5",
+      "category": "Certification Words",
+      "words": [
+        {
+          "word": "grandpa",
+          "definition": "His grandpa is very tall."
+        },
+        {
+          "word": "hall",
+          "definition": "This hall is too big."
+        },
+        {
+          "word": "hat",
+          "definition": "Your hat is the biggest."
+        },
+        {
+          "word": "hippo",
+          "definition": "Look! There’s a baby hippo."
+        },
+        {
+          "word": "home",
+          "definition": "My home is my favorite place."
+        },
+        {
+          "word": "house",
+          "definition": "This is a doll house."
+        },
+        {
+          "word": "lamp",
+          "definition": "A lamp is so useful to see at night."
+        },
+        {
+          "word": "mat",
+          "definition": "Touch! We can walk on a mat without shoes."
+        },
+        {
+          "word": "mirror",
+          "definition": "You can see yourself in the mirror."
+        },
+        {
+          "word": "mother",
+          "definition": "My mother cooks and cleans."
+        }
+      ]
+    },
+    {
+      "name": "Certification 6",
+      "category": "Certification Words",
+      "words": [
+        {
+          "word": "mum",
+          "definition": "Your mum had many kids."
+        },
+        {
+          "word": "number",
+          "definition": "Seven is an odd number."
+        },
+        {
+          "word": "orange",
+          "definition": "An orange is a healthy food."
+        },
+        {
+          "word": "painting",
+          "definition": "She uses many colors in her painting."
+        },
+        {
+          "word": "pen",
+          "definition": "My black pen is so useful."
+        },
+        {
+          "word": "pencil",
+          "definition": "Your pencil is the longest."
+        },
+        {
+          "word": "pet",
+          "definition": "I have a beautiful pet."
+        },
+        {
+          "word": "piano",
+          "definition": "She can play the piano beautifully!"
+        },
+        {
+          "word": "right",
+          "definition": "You got three answers right and two wrong."
+        },
+        {
+          "word": "rug",
+          "definition": "A rug covered most of the floor."
+        }
+      ]
+    },
+    {
+      "name": "Certification 7",
+      "category": "Certification Words",
+      "words": [
+        {
+          "word": "shoe",
+          "definition": "This shoe is smaller than the other one! It hurts my foot!"
+        },
+        {
+          "word": "snake",
+          "definition": "Be careful! That snake is very dangerous."
+        },
+        {
+          "word": "sock",
+          "definition": "I can’t find my sock pair."
+        },
+        {
+          "word": "sofa",
+          "definition": "This sofa is so comfortable."
+        },
+        {
+          "word": "story",
+          "definition": "Please! Tell us a funny story."
+        },
+        {
+          "word": "sweets",
+          "definition": "Don’t eat many sweets. They have too much sugar."
+        },
+        {
+          "word": "table",
+          "definition": "My table is made from wood."
+        },
+        {
+          "word": "teeth",
+          "definition": "There are 32 teeth in your mouth."
+        },
+        {
+          "word": "today",
+          "definition": "Today is my birthday!"
+        },
+        {
+          "word": "toy",
+          "definition": "This robot is my favorite toy."
+        }
+      ]
+    },
+    {
+      "name": "Science 1",
+      "category": "Science Words",
+      "words": [
+        {
+          "word": "absorbent",
+          "definition": "Nappies are absorbent."
+        },
+        {
+          "word": "adapted",
+          "definition": "Cactus is adapted to its habitat."
+        },
+        {
+          "word": "aquatic",
+          "definition": "Animals in water are aquatic."
+        },
+        {
+          "word": "Arctic tundra",
+          "definition": "There aren’t many trees in the Arctic tundra."
+        },
+        {
+          "word": "birth",
+          "definition": "The first stage is birth."
+        },
+        {
+          "word": "blond hair",
+          "definition": "Lola has blond hair and blue eyes."
+        },
+        {
+          "word": "cactus",
+          "definition": "A cactus can grow in deserts."
+        },
+        {
+          "word": "camel",
+          "definition": "A camel can resist a lot of time without water."
+        },
+        {
+          "word": "clam",
+          "definition": "A clam has a shell."
+        },
+        {
+          "word": "climb",
+          "definition": "I can climb the trees."
+        }
+      ]
+    },
+    {
+      "name": "Science 2",
+      "category": "Science Words",
+      "words": [
+        {
+          "word": "cold",
+          "definition": "South Pole is cold."
+        },
+        {
+          "word": "conditions",
+          "definition": "The desert and the tropical rainforest have different conditions."
+        },
+        {
+          "word": "cool",
+          "definition": "This habitat is cool and rainy."
+        },
+        {
+          "word": "coral",
+          "definition": "I love that yellow coral."
+        },
+        {
+          "word": "crawl",
+          "definition": "When you crawl, you use your hands and feet to move."
+        },
+        {
+          "word": "dark",
+          "definition": "The ocean depth is dark."
+        },
+        {
+          "word": "desert",
+          "definition": "The weather in the desert is hot."
+        },
+        {
+          "word": "dies",
+          "definition": "The animal gets old and dies."
+        },
+        {
+          "word": "dry",
+          "definition": "The desert is dry and hot."
+        },
+        {
+          "word": "eagle",
+          "definition": "A baby eagle can’t fly."
+        }
+      ]
+    },
+    {
+      "name": "Science 3",
+      "category": "Science Words",
+      "words": [
+        {
+          "word": "environment",
+          "definition": "An environment can be cold or hot."
+        },
+        {
+          "word": "fins",
+          "definition": "Fish have fins instead of legs."
+        },
+        {
+          "word": "flexible",
+          "definition": "My plastic ruler is flexible."
+        },
+        {
+          "word": "food",
+          "definition": "Animals get food from their habitats."
+        },
+        {
+          "word": "forest",
+          "definition": "Forests are hot and wet."
+        },
+        {
+          "word": "grows",
+          "definition": "The animal grows and becomes an adult."
+        },
+        {
+          "word": "habitats",
+          "definition": "Environments have different habitats."
+        },
+        {
+          "word": "height",
+          "definition": "The children lined up in order of height."
+        },
+        {
+          "word": "hot",
+          "definition": "Some places are hot."
+        },
+        {
+          "word": "inherit",
+          "definition": "Some animals inherit some features from their parents."
+        }
+      ]
+    },
+    {
+      "name": "Science 4",
+      "category": "Science Words",
+      "words": [
+        {
+          "word": "lakes",
+          "definition": "Lakes are aquatic environments."
+        },
+        {
+          "word": "land",
+          "definition": "Some animals can live on land."
+        },
+        {
+          "word": "large",
+          "definition": "A blue whale is a large animal."
+        },
+        {
+          "word": "length",
+          "definition": "A ruler can measure the length of a short object."
+        },
+        {
+          "word": "light",
+          "definition": "The beach can be light."
+        },
+        {
+          "word": "lizard",
+          "definition": "The lizard has green skin."
+        },
+        {
+          "word": "logs",
+          "definition": "Logs float on water because they come from trees."
+        },
+        {
+          "word": "mass",
+          "definition": "We use a scale to measure mass."
+        },
+        {
+          "word": "minerals",
+          "definition": "A plant needs minerals."
+        },
+        {
+          "word": "move",
+          "definition": "Your body parts can help you to move."
+        }
+      ]
+    },
+    {
+      "name": "Science 5",
+      "category": "Science Words",
+      "words": [
+        {
+          "word": "nutrients",
+          "definition": "Plants need different nutrients."
+        },
+        {
+          "word": "oceans",
+          "definition": "Oceans are covered by water."
+        },
+        {
+          "word": "offspring",
+          "definition": "A sheep’s offspring is called a lamb."
+        },
+        {
+          "word": "plants",
+          "definition": "Plants can grow in the garden."
+        },
+        {
+          "word": "predators",
+          "definition": "Animals can be predators."
+        },
+        {
+          "word": "properties",
+          "definition": "The properties make the objects different."
+        },
+        {
+          "word": "reproduction",
+          "definition": "The reproduction of animals is important."
+        },
+        {
+          "word": "rigid",
+          "definition": "My table is rigid."
+        },
+        {
+          "word": "rivers",
+          "definition": "Fish can live in rivers."
+        },
+        {
+          "word": "roots",
+          "definition": "Many deserts plant have long roots."
+        }
+      ]
+    },
+    {
+      "name": "Science 6",
+      "category": "Science Words",
+      "words": [
+        {
+          "word": "senses",
+          "definition": "We have five senses: sight, hearing, touch, and taste."
+        },
+        {
+          "word": "shallow",
+          "definition": "The water is shallow here. We can’t swim!"
+        },
+        {
+          "word": "shells",
+          "definition": "Snails and many ocean animals have shells."
+        },
+        {
+          "word": "shelter",
+          "definition": "A shelter is a safe place where animals can live."
+        },
+        {
+          "word": "size",
+          "definition": "The size of a tree is small."
+        },
+        {
+          "word": "small",
+          "definition": "Insects are small."
+        },
+        {
+          "word": "snail",
+          "definition": "A snail moves very slowly."
+        },
+        {
+          "word": "soil",
+          "definition": "The soil is where plants live."
+        },
+        {
+          "word": "stem",
+          "definition": "Some plants keep water in their stem."
+        },
+        {
+          "word": "stick insect",
+          "definition": "The stick insect lives in trees."
+        }
+      ]
+    },
+    {
+      "name": "Science 7",
+      "category": "Science Words",
+      "words": [
+        {
+          "word": "survive",
+          "definition": "Animals can’t survive without food."
+        },
+        {
+          "word": "swim",
+          "definition": "Fish can swim in the ocean."
+        },
+        {
+          "word": "tadpole",
+          "definition": "A baby frog is called a tadpole."
+        },
+        {
+          "word": "tail",
+          "definition": "A monkey uses its tail to help it climb trees."
+        },
+        {
+          "word": "temperatures",
+          "definition": "We use a thermometer to measure temperatures."
+        },
+        {
+          "word": "terrestrial",
+          "definition": "Animals on land are terrestrial."
+        },
+        {
+          "word": "texture",
+          "definition": "The texture of the wood is rough."
+        },
+        {
+          "word": "tropical rainforest",
+          "definition": "Some plants grow in a tropical rainforest."
+        },
+        {
+          "word": "warm",
+          "definition": "Some animals live in warm places."
+        },
+        {
+          "word": "waterproof",
+          "definition": "My umbrella needs to be waterproof."
+        }
+      ]
+    },
+    {
+      "name": "Science 8",
+      "category": "Science Words",
+      "words": [
+        {
+          "word": "wet",
+          "definition": "Tropical rainforest is wet."
+        },
+        {
+          "word": "windy",
+          "definition": "The Arctic tundra is windy."
+        }
+      ]
+    },
+    {
+      "name": "Content 1",
+      "category": "Content Words",
+      "words": [
+        {
+          "word": "airplane",
+          "definition": "That airplane is the biggest mean of transportation."
+        },
+        {
+          "word": "amphibians",
+          "definition": "Salamanders are amphibians."
+        },
+        {
+          "word": "balloon",
+          "definition": "I don’t like that balloon because it can explode."
+        },
+        {
+          "word": "berries",
+          "definition": "Berries can be red."
+        },
+        {
+          "word": "boat",
+          "definition": "I can see a boat in the sea."
+        },
+        {
+          "word": "body",
+          "definition": "I move my body to exercise."
+        },
+        {
+          "word": "bus",
+          "definition": "Traveling by bus is cheap."
+        },
+        {
+          "word": "cable car",
+          "definition": "The cable car is not a common transportation."
+        },
+        {
+          "word": "calm",
+          "definition": "He was calm despite the pressure on him."
+        },
+        {
+          "word": "candle",
+          "definition": "Last night I used a candle. There was a power outage."
+        }
+      ]
+    },
+    {
+      "name": "Content 2",
+      "category": "Content Words",
+      "words": [
+        {
+          "word": "closed",
+          "definition": "The window is closed and the room is too hot."
+        },
+        {
+          "word": "coffee",
+          "definition": "You can put cream in your coffee."
+        },
+        {
+          "word": "communication",
+          "definition": "It’s important to have a good communication everywhere."
+        },
+        {
+          "word": "cream",
+          "definition": "You can drink your coffee with cream."
+        },
+        {
+          "word": "creep",
+          "definition": "My cat can creep very quietly."
+        },
+        {
+          "word": "ear",
+          "definition": "My left ear hurts."
+        },
+        {
+          "word": "egg",
+          "definition": "Eagles lay eggs."
+        },
+        {
+          "word": "e-mail",
+          "definition": "For better communication send him an e-mail."
+        },
+        {
+          "word": "scape",
+          "definition": "The horses always scape."
+        },
+        {
+          "word": "eye",
+          "definition": "We can’t see well with only an eye."
+        }
+      ]
+    },
+    {
+      "name": "Content 3",
+      "category": "Content Words",
+      "words": [
+        {
+          "word": "feathers",
+          "definition": "Parrots have feathers."
+        },
+        {
+          "word": "fierce",
+          "definition": "Be careful! That dog can be fierce."
+        },
+        {
+          "word": "fight",
+          "definition": "My brother and sister don’t like each other. They often fight."
+        },
+        {
+          "word": "flow",
+          "definition": "Water in a river can flow over stones."
+        },
+        {
+          "word": "freezer",
+          "definition": "I freeze my food to keep it good."
+        },
+        {
+          "word": "fruit",
+          "definition": "Monkeys and other animals love fruit."
+        },
+        {
+          "word": "fur",
+          "definition": "Many mammals have fur."
+        },
+        {
+          "word": "gas",
+          "definition": "We can’t see gas but I can smell it."
+        },
+        {
+          "word": "gentle",
+          "definition": "Some animals are gentle."
+        },
+        {
+          "word": "gills",
+          "definition": "Sharks use gills to breath."
+        }
+      ]
+    },
+    {
+      "name": "Content 4",
+      "category": "Content Words",
+      "words": [
+        {
+          "word": "head",
+          "definition": "I have hair on my head."
+        },
+        {
+          "word": "heat",
+          "definition": "We heat water to make a tea."
+        },
+        {
+          "word": "horse",
+          "definition": "That horse is brave. Don’t ride it."
+        },
+        {
+          "word": "hunt",
+          "definition": "Wild animals hunt their food."
+        },
+        {
+          "word": "ice",
+          "definition": "We can freeze things using ice."
+        },
+        {
+          "word": "ice pop",
+          "definition": "The strawberry ice pop is delicious."
+        },
+        {
+          "word": "icicle",
+          "definition": "An icicle appeared outside my house."
+        },
+        {
+          "word": "Internet",
+          "definition": "I have Internet on my tablet."
+        },
+        {
+          "word": "kettle",
+          "definition": "My kettle helps me heat water."
+        },
+        {
+          "word": "leg",
+          "definition": "I can’t walk with only one leg."
+        }
+      ]
+    },
+    {
+      "name": "Content 5",
+      "category": "Content Words",
+      "words": [
+        {
+          "word": "letters",
+          "definition": "My grandparents used to write letters not e-mails."
+        },
+        {
+          "word": "liquid",
+          "definition": "Soda is a liquid."
+        },
+        {
+          "word": "mammals",
+          "definition": "Cats and dogs are mammals."
+        },
+        {
+          "word": "melt",
+          "definition": "Don’t leave your ice pop there it can melt."
+        },
+        {
+          "word": "mixture",
+          "definition": "A chicken soup is a mixture of vegetables."
+        },
+        {
+          "word": "motorcycle",
+          "definition": "Wear a helmet when you travel by motorcycle."
+        },
+        {
+          "word": "mouth",
+          "definition": "You should eat with your mouth closed."
+        },
+        {
+          "word": "news",
+          "definition": "News can give us important information."
+        },
+        {
+          "word": "open",
+          "definition": "Please open the door!"
+        },
+        {
+          "word": "pasta",
+          "definition": "Italian pasta is the most delicious in the world."
+        }
+      ]
+    },
+    {
+      "name": "Content 6",
+      "category": "Content Words",
+      "words": [
+        {
+          "word": "patient",
+          "definition": "My mum is patient."
+        },
+        {
+          "word": "peck",
+          "definition": "Chickens usually peck at their food to eat."
+        },
+        {
+          "word": "pinecone",
+          "definition": "A pinecone grows on a pine tree."
+        },
+        {
+          "word": "plastic bag",
+          "definition": "Stop using that plastic bag. It’s dirty."
+        },
+        {
+          "word": "popcorn",
+          "definition": "Popcorn at the movies is so expensive."
+        },
+        {
+          "word": "pour",
+          "definition": "Please pour the soda!"
+        },
+        {
+          "word": "radio",
+          "definition": "Many years ago my family had a radio where they listened to music."
+        },
+        {
+          "word": "salad",
+          "definition": "The salad is healthy. Eat up!"
+        },
+        {
+          "word": "salt",
+          "definition": "Salt is indispensable for cooking."
+        },
+        {
+          "word": "scales",
+          "definition": "Serpents have scales."
+        }
+      ]
+    },
+    {
+      "name": "Content 7",
+      "category": "Content Words",
+      "words": [
+        {
+          "word": "skin",
+          "definition": "Some amphibians have wet skin."
+        },
+        {
+          "word": "smart",
+          "definition": "You are good at maths, you are smart."
+        },
+        {
+          "word": "solid",
+          "definition": "A pencil is a solid."
+        },
+        {
+          "word": "squawk",
+          "definition": "The parrot can squawk loudly. It’s a funny sound!"
+        },
+        {
+          "word": "steam",
+          "definition": "The steam from the kettle misted up her glasses."
+        },
+        {
+          "word": "strong",
+          "definition": "Some insects are small but strong."
+        },
+        {
+          "word": "sugar",
+          "definition": "Don’t put a lot of sugar in your tea. It’s unhealthy."
+        },
+        {
+          "word": "tea",
+          "definition": "Be careful! That cup of tea is too hot."
+        },
+        {
+          "word": "text message",
+          "definition": "I received your text message. Thank you!"
+        },
+        {
+          "word": "travel",
+          "definition": "I didn’t travel by plane yet."
+        }
+      ]
+    },
+    {
+      "name": "Content 8",
+      "category": "Content Words",
+      "words": [
+        {
+          "word": "truck",
+          "definition": "Look at that red truck. It is so big!"
+        },
+        {
+          "word": "vegetables",
+          "definition": "Broccoli and lettuce are vegetables."
+        },
+        {
+          "word": "wings",
+          "definition": "Ducks have wings."
+        },
+        {
+          "word": "worm",
+          "definition": "This worm is the longest one."
+        }
+      ]
+    }
+  ]
+}

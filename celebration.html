@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spelling Bee Certificaion (Audio)</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="card" style="text-align:center">
+    <canvas id="confetti" width="800" height="300" style="width:100%;height:auto"></canvas>
+    <h2 id="title">Congrats!</h2>
+    <div style="font-size:68px">🐝</div>
+    <p>You unlocked a new belt.</p>
+    <button onclick="location.href='dojo.html'">🎴 Ir al Dojo</button>
+  </main>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const belt = params.get('belt')||'New Belt';
+    document.getElementById('title').textContent = '¡Felicidades, desbloqueaste el cinturón '+belt+'!';
+    // Simple confetti
+    const c = document.getElementById('confetti');
+    const ctx = c.getContext('2d');
+    const parts = Array.from({length:200}, (_,i)=> ({
+      x: Math.random()*c.width, y: Math.random()*-c.height, vy: 2+Math.random()*3, s: 2+Math.random()*5
+    }));
+    function frame(){
+      ctx.clearRect(0,0,c.width,c.height);
+      parts.forEach(p=>{
+        p.y += p.vy; if (p.y>c.height) p.y = -10;
+        ctx.fillRect(p.x, p.y, p.s, p.s);
+      });
+      requestAnimationFrame(frame);
+    }
+    frame();
+  </script>
+</body>
+</html>

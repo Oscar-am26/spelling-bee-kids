@@ -1,0 +1,374 @@
+{
+  "levels": [
+    {
+      "name": "Starter",
+      "words": [
+        {
+          "word": "animal",
+          "definition": "My pet is an animal.",
+          "image": "assets/img/animal.png"
+        },
+        {
+          "word": "bathroom",
+          "definition": "My bathroom doesn’t have a bath.",
+          "image": "assets/img/bathroom.png"
+        },
+        {
+          "word": "big",
+          "definition": "I have a big ball to play with.",
+          "image": "assets/img/big.png"
+        },
+        {
+          "word": "boy",
+          "definition": "Mark is a polite boy.",
+          "image": "assets/img/boy.png"
+        },
+        {
+          "word": "child",
+          "definition": "That child is rude.",
+          "image": "assets/img/child.png"
+        },
+        {
+          "word": "cupboard",
+          "definition": "In our cupboard, we can keep many school supplies.",
+          "image": "assets/img/cupboard.png"
+        },
+        {
+          "word": "donkey",
+          "definition": "A donkey is similar to a horse but smaller.",
+          "image": "assets/img/donkey.png"
+        },
+        {
+          "word": "face",
+          "definition": "The eyes, nose, and mouth are in the face.",
+          "image": "assets/img/face.png"
+        },
+        {
+          "word": "football",
+          "definition": "My favorite sport is football.",
+          "image": "assets/img/football.png"
+        },
+        {
+          "word": "garden",
+          "definition": "Elisa’s garden is the most beautiful.",
+          "image": "assets/img/garden.png"
+        },
+        {
+          "word": "grandpa",
+          "definition": "His grandpa is very tall.",
+          "image": "assets/img/grandpa.png"
+        },
+        {
+          "word": "home",
+          "definition": "My home is my favorite place.",
+          "image": "assets/img/home.png"
+        },
+        {
+          "word": "mirror",
+          "definition": "You can see yourself in the mirror.",
+          "image": "assets/img/mirror.png"
+        },
+        {
+          "word": "orange",
+          "definition": "An orange is a healthy food.",
+          "image": "assets/img/orange.png"
+        },
+        {
+          "word": "pet",
+          "definition": "I have a beautiful pet.",
+          "image": "assets/img/pet.png"
+        },
+        {
+          "word": "shoe",
+          "definition": "This shoe is smaller than the other one! It hurts my foot!",
+          "image": "assets/img/shoe.png"
+        },
+        {
+          "word": "story",
+          "definition": "Please! Tell us a funny story.",
+          "image": "assets/img/story.png"
+        },
+        {
+          "word": "today",
+          "definition": "Today is my birthday!",
+          "image": "assets/img/today.png"
+        }
+      ]
+    },
+    {
+      "name": "Animals",
+      "words": [
+        {
+          "word": "armchair",
+          "definition": "An armchair is similar to a sofa, but it’s smaller.",
+          "image": "assets/img/armchair.png"
+        },
+        {
+          "word": "bed",
+          "definition": "Today I made my bed.",
+          "image": "assets/img/bed.png"
+        },
+        {
+          "word": "book",
+          "definition": "My favorite book is that yellow one.",
+          "image": "assets/img/book.png"
+        },
+        {
+          "word": "cake",
+          "definition": "I loved having a cake for my birthday.",
+          "image": "assets/img/cake.png"
+        },
+        {
+          "word": "clean",
+          "definition": "Please! Clean your bedroom.",
+          "image": "assets/img/clean.png"
+        },
+        {
+          "word": "dad",
+          "definition": "My dad is taller than me.",
+          "image": "assets/img/dad.png"
+        },
+        {
+          "word": "door",
+          "definition": "Please! Open the door.",
+          "image": "assets/img/door.png"
+        },
+        {
+          "word": "family",
+          "definition": "Linda’s family is the largest.",
+          "image": "assets/img/family.png"
+        },
+        {
+          "word": "fries",
+          "definition": "I love fries with ketchup.",
+          "image": "assets/img/fries.png"
+        },
+        {
+          "word": "grandfather",
+          "definition": "Lucas is my grandfather.",
+          "image": "assets/img/grandfather.png"
+        },
+        {
+          "word": "hall",
+          "definition": "This hall is too big.",
+          "image": "assets/img/hall.png"
+        },
+        {
+          "word": "house",
+          "definition": "This is a doll house.",
+          "image": "assets/img/house.png"
+        },
+        {
+          "word": "mother",
+          "definition": "My mother cooks and cleans.",
+          "image": "assets/img/mother.png"
+        },
+        {
+          "word": "painting",
+          "definition": "She uses many colors in her painting.",
+          "image": "assets/img/painting.png"
+        },
+        {
+          "word": "piano",
+          "definition": "She can play the piano beautifully!",
+          "image": "assets/img/piano.png"
+        },
+        {
+          "word": "snake",
+          "definition": "Be careful! That snake is very dangerous.",
+          "image": "assets/img/snake.png"
+        },
+        {
+          "word": "sweets",
+          "definition": "Don’t eat many sweets. They have too much sugar.",
+          "image": "assets/img/sweets.png"
+        },
+        {
+          "word": "toy",
+          "definition": "This robot is my favorite toy.",
+          "image": "assets/img/toy.png"
+        }
+      ]
+    },
+    {
+      "name": "Nature",
+      "words": [
+        {
+          "word": "baby",
+          "definition": "A baby can’t walk.",
+          "image": "assets/img/baby.png"
+        },
+        {
+          "word": "bedroom",
+          "definition": "My toys are in my bedroom.",
+          "image": "assets/img/bedroom.png"
+        },
+        {
+          "word": "bookcase",
+          "definition": "Our bookcase is blue.",
+          "image": "assets/img/bookcase.png"
+        },
+        {
+          "word": "cat",
+          "definition": "My cat is brown.",
+          "image": "assets/img/cat.png"
+        },
+        {
+          "word": "colour",
+          "definition": "My favourite colour is pink.",
+          "image": "assets/img/colour.png"
+        },
+        {
+          "word": "desk",
+          "definition": "She has a yellow desk.",
+          "image": "assets/img/desk.png"
+        },
+        {
+          "word": "duck",
+          "definition": "My toy duck is yellow.",
+          "image": "assets/img/duck.png"
+        },
+        {
+          "word": "flat",
+          "definition": "A flat is smaller than a house.",
+          "image": "assets/img/flat.png"
+        },
+        {
+          "word": "frog",
+          "definition": "That frog jumps funny.",
+          "image": "assets/img/frog.png"
+        },
+        {
+          "word": "grandma",
+          "definition": "Their grandma is old, but so sweet.",
+          "image": "assets/img/grandma.png"
+        },
+        {
+          "word": "hat",
+          "definition": "Your hat is the biggest.",
+          "image": "assets/img/hat.png"
+        },
+        {
+          "word": "lamp",
+          "definition": "A lamp is so useful to see at night.",
+          "image": "assets/img/lamp.png"
+        },
+        {
+          "word": "mum",
+          "definition": "Your mum had many kids.",
+          "image": "assets/img/mum.png"
+        },
+        {
+          "word": "pen",
+          "definition": "My black pen is so useful.",
+          "image": "assets/img/pen.png"
+        },
+        {
+          "word": "right",
+          "definition": "You got three answers right and two wrong.",
+          "image": "assets/img/right.png"
+        },
+        {
+          "word": "sock",
+          "definition": "I can’t find my sock pair.",
+          "image": "assets/img/sock.png"
+        },
+        {
+          "word": "table",
+          "definition": "My table is made from wood.",
+          "image": "assets/img/table.png"
+        }
+      ]
+    },
+    {
+      "name": "Challenge",
+      "words": [
+        {
+          "word": "bath",
+          "definition": "Don’t use the bath, it wastes too much water.",
+          "image": "assets/img/bath.png"
+        },
+        {
+          "word": "bird",
+          "definition": "That bird sings beautifully.",
+          "image": "assets/img/bird.png"
+        },
+        {
+          "word": "box",
+          "definition": "This box is bigger than the other one.",
+          "image": "assets/img/box.png"
+        },
+        {
+          "word": "chair",
+          "definition": "She sits down in that blue chair.",
+          "image": "assets/img/chair.png"
+        },
+        {
+          "word": "crocodile",
+          "definition": "That crocodile is the biggest one in the zoo.",
+          "image": "assets/img/crocodile.png"
+        },
+        {
+          "word": "dining room",
+          "definition": "We eat dinner in our dining room.",
+          "image": "assets/img/dining-room.png"
+        },
+        {
+          "word": "elephant",
+          "definition": "This elephant is the fattest one.",
+          "image": "assets/img/elephant.png"
+        },
+        {
+          "word": "flower",
+          "definition": "This yellow flower is my favorite.",
+          "image": "assets/img/flower.png"
+        },
+        {
+          "word": "game",
+          "definition": "That game is fun.",
+          "image": "assets/img/game.png"
+        },
+        {
+          "word": "grandmother",
+          "definition": "Your grandmother is younger than my grandma.",
+          "image": "assets/img/grandmother.png"
+        },
+        {
+          "word": "hippo",
+          "definition": "Look! There’s a baby hippo.",
+          "image": "assets/img/hippo.png"
+        },
+        {
+          "word": "mat",
+          "definition": "Touch! We can walk on a mat without shoes.",
+          "image": "assets/img/mat.png"
+        },
+        {
+          "word": "number",
+          "definition": "Seven is an odd number.",
+          "image": "assets/img/number.png"
+        },
+        {
+          "word": "pencil",
+          "definition": "Your pencil is the longest.",
+          "image": "assets/img/pencil.png"
+        },
+        {
+          "word": "rug",
+          "definition": "A rug covered most of the floor.",
+          "image": "assets/img/rug.png"
+        },
+        {
+          "word": "sofa",
+          "definition": "This sofa is so comfortable.",
+          "image": "assets/img/sofa.png"
+        },
+        {
+          "word": "teeth",
+          "definition": "There are 32 teeth in your mouth.",
+          "image": "assets/img/teeth.png"
+        }
+      ]
+    }
+  ]
+}

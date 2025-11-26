@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spelling Bee Certificaion (Audio)</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <button onclick="location.href='index.html'">← Back</button>
+    <h2>🏯 Abejitas Dojo</h2>
+  </header>
+  <main class="card">
+    <p>Unlock belts by mastering words. Tap a belt to set it as your avatar.</p>
+    <div id="belts" class="belt-grid"></div>
+  </main>
+  <script>
+    const thresholds = {White:0, Yellow:10, Orange:20, Green:30, Blue:40, Brown:55, Black:70};
+    const beltsEl = document.getElementById('belts');
+    const count = Object.keys(JSON.parse(localStorage.getItem('sb_mastered_v1')||'{}')).length;
+    const avatarKey='sb_avatar_belt';
+    function tile(name, need){
+      const unlocked = count>=need;
+      const div = document.createElement('div');
+      div.className='belt-card';
+      div.innerHTML = `
+        <div class="belt ${unlocked?'':'badge-lock'}">
+          <div class="bee">🐝</div>
+          <div class="name">${name}</div>
+          <div class="need">${need} words</div>
+          ${unlocked?'<button>Use as Avatar</button>':'<span>🔒</span>'}
+        </div>
+      `;
+      if (unlocked){
+        div.querySelector('button').addEventListener('click', ()=>{
+          localStorage.setItem(avatarKey, name);
+          alert('Avatar set to '+name+'!');
+        });
+      }
+      return div;
+    }
+    for (const [b,n] of Object.entries(thresholds)) beltsEl.appendChild(tile(b,n));
+  </script>
+  <style>
+    .belt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+    .belt-card{background:#fff;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);padding:12px;text-align:center}
+    .bee{font-size:44px}
+    .name{font-weight:700}
+    .belt button{margin-top:8px;border:0;background:#ffd54f;padding:6px 10px;border-radius:10px}
+  </style>
+</body>
+</html>
