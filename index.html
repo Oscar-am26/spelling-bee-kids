@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Spelling Bee Kids</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="app-logo">
+      <span class="bee">🐝</span>
+      <div class="app-title">
+        <h1>Spelling Bee Kids</h1>
+        <p>Juega, aprende y deletrea</p>
+      </div>
+    </div>
+
+    <div class="mode-toggle">
+      <button id="modeKidsBtn" class="mode-btn active">Modo Niños</button>
+      <button id="modeProBtn" class="mode-btn">Modo Bee Pro</button>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <!-- Panel izquierdo: selección de categoría y nivel -->
+    <section class="sidebar">
+      <h2 class="sidebar-title">Elige tu nivel</h2>
+
+      <div class="tabs">
+        <button class="tab-btn active" data-category="Certification">🏅 Certification</button>
+        <button class="tab-btn" data-category="Science">🔬 Science</button>
+        <button class="tab-btn" data-category="Content">📚 Content</button>
+      </div>
+
+      <div id="levelsList" class="levels-list">
+        <!-- Aquí se llenan los niveles por JS -->
+      </div>
+
+      <div class="legend">
+        <p><span class="dot done"></span> Completado</p>
+        <p><span class="dot current"></span> En curso</p>
+        <p><span class="dot locked"></span> Sin empezar</p>
+      </div>
+    </section>
+
+    <!-- Panel derecho: juego -->
+    <section class="game-area">
+      <div class="game-card">
+        <div class="game-header">
+          <h2 id="levelName">Selecciona un nivel</h2>
+          <div class="stats">
+            <div class="stat">
+              ⭐ <span id="starsCount">0</span>
+            </div>
+            <div class="stat">
+              ✅ <span id="correctCount">0</span> /
+              <span id="totalCount">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="game-body">
+          <p id="hintText" class="hint-text">Cuando elijas un nivel, aquí verás la oración o pista.</p>
+
+          <div class="word-visual">
+            <div id="wordImageContainer" class="word-image hidden">
+              <img id="wordImage" src="" alt="Imagen de la palabra" />
+            </div>
+            <div class="word-helper">
+              <button id="btnHearWord" class="primary-btn" disabled>🔊 Escuchar palabra</button>
+              <button id="btnSpellSlow" class="secondary-btn" disabled>🗣️ Deletreo lento</button>
+            </div>
+          </div>
+
+          <div class="input-area">
+            <label for="answerInput">Escribe la palabra:</label>
+            <input
+              id="answerInput"
+              type="text"
+              autocomplete="off"
+              disabled
+              placeholder="Escribe aquí..."
+            />
+          </div>
+
+          <div class="game-controls">
+            <button id="btnCheck" class="primary-btn" disabled>✅ Revisar</button>
+            <button id="btnSkip" class="ghost-btn" disabled>⏭ Omitir</button>
+          </div>
+
+          <p id="feedbackText" class="feedback"></p>
+        </div>
+
+        <div class="game-footer">
+          <p id="modeLabel">Modo actual: Niños (práctica con intentos ilimitados)</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Mensaje al terminar nivel -->
+  <div id="levelModal" class="modal hidden">
+    <div class="modal-content">
+      <h2>🎉 ¡Nivel completado!</h2>
+      <p id="modalMessage"></p>
+      <button id="btnNextLevel" class="primary-btn">Siguiente nivel ➜</button>
+      <button id="btnCloseModal" class="ghost-btn">Cerrar</button>
+    </div>
+  </div>
+
+  <button id="installBtn" class="install-btn hidden">📲 Instalar app</button>
+
+  <script src="app.js"></script>
+</body>
+</html>

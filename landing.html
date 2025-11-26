@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Spelling Bee Kids – Juego para practicar inglés</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .landing {
+      max-width: 900px;
+      margin: 1.5rem auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 18px;
+      padding: 1.2rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+    .landing-hero {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .landing-hero-text {
+      flex: 1;
+    }
+    .landing-hero h1 {
+      margin-top: 0;
+    }
+    .landing-hero img {
+      max-width: 220px;
+      border-radius: 18px;
+    }
+    .landing-cta {
+      margin-top: 1rem;
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+    .landing-cta a {
+      text-decoration: none;
+    }
+    .landing-section {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+    }
+    @media (max-width: 768px) {
+      .landing {
+        margin: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="landing">
+    <div class="landing-hero">
+      <div class="landing-hero-text">
+        <h1>Spelling Bee Kids 🐝</h1>
+        <p>
+          Un juego interactivo para que niños de primaria practiquen
+          <strong>Spelling Bee</strong> con audio, imágenes y niveles
+          progresivos. Ideal para escuelas, retos en casa y concursos.
+        </p>
+        <div class="landing-cta">
+          <a href="index.html" class="primary-btn">🎮 Entrar al juego</a>
+          <a href="#como-funciona" class="ghost-btn">ℹ️ Cómo funciona</a>
+        </div>
+      </div>
+      <img src="icon-512.png" alt="Logo Spelling Bee Kids" />
+    </div>
+
+    <div id="como-funciona" class="landing-section">
+      <h2>¿Qué ofrece?</h2>
+      <ul>
+        <li>Niveles por categorías: Certification, Science, Content.</li>
+        <li>Modo Niños: práctica tranquila, con intentos ilimitados.</li>
+        <li>Modo Bee Pro: entrenamiento tipo concurso con 2 intentos.</li>
+        <li>Audio de la palabra y deletreo lento para reforzar el oído.</li>
+        <li>Estrellas, progreso guardado y mensajes motivacionales.</li>
+        <li>Instalable como app en el celular (PWA).</li>
+      </ul>
+    </div>
+
+    <div class="landing-section">
+      <h2>¿Cómo instalar la app en el celular?</h2>
+      <p><strong>En Android (Chrome):</strong></p>
+      <ol>
+        <li>Abre el juego en tu celular.</li>
+        <li>Toca los tres puntitos (⋮) y elige “Añadir a pantalla de inicio”.</li>
+        <li>Confirma en “Añadir” y listo.</li>
+      </ol>
+
+      <p><strong>En iPhone / iPad (Safari):</strong></p>
+      <ol>
+        <li>Abre el juego en Safari.</li>
+        <li>Toca el ícono de compartir y luego “Añadir a pantalla de inicio”.</li>
+        <li>Toca “Añadir” y aparecerá como una app.</li>
+      </ol>
+    </div>
+  </div>
+</body>
+</html>
