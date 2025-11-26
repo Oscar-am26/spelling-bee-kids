@@ -1,5 +1,6 @@
 // app.js
 // Lógica principal del juego Spelling Bee Kids / Bee Pro
+// Ahora con voz femenina, definición en audio y soporte para carpeta img/
 
 // --------- ESTADO GLOBAL ---------
 let allLevels = [];
@@ -17,6 +18,9 @@ let stats = {
 
 let proAttemptsLeft = 2;
 let deferredPrompt = null;
+
+// Voz seleccionada (femenina si está disponible)
+let selectedVoice = null;
 
 // --------- SELECTORES ---------
 const levelsListEl = document.getElementById("levelsList");
@@ -47,18 +51,64 @@ const btnCloseModal = document.getElementById("btnCloseModal");
 
 const installBtn = document.getElementById("installBtn");
 
-// --------- UTILIDADES ---------
+// --------- VOZ FEMENINA ---------
+
+function pickFemaleVoice(voices) {
+  // Intentar encontrar una voz femenina en inglés
+  const byName = voices.find((v) =>
+    /female|woman|Samantha|Google US English Female/i.test(v.name)
+  );
+  if (byName) return byName;
+
+  // Si no hay coincidencia clara, tomar cualquier en-US
+  const en = voices.find((v) => v.lang === "en-US");
+  if (en) return en;
+
+  // Último recurso: la primera voz disponible
+  return voices[0] || null;
+}
+
+function initVoices() {
+  if (!("speechSynthesis" in window)) return;
+  const synth = window.speechSynthesis;
+  const voices = synth.getVoices();
+  if (!voices || !voices.length) return;
+  selectedVoice = pickFemaleVoice(voices);
+}
+
+if ("speechSynthesis" in window) {
+  initVoices();
+  window.speechSynthesis.onvoiceschanged = initVoices;
+}
 
 function speak(text, { rate = 1, pitch = 1 } = {}) {
+  if (!("speechSynthesis" in window)) return;
   const synth = window.speechSynthesis;
-  if (!synth) return;
   const utter = new SpeechSynthesisUtterance(text);
+
+  if (selectedVoice) {
+    utter.voice = selectedVoice;
+  }
   utter.lang = "en-US";
   utter.rate = rate;
   utter.pitch = pitch;
+
   synth.cancel();
   synth.speak(utter);
 }
+
+function speakDefinition(entry) {
+  if (!entry) return;
+  let def = (entry.definition || "").trim();
+  if (!def) {
+    // Mensaje de apoyo si no hay definición escrita
+    def = `Listen carefully to the word ${entry.word} in a sentence and try to imagine it.`;
+  }
+  // Definición en audio, un poquito más cálida
+  speak(def, { rate: 0.95, pitch: 1.1 });
+}
+
+// --------- UTILIDADES ---------
 
 function getStorageKey(levelName) {
   return `spelling_progress_${mode}_${levelName}`;
@@ -98,16 +148,16 @@ function getLevelStatus(level) {
 
 function motivationalMessage() {
   const msgsKids = [
-    "¡Lo hiciste increíble! Cada letra cuenta 🐝",
-    "¡Wow! Tu mente y tu corazón están muy fuertes 💪✨",
-    "Cada palabra que aprendes te acerca a tus sueños 📚🌟",
-    "¡Qué orgullo! Estás construyendo un cerebro campeón 🧠👑"
+    "¡Lo hiciste increíble! Cada letra que practicas, fortalece tu cerebro. 🧠✨",
+    "¡Wow! Estás construyendo una relación hermosa con el inglés. 💛",
+    "Cada palabra que aprendes te acerca a tus sueños. 📚🌟",
+    "Estoy orgullosa de ti, sigues avanzando, paso a pasito. 🐝"
   ];
   const msgsPro = [
-    "Modo Bee Pro desbloqueado: vas volando alto 🐝🔥",
-    "Así se entrena un verdadero campeón de Spelling Bee 🏆",
-    "Disciplina + práctica = resultados de concurso 💪",
-    "Tus futuros concursos te van a agradecer este esfuerzo 🎤✨"
+    "Modo Bee Pro: estás entrenando como un verdadero campeón. 🏆",
+    "Tu disciplina hoy será tu seguridad en los concursos. 💪",
+    "Estás volando alto, como una abejita experta. 🐝🔥",
+    "Cada nivel que completas es experiencia para tus futuros retos. 🎤"
   ];
 
   const list = mode === "kids" ? msgsKids : msgsPro;
@@ -237,16 +287,23 @@ function showCurrentWord() {
 
   if (!entry) return;
 
-  hintTextEl.textContent = entry.definition || "Escucha la palabra y escríbela.";
+  // Ya no mostramos la definición escrita; solo un mensajito neutro
+  hintTextEl.textContent =
+    "Escucha la explicación y la palabra, luego escribe lo que escuches.";
+
   feedbackTextEl.textContent = "";
   feedbackTextEl.className = "feedback";
   answerInputEl.value = "";
   answerInputEl.focus();
 
-  // Imagen
+  // Imagen desde carpeta img/ y se oculta si no carga
   if (entry.image) {
     wordImageContainerEl.classList.remove("hidden");
-    wordImageEl.src = `images/${entry.image}`;
+    wordImageEl.onerror = () => {
+      // Si no existe la imagen, ocultamos el recuadro
+      wordImageContainerEl.classList.add("hidden");
+    };
+    wordImageEl.src = `img/${entry.image}`;
     wordImageEl.alt = entry.word;
   } else {
     wordImageContainerEl.classList.add("hidden");
@@ -256,6 +313,9 @@ function showCurrentWord() {
   if (mode === "pro") {
     proAttemptsLeft = 2;
   }
+
+  // Reproducimos la definición / frase de contexto en audio
+  speakDefinition(entry);
 
   saveLevelProgress(level, {
     currentWordIndex,
@@ -271,7 +331,7 @@ btnHearWord.addEventListener("click", () => {
   const level = filteredLevels[currentLevelIndex];
   const entry = level.words[currentWordIndex];
   if (!entry) return;
-  speak(entry.word, { rate: 0.9, pitch: 1 });
+  speak(entry.word, { rate: 0.9, pitch: 1.05 });
 });
 
 btnSpellSlow.addEventListener("click", () => {
@@ -280,7 +340,7 @@ btnSpellSlow.addEventListener("click", () => {
   if (!entry) return;
 
   const letters = entry.word.split("").join(", ");
-  speak(letters, { rate: 0.7, pitch: 1 });
+  speak(letters, { rate: 0.7, pitch: 1.05 });
 });
 
 btnCheck.addEventListener("click", () => {
@@ -292,13 +352,14 @@ btnCheck.addEventListener("click", () => {
   const correct = entry.word.trim().toLowerCase();
 
   if (!user) {
-    feedbackTextEl.textContent = "Escribe algo primero 😉";
+    feedbackTextEl.textContent = "Escribe algo primero, corazón 😉";
     feedbackTextEl.className = "feedback error";
     return;
   }
 
   if (user === correct) {
-    feedbackTextEl.textContent = "¡Correcto! ⭐";
+    feedbackTextEl.textContent =
+      "¡Muy bien, corazón! 🌟 Lo estás haciendo increíble.";
     feedbackTextEl.className = "feedback ok";
     stats.correctInLevel += 1;
 
@@ -311,7 +372,8 @@ btnCheck.addEventListener("click", () => {
     updateStatsUI();
     goToNextWordOrFinish();
   } else {
-    feedbackTextEl.textContent = "Aún no, intenta de nuevo 💛";
+    feedbackTextEl.textContent =
+      "Todavía no coincide, intenta otra vez, estoy contigo 💛";
     feedbackTextEl.className = "feedback error";
 
     if (mode === "pro") {
@@ -379,12 +441,12 @@ function setMode(newMode) {
     modeKidsBtn.classList.add("active");
     modeProBtn.classList.remove("active");
     modeLabelEl.textContent =
-      "Modo actual: Niños (práctica con intentos ilimitados)";
+      "Modo Niños 🌟 Practica sin presión, aprende a tu ritmo.";
   } else {
     modeKidsBtn.classList.remove("active");
     modeProBtn.classList.add("active");
     modeLabelEl.textContent =
-      "Modo actual: Bee Pro (tipo concurso, 2 intentos por palabra)";
+      "Modo Bee Pro 🐝 Entrenamiento tipo concurso (2 intentos por palabra).";
   }
 
   // al cambiar de modo, se vuelve a cargar estado del nivel actual (si lo hay)
