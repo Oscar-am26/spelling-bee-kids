@@ -1,6 +1,6 @@
 // app.js
 // Lógica principal del juego Spelling Bee Kids / Bee Pro
-// Ahora con voz femenina, definición en audio y soporte para carpeta img/
+// Voz femenina, explicación con botón propio y carpeta img/
 
 // --------- ESTADO GLOBAL ---------
 let allLevels = [];
@@ -37,6 +37,7 @@ const modeLabelEl = document.getElementById("modeLabel");
 
 const btnHearWord = document.getElementById("btnHearWord");
 const btnSpellSlow = document.getElementById("btnSpellSlow");
+const btnHearDefinition = document.getElementById("btnHearDefinition");
 const btnCheck = document.getElementById("btnCheck");
 const btnSkip = document.getElementById("btnSkip");
 
@@ -54,17 +55,16 @@ const installBtn = document.getElementById("installBtn");
 // --------- VOZ FEMENINA ---------
 
 function pickFemaleVoice(voices) {
-  // Intentar encontrar una voz femenina en inglés
-  const byName = voices.find((v) =>
-    /female|woman|Samantha|Google US English Female/i.test(v.name)
+  const preferredNames = /(Zira|Jenny|Aria|Samantha|Google US English Female|Female)/i;
+
+  const byName = voices.find(
+    (v) => v.lang.startsWith("en") && preferredNames.test(v.name)
   );
   if (byName) return byName;
 
-  // Si no hay coincidencia clara, tomar cualquier en-US
   const en = voices.find((v) => v.lang === "en-US");
   if (en) return en;
 
-  // Último recurso: la primera voz disponible
   return voices[0] || null;
 }
 
@@ -101,11 +101,10 @@ function speakDefinition(entry) {
   if (!entry) return;
   let def = (entry.definition || "").trim();
   if (!def) {
-    // Mensaje de apoyo si no hay definición escrita
     def = `Listen carefully to the word ${entry.word} in a sentence and try to imagine it.`;
   }
-  // Definición en audio, un poquito más cálida
-  speak(def, { rate: 0.95, pitch: 1.1 });
+  // 20% más lenta y un poquito más aguda
+  speak(def, { rate: 0.8, pitch: 1.15 });
 }
 
 // --------- UTILIDADES ---------
@@ -131,7 +130,6 @@ function loadLevelProgress(level) {
 }
 
 function getLevelStatus(level) {
-  // done / current / locked según progreso
   const progressKids = JSON.parse(
     localStorage.getItem(`spelling_progress_kids_${level.name}`) || "null"
   );
@@ -148,10 +146,10 @@ function getLevelStatus(level) {
 
 function motivationalMessage() {
   const msgsKids = [
-    "¡Lo hiciste increíble! Cada letra que practicas, fortalece tu cerebro. 🧠✨",
+    "¡Lo hiciste increíble! Cada letra que practicas fortalece tu cerebro. 🧠✨",
     "¡Wow! Estás construyendo una relación hermosa con el inglés. 💛",
     "Cada palabra que aprendes te acerca a tus sueños. 📚🌟",
-    "Estoy orgullosa de ti, sigues avanzando, paso a pasito. 🐝"
+    "Estoy orgullosa de ti, sigues avanzando paso a pasito. 🐝"
   ];
   const msgsPro = [
     "Modo Bee Pro: estás entrenando como un verdadero campeón. 🏆",
@@ -245,7 +243,6 @@ function selectLevel(index) {
   const level = filteredLevels[currentLevelIndex];
   levelNameEl.textContent = level.name;
 
-  // cargar progreso si existe
   const progress = loadLevelProgress(level);
   if (progress) {
     currentWordIndex = Math.min(
@@ -275,6 +272,7 @@ function enableGameControls(enabled) {
   answerInputEl.disabled = !enabled;
   btnHearWord.disabled = !enabled;
   btnSpellSlow.disabled = !enabled;
+  btnHearDefinition.disabled = !enabled;
   btnCheck.disabled = !enabled;
   btnSkip.disabled = !enabled;
 }
@@ -287,20 +285,17 @@ function showCurrentWord() {
 
   if (!entry) return;
 
-  // Ya no mostramos la definición escrita; solo un mensajito neutro
   hintTextEl.textContent =
-    "Escucha la explicación y la palabra, luego escribe lo que escuches.";
+    "Pulsa “Escuchar explicación” para oír la frase con la palabra.";
 
   feedbackTextEl.textContent = "";
   feedbackTextEl.className = "feedback";
   answerInputEl.value = "";
   answerInputEl.focus();
 
-  // Imagen desde carpeta img/ y se oculta si no carga
   if (entry.image) {
     wordImageContainerEl.classList.remove("hidden");
     wordImageEl.onerror = () => {
-      // Si no existe la imagen, ocultamos el recuadro
       wordImageContainerEl.classList.add("hidden");
     };
     wordImageEl.src = `img/${entry.image}`;
@@ -309,13 +304,9 @@ function showCurrentWord() {
     wordImageContainerEl.classList.add("hidden");
   }
 
-  // Intentos en modo pro
   if (mode === "pro") {
     proAttemptsLeft = 2;
   }
-
-  // Reproducimos la definición / frase de contexto en audio
-  speakDefinition(entry);
 
   saveLevelProgress(level, {
     currentWordIndex,
@@ -340,7 +331,14 @@ btnSpellSlow.addEventListener("click", () => {
   if (!entry) return;
 
   const letters = entry.word.split("").join(", ");
-  speak(letters, { rate: 0.7, pitch: 1.05 });
+  speak(letters, { rate: 0.75, pitch: 1.05 });
+});
+
+btnHearDefinition.addEventListener("click", () => {
+  const level = filteredLevels[currentLevelIndex];
+  const entry = level.words[currentWordIndex];
+  if (!entry) return;
+  speakDefinition(entry);
 });
 
 btnCheck.addEventListener("click", () => {
@@ -363,7 +361,6 @@ btnCheck.addEventListener("click", () => {
     feedbackTextEl.className = "feedback ok";
     stats.correctInLevel += 1;
 
-    // estrellas: 1 estrella cada 3 aciertos
     if (stats.correctInLevel % 3 === 0) {
       stats.stars += 1;
       speak("Great job!", { rate: 1, pitch: 1.2 });
@@ -406,10 +403,8 @@ function goToNextWordOrFinish(addStarIfPerfect = true) {
     currentWordIndex += 1;
     showCurrentWord();
   } else {
-    // FIN DE NIVEL
     const completed = true;
 
-    // Bonus por nivel perfecto en modo Pro
     if (mode === "pro" && addStarIfPerfect) {
       stats.stars += 2;
     }
@@ -423,7 +418,7 @@ function goToNextWordOrFinish(addStarIfPerfect = true) {
 
     updateStatsUI();
     showLevelCompletedModal();
-    renderLevelsList(); // refrescar badges
+    renderLevelsList();
   }
 }
 
@@ -449,7 +444,6 @@ function setMode(newMode) {
       "Modo Bee Pro 🐝 Entrenamiento tipo concurso (2 intentos por palabra).";
   }
 
-  // al cambiar de modo, se vuelve a cargar estado del nivel actual (si lo hay)
   if (currentLevelIndex !== null) {
     selectLevel(currentLevelIndex);
   } else {
