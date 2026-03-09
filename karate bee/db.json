@@ -1,0 +1,2173 @@
+{
+            "certification": [
+                {
+                    "id": 1,
+                    "w": "animal",
+                    "d": "My pet is an animal."
+                },
+                {
+                    "id": 2,
+                    "w": "armchair",
+                    "d": "An armchair is similar to a sofa, but it’s smaller."
+                },
+                {
+                    "id": 3,
+                    "w": "baby",
+                    "d": "A baby can’t walk."
+                },
+                {
+                    "id": 4,
+                    "w": "bath",
+                    "d": "Don’t use the bath, it wastes too much water."
+                },
+                {
+                    "id": 5,
+                    "w": "bathroom",
+                    "d": "My bathroom doesn’t have a bath."
+                },
+                {
+                    "id": 6,
+                    "w": "bed",
+                    "d": "Today I made my bed."
+                },
+                {
+                    "id": 7,
+                    "w": "bedroom",
+                    "d": "My toys are in my bedroom."
+                },
+                {
+                    "id": 8,
+                    "w": "bird",
+                    "d": "That bird sings beautifully."
+                },
+                {
+                    "id": 9,
+                    "w": "big",
+                    "d": "I have a big ball to play with."
+                },
+                {
+                    "id": 10,
+                    "w": "book",
+                    "d": "My favorite book is that yellow one."
+                },
+                {
+                    "id": 11,
+                    "w": "bookcase",
+                    "d": "Our bookcase is blue."
+                },
+                {
+                    "id": 12,
+                    "w": "box",
+                    "d": "This box is bigger than the other one."
+                },
+                {
+                    "id": 13,
+                    "w": "boy",
+                    "d": "Mark is a polite boy."
+                },
+                {
+                    "id": 14,
+                    "w": "cake",
+                    "d": "I loved having a cake for my birthday."
+                },
+                {
+                    "id": 15,
+                    "w": "cat",
+                    "d": "My cat is brown."
+                },
+                {
+                    "id": 16,
+                    "w": "chair",
+                    "d": "She sits down in that blue chair."
+                },
+                {
+                    "id": 17,
+                    "w": "child",
+                    "d": "That child is rude."
+                },
+                {
+                    "id": 18,
+                    "w": "clean",
+                    "d": "Please! Clean your bedroom."
+                },
+                {
+                    "id": 19,
+                    "w": "colour",
+                    "d": "My favourite colour is pink."
+                },
+                {
+                    "id": 20,
+                    "w": "crocodile",
+                    "d": "That crocodile is the biggest one in the zoo."
+                },
+                {
+                    "id": 21,
+                    "w": "cupboard",
+                    "d": "In our cupboard, we can keep many school supplies."
+                },
+                {
+                    "id": 22,
+                    "w": "dad",
+                    "d": "My dad is taller than me."
+                },
+                {
+                    "id": 23,
+                    "w": "desk",
+                    "d": "She has a yellow desk."
+                },
+                {
+                    "id": 24,
+                    "w": "dining room",
+                    "d": "We eat dinner in our dining room."
+                },
+                {
+                    "id": 25,
+                    "w": "donkey",
+                    "d": "A donkey is similar to a horse but smaller."
+                },
+                {
+                    "id": 26,
+                    "w": "door",
+                    "d": "Please! Open the door."
+                },
+                {
+                    "id": 27,
+                    "w": "duck",
+                    "d": "My toy duck is yellow."
+                },
+                {
+                    "id": 28,
+                    "w": "elephant",
+                    "d": "This elephant is the fattest one."
+                },
+                {
+                    "id": 29,
+                    "w": "face",
+                    "d": "The eyes, nose, and mouth are in the face."
+                },
+                {
+                    "id": 30,
+                    "w": "family",
+                    "d": "Linda’s family is the largest."
+                },
+                {
+                    "id": 31,
+                    "w": "flat",
+                    "d": "A flat is smaller than a house."
+                },
+                {
+                    "id": 32,
+                    "w": "flower",
+                    "d": "This yellow flower is my favorite."
+                },
+                {
+                    "id": 33,
+                    "w": "football",
+                    "d": "My favorite sport is football."
+                },
+                {
+                    "id": 34,
+                    "w": "fries",
+                    "d": "I love fries with ketchup."
+                },
+                {
+                    "id": 35,
+                    "w": "frog",
+                    "d": "That frog jumps funny."
+                },
+                {
+                    "id": 36,
+                    "w": "game",
+                    "d": "That game is fun."
+                },
+                {
+                    "id": 37,
+                    "w": "garden",
+                    "d": "Elisa’s garden is the most beautiful."
+                },
+                {
+                    "id": 38,
+                    "w": "grandfather",
+                    "d": "Lucas is my grandfather."
+                },
+                {
+                    "id": 39,
+                    "w": "grandma",
+                    "d": "Their grandma is old, but so sweet."
+                },
+                {
+                    "id": 40,
+                    "w": "grandmother",
+                    "d": "Your grandmother is younger than my grandma."
+                },
+                {
+                    "id": 41,
+                    "w": "grandpa",
+                    "d": "His grandpa is very tall."
+                },
+                {
+                    "id": 42,
+                    "w": "hall",
+                    "d": "This hall is too big."
+                },
+                {
+                    "id": 43,
+                    "w": "hat",
+                    "d": "Your hat is the biggest."
+                },
+                {
+                    "id": 44,
+                    "w": "hippo",
+                    "d": "Look! There’s a baby hippo."
+                },
+                {
+                    "id": 45,
+                    "w": "home",
+                    "d": "My home is my favorite place."
+                },
+                {
+                    "id": 46,
+                    "w": "house",
+                    "d": "This is a doll house."
+                },
+                {
+                    "id": 47,
+                    "w": "lamp",
+                    "d": "A lamp is so useful to see at night."
+                },
+                {
+                    "id": 48,
+                    "w": "mat",
+                    "d": "Touch! We can walk on a mat without shoes."
+                },
+                {
+                    "id": 49,
+                    "w": "mirror",
+                    "d": "You can see yourself in the mirror."
+                },
+                {
+                    "id": 50,
+                    "w": "mother",
+                    "d": "My mother cooks and cleans."
+                },
+                {
+                    "id": 51,
+                    "w": "mum",
+                    "d": "Your mum had many kids."
+                },
+                {
+                    "id": 52,
+                    "w": "number",
+                    "d": "Seven is an odd number."
+                },
+                {
+                    "id": 53,
+                    "w": "orange",
+                    "d": "An orange is a healthy food."
+                },
+                {
+                    "id": 54,
+                    "w": "painting",
+                    "d": "She uses many colors in her painting."
+                },
+                {
+                    "id": 55,
+                    "w": "pen",
+                    "d": "My black pen is so useful."
+                },
+                {
+                    "id": 56,
+                    "w": "pencil",
+                    "d": "Your pencil is the longest."
+                },
+                {
+                    "id": 57,
+                    "w": "pet",
+                    "d": "I have a beautiful pet."
+                },
+                {
+                    "id": 58,
+                    "w": "piano",
+                    "d": "She can play the piano beautifully!"
+                },
+                {
+                    "id": 59,
+                    "w": "right",
+                    "d": "You got three answers right and two wrong."
+                },
+                {
+                    "id": 60,
+                    "w": "rug",
+                    "d": "A rug covered most of the floor."
+                },
+                {
+                    "id": 61,
+                    "w": "shoe",
+                    "d": "This shoe is smaller than the other one! It hurts my foot!"
+                },
+                {
+                    "id": 62,
+                    "w": "snake",
+                    "d": "Be careful! That snake is very dangerous."
+                },
+                {
+                    "id": 63,
+                    "w": "sock",
+                    "d": "I can’t find my sock pair."
+                },
+                {
+                    "id": 64,
+                    "w": "sofa",
+                    "d": "This sofa is so comfortable."
+                },
+                {
+                    "id": 65,
+                    "w": "story",
+                    "d": "Please! Tell us a funny story."
+                },
+                {
+                    "id": 66,
+                    "w": "sweets",
+                    "d": "Don’t eat many sweets. They have too much sugar."
+                },
+                {
+                    "id": 67,
+                    "w": "table",
+                    "d": "My table is made from wood."
+                },
+                {
+                    "id": 68,
+                    "w": "teeth",
+                    "d": "There are 32 teeth in your mouth."
+                },
+                {
+                    "id": 69,
+                    "w": "today",
+                    "d": "Today is my birthday!"
+                },
+                {
+                    "id": 70,
+                    "w": "toy",
+                    "d": "This robot is my favorite toy."
+                },
+                {
+                    "id": 71,
+                    "w": "answer",
+                    "d": "Answer your exam honestly."
+                },
+                {
+                    "id": 72,
+                    "w": "afternoon",
+                    "d": "In the afternoon, we went to the cinema."
+                },
+                {
+                    "id": 73,
+                    "w": "alphabet",
+                    "d": "The alphabet has 26 letters."
+                },
+                {
+                    "id": 74,
+                    "w": "apple",
+                    "d": "My apple is yellow, yours is green."
+                },
+                {
+                    "id": 75,
+                    "w": "ball",
+                    "d": "Please don't play with the ball."
+                },
+                {
+                    "id": 76,
+                    "w": "beach",
+                    "d": "We went to the beach yesterday."
+                },
+                {
+                    "id": 77,
+                    "w": "beautiful",
+                    "d": "My house is very beautiful."
+                },
+                {
+                    "id": 78,
+                    "w": "bee",
+                    "d": "I'm afraid of that bee."
+                },
+                {
+                    "id": 79,
+                    "w": "boot",
+                    "d": "That boot is brown."
+                },
+                {
+                    "id": 80,
+                    "w": "brother",
+                    "d": "My brother is taller than me."
+                },
+                {
+                    "id": 81,
+                    "w": "brown",
+                    "d": "Many bears are brown."
+                },
+                {
+                    "id": 82,
+                    "w": "car",
+                    "d": "My car is the most expensive one."
+                },
+                {
+                    "id": 83,
+                    "w": "chicken",
+                    "d": "My favourite animal is the chicken."
+                },
+                {
+                    "id": 84,
+                    "w": "children",
+                    "d": "Those children are playful."
+                },
+                {
+                    "id": 85,
+                    "w": "chocolate",
+                    "d": "I love eating chocolate."
+                },
+                {
+                    "id": 86,
+                    "w": "class",
+                    "d": "My class was fantastic! I love English."
+                },
+                {
+                    "id": 87,
+                    "w": "cousin",
+                    "d": "Your cousin is the best student here."
+                },
+                {
+                    "id": 88,
+                    "w": "cow",
+                    "d": "That cow produces a lot of milk."
+                },
+                {
+                    "id": 89,
+                    "w": "crayon",
+                    "d": "Use that red crayon to colour your drawing."
+                },
+                {
+                    "id": 90,
+                    "w": "do",
+                    "d": "Do your homework because it's important."
+                },
+                {
+                    "id": 91,
+                    "w": "dog",
+                    "d": "I have a pet dog."
+                },
+                {
+                    "id": 92,
+                    "w": "eraser",
+                    "d": "May I borrow your eraser?"
+                },
+                {
+                    "id": 93,
+                    "w": "evening",
+                    "d": "In the evening, I go to sleep."
+                },
+                {
+                    "id": 94,
+                    "w": "fantastic",
+                    "d": "This story sounds fantastic."
+                },
+                {
+                    "id": 95,
+                    "w": "favourite",
+                    "d": "My favourite colour is purple."
+                },
+                {
+                    "id": 96,
+                    "w": "find",
+                    "d": "I can't find my keys."
+                },
+                {
+                    "id": 97,
+                    "w": "food",
+                    "d": "I cook my own food."
+                },
+                {
+                    "id": 98,
+                    "w": "friend",
+                    "d": "I play with my friend at recess."
+                },
+                {
+                    "id": 99,
+                    "w": "giraffe",
+                    "d": "That giraffe is the tallest in this zoo."
+                },
+                {
+                    "id": 100,
+                    "w": "good",
+                    "d": "Very good job!"
+                },
+                {
+                    "id": 101,
+                    "w": "guitar",
+                    "d": "She plays the guitar beautifully!"
+                },
+                {
+                    "id": 102,
+                    "w": "hair",
+                    "d": "My hair is black."
+                },
+                {
+                    "id": 103,
+                    "w": "happy",
+                    "d": "I am happy because today I have a party."
+                },
+                {
+                    "id": 104,
+                    "w": "have",
+                    "d": "I have a brother and a sister."
+                },
+                {
+                    "id": 105,
+                    "w": "honey",
+                    "d": "I like eating honey."
+                },
+                {
+                    "id": 106,
+                    "w": "jeans",
+                    "d": "I love wearing blue jeans."
+                },
+                {
+                    "id": 107,
+                    "w": "jellyfish",
+                    "d": "The jellyfish are dangerous, be careful!"
+                },
+                {
+                    "id": 108,
+                    "w": "kite",
+                    "d": "My kite flies so high."
+                },
+                {
+                    "id": 109,
+                    "w": "learn",
+                    "d": "Please learn these names."
+                },
+                {
+                    "id": 110,
+                    "w": "lesson",
+                    "d": "My Chinese lesson was good."
+                },
+                {
+                    "id": 111,
+                    "w": "listen",
+                    "d": "Listen to the instructions."
+                },
+                {
+                    "id": 112,
+                    "w": "little",
+                    "d": "My little cat is very playful."
+                },
+                {
+                    "id": 113,
+                    "w": "lunch",
+                    "d": "I packed a sandwich for lunch."
+                },
+                {
+                    "id": 114,
+                    "w": "meat",
+                    "d": "I like to eat meat with vegetables."
+                },
+                {
+                    "id": 115,
+                    "w": "morning",
+                    "d": "In the morning, I brush my teeth."
+                },
+                {
+                    "id": 116,
+                    "w": "mouse",
+                    "d": "The mouse ran across the floor."
+                },
+                {
+                    "id": 117,
+                    "w": "music",
+                    "d": "I love listening to music on the radio."
+                },
+                {
+                    "id": 118,
+                    "w": "name",
+                    "d": "What is your name?"
+                },
+                {
+                    "id": 119,
+                    "w": "park",
+                    "d": "I always play in the park with my friends."
+                },
+                {
+                    "id": 120,
+                    "w": "person",
+                    "d": "A person is talking. Please be quiet!"
+                },
+                {
+                    "id": 121,
+                    "w": "picture",
+                    "d": "I drew a picture of a cat."
+                },
+                {
+                    "id": 122,
+                    "w": "please",
+                    "d": "Always say please and thank you to be polite."
+                },
+                {
+                    "id": 123,
+                    "w": "polar bear",
+                    "d": "That polar bear is so cute."
+                },
+                {
+                    "id": 124,
+                    "w": "question",
+                    "d": "Ask me an interesting question."
+                },
+                {
+                    "id": 125,
+                    "w": "rain",
+                    "d": "It started to rain during lunch."
+                },
+                {
+                    "id": 126,
+                    "w": "scary",
+                    "d": "The movie was scary."
+                },
+                {
+                    "id": 127,
+                    "w": "school",
+                    "d": "I go to school every day."
+                },
+                {
+                    "id": 128,
+                    "w": "sea",
+                    "d": "I can swim in the sea."
+                },
+                {
+                    "id": 129,
+                    "w": "sing",
+                    "d": "Sing along to this song."
+                },
+                {
+                    "id": 130,
+                    "w": "sister",
+                    "d": "My sister is younger than I am."
+                },
+                {
+                    "id": 131,
+                    "w": "skateboard",
+                    "d": "I ride my skateboard in the park."
+                },
+                {
+                    "id": 132,
+                    "w": "small",
+                    "d": "Ants are small but intelligent."
+                },
+                {
+                    "id": 133,
+                    "w": "sorry",
+                    "d": "Please say sorry to him!"
+                },
+                {
+                    "id": 134,
+                    "w": "talk",
+                    "d": "Don't talk loudly, it's annoying."
+                },
+                {
+                    "id": 135,
+                    "w": "teddy bear",
+                    "d": "I love sleeping with my teddy bear."
+                },
+                {
+                    "id": 136,
+                    "w": "thing",
+                    "d": "An object is a synonym for a thing."
+                },
+                {
+                    "id": 137,
+                    "w": "tiger",
+                    "d": "A tiger is a dangerous animal."
+                },
+                {
+                    "id": 138,
+                    "w": "try",
+                    "d": "Always try your best!"
+                },
+                {
+                    "id": 139,
+                    "w": "ugly",
+                    "d": "I don't like that color, it's ugly!"
+                },
+                {
+                    "id": 140,
+                    "w": "want",
+                    "d": "I want a burger and fries."
+                }
+            ],
+            "science": [
+                {
+                    "id": 1,
+                    "w": "absorbent",
+                    "d": "Nappies are absorbent."
+                },
+                {
+                    "id": 2,
+                    "w": "adapted",
+                    "d": "Cactus is adapted to its habitat."
+                },
+                {
+                    "id": 3,
+                    "w": "aquatic",
+                    "d": "Animals in water are aquatic."
+                },
+                {
+                    "id": 4,
+                    "w": "Arctic tundra",
+                    "d": "There aren’t many trees in the Arctic tundra."
+                },
+                {
+                    "id": 5,
+                    "w": "birth",
+                    "d": "The first stage is birth."
+                },
+                {
+                    "id": 6,
+                    "w": "blond hair",
+                    "d": "Lola has blond hair and blue eyes."
+                },
+                {
+                    "id": 7,
+                    "w": "cactus",
+                    "d": "A cactus can grow in deserts."
+                },
+                {
+                    "id": 8,
+                    "w": "camel",
+                    "d": "A camel can resist a lot of time without water."
+                },
+                {
+                    "id": 9,
+                    "w": "clam",
+                    "d": "A clam has a shell."
+                },
+                {
+                    "id": 10,
+                    "w": "climb",
+                    "d": "I can climb the trees."
+                },
+                {
+                    "id": 11,
+                    "w": "cold",
+                    "d": "South Pole is cold."
+                },
+                {
+                    "id": 12,
+                    "w": "conditions",
+                    "d": "The desert and the tropical rainforest have different conditions."
+                },
+                {
+                    "id": 13,
+                    "w": "cool",
+                    "d": "This habitat is cool and rainy."
+                },
+                {
+                    "id": 14,
+                    "w": "coral",
+                    "d": "I love that yellow coral."
+                },
+                {
+                    "id": 15,
+                    "w": "crawl",
+                    "d": "When you crawl, you use your hands and feet to move."
+                },
+                {
+                    "id": 16,
+                    "w": "dark",
+                    "d": "The ocean depth is dark."
+                },
+                {
+                    "id": 17,
+                    "w": "desert",
+                    "d": "The weather in the desert is hot."
+                },
+                {
+                    "id": 18,
+                    "w": "dies",
+                    "d": "The animal gets old and dies."
+                },
+                {
+                    "id": 19,
+                    "w": "dry",
+                    "d": "The desert is dry and hot."
+                },
+                {
+                    "id": 20,
+                    "w": "eagle",
+                    "d": "A baby eagle can’t fly."
+                },
+                {
+                    "id": 21,
+                    "w": "environment",
+                    "d": "An environment can be cold or hot."
+                },
+                {
+                    "id": 22,
+                    "w": "fins",
+                    "d": "Fish have fins instead of legs."
+                },
+                {
+                    "id": 23,
+                    "w": "flexible",
+                    "d": "My plastic ruler is flexible."
+                },
+                {
+                    "id": 24,
+                    "w": "food",
+                    "d": "Animals get food from their habitats."
+                },
+                {
+                    "id": 25,
+                    "w": "forest",
+                    "d": "Forests are hot and wet."
+                },
+                {
+                    "id": 26,
+                    "w": "grows",
+                    "d": "The animal grows and becomes an adult."
+                },
+                {
+                    "id": 27,
+                    "w": "habitats",
+                    "d": "Environments have different habitats."
+                },
+                {
+                    "id": 28,
+                    "w": "height",
+                    "d": "The children lined up in order of height."
+                },
+                {
+                    "id": 29,
+                    "w": "hot",
+                    "d": "Some places are hot."
+                },
+                {
+                    "id": 30,
+                    "w": "inherit",
+                    "d": "Some animals inherit some features from their parents."
+                },
+                {
+                    "id": 31,
+                    "w": "lakes",
+                    "d": "Lakes are aquatic environments."
+                },
+                {
+                    "id": 32,
+                    "w": "land",
+                    "d": "Some animals can live on land."
+                },
+                {
+                    "id": 33,
+                    "w": "large",
+                    "d": "A blue whale is a large animal."
+                },
+                {
+                    "id": 34,
+                    "w": "length",
+                    "d": "A ruler can measure the length of a short object."
+                },
+                {
+                    "id": 35,
+                    "w": "light",
+                    "d": "The beach can be light."
+                },
+                {
+                    "id": 36,
+                    "w": "lizard",
+                    "d": "The lizard has green skin."
+                },
+                {
+                    "id": 37,
+                    "w": "logs",
+                    "d": "Logs float on water because they come from trees."
+                },
+                {
+                    "id": 38,
+                    "w": "mass",
+                    "d": "We use a scale to measure mass."
+                },
+                {
+                    "id": 39,
+                    "w": "minerals",
+                    "d": "A plant needs minerals."
+                },
+                {
+                    "id": 40,
+                    "w": "move",
+                    "d": "Your body parts can help you to move."
+                },
+                {
+                    "id": 41,
+                    "w": "nutrients",
+                    "d": "Plants need different nutrients."
+                },
+                {
+                    "id": 42,
+                    "w": "oceans",
+                    "d": "Oceans are covered by water."
+                },
+                {
+                    "id": 43,
+                    "w": "offspring",
+                    "d": "A sheep’s offspring is called a lamb."
+                },
+                {
+                    "id": 44,
+                    "w": "plants",
+                    "d": "Plants can grow in the garden."
+                },
+                {
+                    "id": 45,
+                    "w": "predators",
+                    "d": "Animals can be predators."
+                },
+                {
+                    "id": 46,
+                    "w": "properties",
+                    "d": "The properties make the objects different."
+                },
+                {
+                    "id": 47,
+                    "w": "reproduction",
+                    "d": "The reproduction of animals is important."
+                },
+                {
+                    "id": 48,
+                    "w": "rigid",
+                    "d": "My table is rigid."
+                },
+                {
+                    "id": 49,
+                    "w": "rivers",
+                    "d": "Fish can live in rivers."
+                },
+                {
+                    "id": 50,
+                    "w": "roots",
+                    "d": "Many deserts plant have long roots."
+                },
+                {
+                    "id": 51,
+                    "w": "senses",
+                    "d": "We have five senses: sight, hearing, touch, and taste."
+                },
+                {
+                    "id": 52,
+                    "w": "shallow",
+                    "d": "The water is shallow here. We can’t swim!"
+                },
+                {
+                    "id": 53,
+                    "w": "shells",
+                    "d": "Snails and many ocean animals have shells."
+                },
+                {
+                    "id": 54,
+                    "w": "shelter",
+                    "d": "A shelter is a safe place where animals can live."
+                },
+                {
+                    "id": 55,
+                    "w": "size",
+                    "d": "The size of a tree is small."
+                },
+                {
+                    "id": 56,
+                    "w": "small",
+                    "d": "Insects are small."
+                },
+                {
+                    "id": 57,
+                    "w": "snail",
+                    "d": "A snail moves very slowly."
+                },
+                {
+                    "id": 58,
+                    "w": "soil",
+                    "d": "The soil is where plants live."
+                },
+                {
+                    "id": 59,
+                    "w": "stem",
+                    "d": "Some plants keep water in their stem."
+                },
+                {
+                    "id": 60,
+                    "w": "stick insect",
+                    "d": "The stick insect lives in trees."
+                },
+                {
+                    "id": 61,
+                    "w": "survive",
+                    "d": "Animals can’t survive without food."
+                },
+                {
+                    "id": 62,
+                    "w": "swim",
+                    "d": "Fish can swim in the ocean."
+                },
+                {
+                    "id": 63,
+                    "w": "tadpole",
+                    "d": "A baby frog is called a tadpole."
+                },
+                {
+                    "id": 64,
+                    "w": "tail",
+                    "d": "A monkey uses its tail to help it climb trees."
+                },
+                {
+                    "id": 65,
+                    "w": "temperatures",
+                    "d": "We use a thermometer to measure temperatures."
+                },
+                {
+                    "id": 66,
+                    "w": "terrestrial",
+                    "d": "Animals on land are terrestrial."
+                },
+                {
+                    "id": 67,
+                    "w": "texture",
+                    "d": "The texture of the wood is rough."
+                },
+                {
+                    "id": 68,
+                    "w": "tropical rainforest",
+                    "d": "Some plants grow in a tropical rainforest."
+                },
+                {
+                    "id": 69,
+                    "w": "warm",
+                    "d": "Some animals live in warm places."
+                },
+                {
+                    "id": 70,
+                    "w": "waterproof",
+                    "d": "My umbrella needs to be waterproof."
+                },
+                {
+                    "id": 71,
+                    "w": "wet",
+                    "d": "Tropical rainforest is wet."
+                },
+                {
+                    "id": 72,
+                    "w": "windy",
+                    "d": "The Arctic tundra is windy."
+                },
+                {
+                    "id": 73,
+                    "w": "attract",
+                    "d": "The flowers attract butterflies."
+                },
+                {
+                    "id": 74,
+                    "w": "brick",
+                    "d": "That brick is too heavy."
+                },
+                {
+                    "id": 75,
+                    "w": "bulb",
+                    "d": "That bulb is hot."
+                },
+                {
+                    "id": 76,
+                    "w": "burn",
+                    "d": "Don't touch the stove, you might burn yourself."
+                },
+                {
+                    "id": 77,
+                    "w": "change",
+                    "d": "Please change your clothes."
+                },
+                {
+                    "id": 78,
+                    "w": "chemical",
+                    "d": "Water is a chemical made of hydrogen and oxygen."
+                },
+                {
+                    "id": 79,
+                    "w": "clay",
+                    "d": "I made a tiny animal out of clay in art class."
+                },
+                {
+                    "id": 80,
+                    "w": "concrete",
+                    "d": "My house is made of concrete."
+                },
+                {
+                    "id": 81,
+                    "w": "cotton",
+                    "d": "My T-shirt is made of cotton."
+                },
+                {
+                    "id": 82,
+                    "w": "curved",
+                    "d": "The rainbow has a curved shape in the sky."
+                },
+                {
+                    "id": 83,
+                    "w": "daytime",
+                    "d": "I like to play outside during the daytime."
+                },
+                {
+                    "id": 84,
+                    "w": "direction",
+                    "d": "Look for the correct direction."
+                },
+                {
+                    "id": 85,
+                    "w": "Earth",
+                    "d": "Our planet is Earth."
+                },
+                {
+                    "id": 86,
+                    "w": "electricity",
+                    "d": "Electricity is useful."
+                },
+                {
+                    "id": 87,
+                    "w": "energy",
+                    "d": "We can get energy from the Sun."
+                },
+                {
+                    "id": 88,
+                    "w": "fabric",
+                    "d": "Waterproof objects are often made of plastic fabric."
+                },
+                {
+                    "id": 89,
+                    "w": "firefly",
+                    "d": "Don't touch that firefly!"
+                },
+                {
+                    "id": 90,
+                    "w": "flashlight",
+                    "d": "I need a flashlight to see here."
+                },
+                {
+                    "id": 91,
+                    "w": "floodlight",
+                    "d": "The floodlight brightened the soccer field."
+                },
+                {
+                    "id": 92,
+                    "w": "force",
+                    "d": "Gravity is an important force."
+                },
+                {
+                    "id": 93,
+                    "w": "freezing",
+                    "d": "My ice pops are freezing in my freezer."
+                },
+                {
+                    "id": 94,
+                    "w": "friction",
+                    "d": "Friction generates heat."
+                },
+                {
+                    "id": 95,
+                    "w": "glass",
+                    "d": "Windows are made of glass."
+                },
+                {
+                    "id": 96,
+                    "w": "gravity",
+                    "d": "Gravity pulls everything toward the ground."
+                },
+                {
+                    "id": 97,
+                    "w": "ground",
+                    "d": "The cat sat on the ground in the sun."
+                },
+                {
+                    "id": 98,
+                    "w": "hard",
+                    "d": "The rock is too hard to break."
+                },
+                {
+                    "id": 99,
+                    "w": "hypothesis",
+                    "d": "My hypothesis is that plants grow faster if you take care of them."
+                },
+                {
+                    "id": 100,
+                    "w": "investigation",
+                    "d": "The kids did an investigation for homework."
+                },
+                {
+                    "id": 101,
+                    "w": "iron",
+                    "d": "This table is made of iron."
+                },
+                {
+                    "id": 102,
+                    "w": "irreversible",
+                    "d": "Cooking an egg is an irreversible change."
+                },
+                {
+                    "id": 103,
+                    "w": "leather",
+                    "d": "My shoes are made of leather."
+                },
+                {
+                    "id": 104,
+                    "w": "lightning",
+                    "d": "I saw lightning flash across the sky."
+                },
+                {
+                    "id": 105,
+                    "w": "magnetism",
+                    "d": "Magnetism helps magnets stick to the fridge."
+                },
+                {
+                    "id": 106,
+                    "w": "manufactured",
+                    "d": "The toys were manufactured in a large factory."
+                },
+                {
+                    "id": 107,
+                    "w": "materials",
+                    "d": "We need materials to build our house."
+                },
+                {
+                    "id": 108,
+                    "w": "measure",
+                    "d": "We need to measure the length of the table."
+                },
+                {
+                    "id": 109,
+                    "w": "melting",
+                    "d": "The Sun is melting the chocolate."
+                },
+                {
+                    "id": 110,
+                    "w": "metal",
+                    "d": "That door is made of metal."
+                },
+                {
+                    "id": 111,
+                    "w": "Moon",
+                    "d": "I can see the Moon at night."
+                },
+                {
+                    "id": 112,
+                    "w": "natural",
+                    "d": "I prefer natural foods over processed ones."
+                },
+                {
+                    "id": 113,
+                    "w": "observe",
+                    "d": "Please observe how colours can change."
+                },
+                {
+                    "id": 114,
+                    "w": "oil",
+                    "d": "Mexico exports oil."
+                },
+                {
+                    "id": 115,
+                    "w": "plastic",
+                    "d": "Water bottles are made of plastic."
+                },
+                {
+                    "id": 116,
+                    "w": "polyester",
+                    "d": "My shirt is made of polyester."
+                },
+                {
+                    "id": 117,
+                    "w": "predict",
+                    "d": "I can predict that it will rain tomorrow because the sky is so gray."
+                },
+                {
+                    "id": 118,
+                    "w": "produce",
+                    "d": "Farmers can produce fresh fruit."
+                },
+                {
+                    "id": 119,
+                    "w": "record",
+                    "d": "I want to record my video in the garden."
+                },
+                {
+                    "id": 120,
+                    "w": "resistance",
+                    "d": "Rubber has high resistance."
+                },
+                {
+                    "id": 121,
+                    "w": "result",
+                    "d": "That result is not available."
+                },
+                {
+                    "id": 122,
+                    "w": "reversible",
+                    "d": "Some changes are reversible."
+                },
+                {
+                    "id": 123,
+                    "w": "rock",
+                    "d": "That rock has a smooth surface."
+                },
+                {
+                    "id": 124,
+                    "w": "rough",
+                    "d": "Bricks are rough."
+                },
+                {
+                    "id": 125,
+                    "w": "runny",
+                    "d": "I don't like my ice cream when it gets runny in the sun."
+                },
+                {
+                    "id": 126,
+                    "w": "sand",
+                    "d": "I can see sand on the beach."
+                },
+                {
+                    "id": 127,
+                    "w": "scientist",
+                    "d": "I want to be a scientist."
+                },
+                {
+                    "id": 128,
+                    "w": "see",
+                    "d": "I can't see you, it's dark here."
+                },
+                {
+                    "id": 129,
+                    "w": "sky",
+                    "d": "The sky is blue today."
+                },
+                {
+                    "id": 130,
+                    "w": "slow down",
+                    "d": "When we see a stop sign, we need to slow down."
+                },
+                {
+                    "id": 131,
+                    "w": "smooth",
+                    "d": "A teacher's desk must be smooth."
+                },
+                {
+                    "id": 132,
+                    "w": "soft",
+                    "d": "This pillow is soft."
+                },
+                {
+                    "id": 133,
+                    "w": "source",
+                    "d": "The Sun is a source of light."
+                },
+                {
+                    "id": 134,
+                    "w": "speed up",
+                    "d": "When the light turns green, cars can speed up."
+                },
+                {
+                    "id": 135,
+                    "w": "squeeze",
+                    "d": "We squeeze limes."
+                },
+                {
+                    "id": 136,
+                    "w": "star",
+                    "d": "That star is the biggest one."
+                },
+                {
+                    "id": 137,
+                    "w": "steel",
+                    "d": "The bridge is made of strong steel."
+                },
+                {
+                    "id": 138,
+                    "w": "straight",
+                    "d": "Follow that straight line."
+                },
+                {
+                    "id": 139,
+                    "w": "streetlight",
+                    "d": "The streetlight helps us to see at night."
+                },
+                {
+                    "id": 140,
+                    "w": "stretch",
+                    "d": "Rubber bands can stretch."
+                },
+                {
+                    "id": 141,
+                    "w": "strong",
+                    "d": "My dad is very strong."
+                },
+                {
+                    "id": 142,
+                    "w": "Sun",
+                    "d": "The Sun is a star."
+                },
+                {
+                    "id": 143,
+                    "w": "transparent",
+                    "d": "That plastic bag is transparent."
+                },
+                {
+                    "id": 144,
+                    "w": "weak",
+                    "d": "The kitten is weak because it is very small."
+                },
+                {
+                    "id": 145,
+                    "w": "wool",
+                    "d": "My sweater is made of wool."
+                }
+            ],
+            "content": [
+                {
+                    "id": 1,
+                    "w": "airplane",
+                    "d": "That airplane is the biggest mean of transportation."
+                },
+                {
+                    "id": 2,
+                    "w": "amphibians",
+                    "d": "Salamanders are amphibians."
+                },
+                {
+                    "id": 3,
+                    "w": "balloon",
+                    "d": "I don’t like that balloon because it can explode."
+                },
+                {
+                    "id": 4,
+                    "w": "berries",
+                    "d": "Berries can be red."
+                },
+                {
+                    "id": 5,
+                    "w": "boat",
+                    "d": "I can see a boat in the sea."
+                },
+                {
+                    "id": 6,
+                    "w": "body",
+                    "d": "I move my body to exercise."
+                },
+                {
+                    "id": 7,
+                    "w": "bus",
+                    "d": "Traveling by bus is cheap."
+                },
+                {
+                    "id": 8,
+                    "w": "cable car",
+                    "d": "The cable car is not a common transportation."
+                },
+                {
+                    "id": 9,
+                    "w": "calm",
+                    "d": "He was calm despite the pressure on him."
+                },
+                {
+                    "id": 10,
+                    "w": "candle",
+                    "d": "Last night I used a candle. There was a power outage."
+                },
+                {
+                    "id": 11,
+                    "w": "closed",
+                    "d": "The window is closed and the room is too hot."
+                },
+                {
+                    "id": 12,
+                    "w": "coffee",
+                    "d": "You can put cream in your coffee."
+                },
+                {
+                    "id": 13,
+                    "w": "communication",
+                    "d": "It’s important to have a good communication everywhere."
+                },
+                {
+                    "id": 14,
+                    "w": "cream",
+                    "d": "You can drink your coffee with cream."
+                },
+                {
+                    "id": 15,
+                    "w": "creep",
+                    "d": "My cat can creep very quietly."
+                },
+                {
+                    "id": 16,
+                    "w": "ear",
+                    "d": "My left ear hurts."
+                },
+                {
+                    "id": 17,
+                    "w": "egg",
+                    "d": "Eagles lay eggs."
+                },
+                {
+                    "id": 18,
+                    "w": "e-mail",
+                    "d": "For better communication send him an e-mail."
+                },
+                {
+                    "id": 19,
+                    "w": "escape",
+                    "d": "The horses always escape."
+                },
+                {
+                    "id": 20,
+                    "w": "eye",
+                    "d": "We can’t see well with only an eye."
+                },
+                {
+                    "id": 21,
+                    "w": "feathers",
+                    "d": "Parrots have feathers."
+                },
+                {
+                    "id": 22,
+                    "w": "fierce",
+                    "d": "Be careful! That dog can be fierce."
+                },
+                {
+                    "id": 23,
+                    "w": "fight",
+                    "d": "My brother and sister don’t like each other. They often fight."
+                },
+                {
+                    "id": 24,
+                    "w": "flow",
+                    "d": "Water in a river can flow over stones."
+                },
+                {
+                    "id": 25,
+                    "w": "freezer",
+                    "d": "I freeze my food to keep it good."
+                },
+                {
+                    "id": 26,
+                    "w": "fruit",
+                    "d": "Monkeys and other animals love fruit."
+                },
+                {
+                    "id": 27,
+                    "w": "fur",
+                    "d": "Many mammals have fur."
+                },
+                {
+                    "id": 28,
+                    "w": "gas",
+                    "d": "We can’t see gas but I can smell it."
+                },
+                {
+                    "id": 29,
+                    "w": "gentle",
+                    "d": "Some animals are gentle."
+                },
+                {
+                    "id": 30,
+                    "w": "gills",
+                    "d": "Sharks use gills to breath."
+                },
+                {
+                    "id": 31,
+                    "w": "head",
+                    "d": "I have hair on my head."
+                },
+                {
+                    "id": 32,
+                    "w": "heat",
+                    "d": "We heat water to make a tea."
+                },
+                {
+                    "id": 33,
+                    "w": "horse",
+                    "d": "That horse is brave. Don’t ride it."
+                },
+                {
+                    "id": 34,
+                    "w": "hunt",
+                    "d": "Wild animals hunt their food."
+                },
+                {
+                    "id": 35,
+                    "w": "ice",
+                    "d": "We can freeze things using ice."
+                },
+                {
+                    "id": 36,
+                    "w": "ice pop",
+                    "d": "The strawberry ice pop is delicious."
+                },
+                {
+                    "id": 37,
+                    "w": "icicle",
+                    "d": "An icicle appeared outside my house."
+                },
+                {
+                    "id": 38,
+                    "w": "Internet",
+                    "d": "I have Internet on my tablet."
+                },
+                {
+                    "id": 39,
+                    "w": "kettle",
+                    "d": "My kettle helps me heat water."
+                },
+                {
+                    "id": 40,
+                    "w": "leg",
+                    "d": "I can’t walk with only one leg."
+                },
+                {
+                    "id": 41,
+                    "w": "letters",
+                    "d": "My grandparents used to write letters not e-mails."
+                },
+                {
+                    "id": 42,
+                    "w": "liquid",
+                    "d": "Soda is a liquid."
+                },
+                {
+                    "id": 43,
+                    "w": "mammals",
+                    "d": "Cats and dogs are mammals."
+                },
+                {
+                    "id": 44,
+                    "w": "melt",
+                    "d": "Don’t leave your ice pop there it can melt."
+                },
+                {
+                    "id": 45,
+                    "w": "mixture",
+                    "d": "A chicken soup is a mixture of vegetables."
+                },
+                {
+                    "id": 46,
+                    "w": "motorcycle",
+                    "d": "Wear a helmet when you travel by motorcycle."
+                },
+                {
+                    "id": 47,
+                    "w": "mouth",
+                    "d": "You should eat with your mouth closed."
+                },
+                {
+                    "id": 48,
+                    "w": "news",
+                    "d": "News can give us important information."
+                },
+                {
+                    "id": 49,
+                    "w": "open",
+                    "d": "Please open the door!"
+                },
+                {
+                    "id": 50,
+                    "w": "pasta",
+                    "d": "Italian pasta is the most delicious in the world."
+                },
+                {
+                    "id": 51,
+                    "w": "patient",
+                    "d": "My mum is patient."
+                },
+                {
+                    "id": 52,
+                    "w": "peck",
+                    "d": "Chickens usually peck at their food to eat."
+                },
+                {
+                    "id": 53,
+                    "w": "pinecone",
+                    "d": "A pinecone grows on a pine tree."
+                },
+                {
+                    "id": 54,
+                    "w": "plastic bag",
+                    "d": "Stop using that plastic bag. It’s dirty."
+                },
+                {
+                    "id": 55,
+                    "w": "popcorn",
+                    "d": "Popcorn at the movies is so expensive."
+                },
+                {
+                    "id": 56,
+                    "w": "pour",
+                    "d": "Please pour the soda!"
+                },
+                {
+                    "id": 57,
+                    "w": "radio",
+                    "d": "Many years ago my family had a radio where they listened to music."
+                },
+                {
+                    "id": 58,
+                    "w": "salad",
+                    "d": "The salad is healthy. Eat up!"
+                },
+                {
+                    "id": 59,
+                    "w": "salt",
+                    "d": "Salt is indispensable for cooking."
+                },
+                {
+                    "id": 60,
+                    "w": "scales",
+                    "d": "Serpents have scales."
+                },
+                {
+                    "id": 61,
+                    "w": "skin",
+                    "d": "Some amphibians have wet skin."
+                },
+                {
+                    "id": 62,
+                    "w": "smart",
+                    "d": "You are good at maths, you are smart."
+                },
+                {
+                    "id": 63,
+                    "w": "solid",
+                    "d": "A pencil is a solid."
+                },
+                {
+                    "id": 64,
+                    "w": "squawk",
+                    "d": "The parrot can squawk loudly. It’s a funny sound!"
+                },
+                {
+                    "id": 65,
+                    "w": "steam",
+                    "d": "The steam from the kettle misted up her glasses."
+                },
+                {
+                    "id": 66,
+                    "w": "strong",
+                    "d": "Some insects are small but strong."
+                },
+                {
+                    "id": 67,
+                    "w": "sugar",
+                    "d": "Don’t put a lot of sugar in your tea. It’s unhealthy."
+                },
+                {
+                    "id": 68,
+                    "w": "tea",
+                    "d": "Be careful! That cup of tea is too hot."
+                },
+                {
+                    "id": 69,
+                    "w": "text message",
+                    "d": "I received your text message. Thank you!"
+                },
+                {
+                    "id": 70,
+                    "w": "travel",
+                    "d": "I didn’t travel by plane yet."
+                },
+                {
+                    "id": 71,
+                    "w": "truck",
+                    "d": "Look at that red truck. It is so big!"
+                },
+                {
+                    "id": 72,
+                    "w": "vegetables",
+                    "d": "Broccoli and lettuce are vegetables."
+                },
+                {
+                    "id": 73,
+                    "w": "wings",
+                    "d": "Ducks have wings."
+                },
+                {
+                    "id": 74,
+                    "w": "worm",
+                    "d": "This worm is the longest one."
+                },
+                {
+                    "id": 75,
+                    "w": "arm",
+                    "d": "I raised my arm to ask a question."
+                },
+                {
+                    "id": 76,
+                    "w": "arrive",
+                    "d": "I always arrive home at ten."
+                },
+                {
+                    "id": 77,
+                    "w": "ask",
+                    "d": "Please ask me your questions."
+                },
+                {
+                    "id": 78,
+                    "w": "baker",
+                    "d": "That baker is the best at baking bread."
+                },
+                {
+                    "id": 79,
+                    "w": "bathtub",
+                    "d": "Don't use the bathtub, it wastes too much water."
+                },
+                {
+                    "id": 80,
+                    "w": "bored",
+                    "d": "Stop the movie, I'm bored."
+                },
+                {
+                    "id": 81,
+                    "w": "cafeteria",
+                    "d": "We find food in the cafeteria."
+                },
+                {
+                    "id": 82,
+                    "w": "camera",
+                    "d": "My camera takes the best photos."
+                },
+                {
+                    "id": 83,
+                    "w": "cell phone",
+                    "d": "I need another cell phone."
+                },
+                {
+                    "id": 84,
+                    "w": "chair",
+                    "d": "Our classroom chair is blue."
+                },
+                {
+                    "id": 85,
+                    "w": "check",
+                    "d": "Check your homework twice."
+                },
+                {
+                    "id": 86,
+                    "w": "classroom",
+                    "d": "Our classroom is big and safe."
+                },
+                {
+                    "id": 87,
+                    "w": "clean",
+                    "d": "Please clean your room."
+                },
+                {
+                    "id": 88,
+                    "w": "clean up",
+                    "d": "Please clean up here."
+                },
+                {
+                    "id": 89,
+                    "w": "clerk",
+                    "d": "My sister is a clerk. She loves her job."
+                },
+                {
+                    "id": 90,
+                    "w": "clock",
+                    "d": "Check the time on the clock."
+                },
+                {
+                    "id": 91,
+                    "w": "column",
+                    "d": "On the table, the numbers are organized in a column."
+                },
+                {
+                    "id": 92,
+                    "w": "computer",
+                    "d": "My computer is black—yours is red."
+                },
+                {
+                    "id": 93,
+                    "w": "cook",
+                    "d": "That cook works in this restaurant."
+                },
+                {
+                    "id": 94,
+                    "w": "couch",
+                    "d": "My couch is so comfortable."
+                },
+                {
+                    "id": 95,
+                    "w": "crossing guard",
+                    "d": "The crossing guard helps children cross the street safely."
+                },
+                {
+                    "id": 96,
+                    "w": "crosswalk",
+                    "d": "Please use the crosswalk to cross the street."
+                },
+                {
+                    "id": 97,
+                    "w": "crowded",
+                    "d": "That hall is always crowded."
+                },
+                {
+                    "id": 98,
+                    "w": "dig up",
+                    "d": "My dogs always dig up holes in the garden."
+                },
+                {
+                    "id": 99,
+                    "w": "dirty",
+                    "d": "My car is dirty, so I am going to wash it today."
+                },
+                {
+                    "id": 100,
+                    "w": "double-digit number",
+                    "d": "A double-digit number is any number from 10 to 99, like 25 or 68."
+                },
+                {
+                    "id": 101,
+                    "w": "enter",
+                    "d": "Please enter the room quietly."
+                },
+                {
+                    "id": 102,
+                    "w": "face",
+                    "d": "I washed my face in the morning."
+                },
+                {
+                    "id": 103,
+                    "w": "foot",
+                    "d": "My foot is sore from walking."
+                },
+                {
+                    "id": 104,
+                    "w": "full",
+                    "d": "He is full, so he doesn't want any more food."
+                },
+                {
+                    "id": 105,
+                    "w": "grab",
+                    "d": "Can you grab me a glass of water?"
+                },
+                {
+                    "id": 106,
+                    "w": "greedy",
+                    "d": "My brother is a greedy boy, he always wants more food."
+                },
+                {
+                    "id": 107,
+                    "w": "hand",
+                    "d": "I waved my hand to say hello."
+                },
+                {
+                    "id": 108,
+                    "w": "headphones",
+                    "d": "I love listening to music with my headphones."
+                },
+                {
+                    "id": 109,
+                    "w": "hide",
+                    "d": "Please, don't hide behind the fridge. It's dangerous."
+                },
+                {
+                    "id": 110,
+                    "w": "hungry",
+                    "d": "She was hungry, so she ate too much."
+                },
+                {
+                    "id": 111,
+                    "w": "invite",
+                    "d": "I want to invite you to my birthday party."
+                },
+                {
+                    "id": 112,
+                    "w": "jar",
+                    "d": "I can get candies in the jar."
+                },
+                {
+                    "id": 113,
+                    "w": "kitchen",
+                    "d": "We cook in the kitchen."
+                },
+                {
+                    "id": 114,
+                    "w": "knee",
+                    "d": "I hurt my knee while playing soccer."
+                },
+                {
+                    "id": 115,
+                    "w": "knock",
+                    "d": "Knock at the door before entering."
+                },
+                {
+                    "id": 116,
+                    "w": "lamp",
+                    "d": "That lamp doesn’t work. I will fix it."
+                },
+                {
+                    "id": 117,
+                    "w": "laptop",
+                    "d": "That laptop is not working, so use the other one."
+                },
+                {
+                    "id": 118,
+                    "w": "left",
+                    "d": "When you subtract 3 from 10, you are left with 7."
+                },
+                {
+                    "id": 119,
+                    "w": "let go",
+                    "d": "She decided to let go of her problems."
+                },
+                {
+                    "id": 120,
+                    "w": "librarian",
+                    "d": "The librarian knows all the books here."
+                },
+                {
+                    "id": 121,
+                    "w": "lifeguard",
+                    "d": "The lifeguard watched the swimmers at the beach."
+                },
+                {
+                    "id": 122,
+                    "w": "litter",
+                    "d": "Don’t litter! Respect the environment."
+                },
+                {
+                    "id": 123,
+                    "w": "living room",
+                    "d": "The living room is next to the dining room."
+                },
+                {
+                    "id": 124,
+                    "w": "minus sign",
+                    "d": "When you see a minus sign in maths, it means to take away."
+                },
+                {
+                    "id": 125,
+                    "w": "nose",
+                    "d": "My nose is cold in the winter."
+                },
+                {
+                    "id": 126,
+                    "w": "pass",
+                    "d": "I will pass the ball to you."
+                },
+                {
+                    "id": 127,
+                    "w": "polite",
+                    "d": "Be always polite to others!"
+                },
+                {
+                    "id": 128,
+                    "w": "poor",
+                    "d": "I'm poor, I don't have any money today."
+                },
+                {
+                    "id": 129,
+                    "w": "principal",
+                    "d": "Our principal makes important decisions."
+                },
+                {
+                    "id": 130,
+                    "w": "put away",
+                    "d": "Please put away your toys after playing."
+                },
+                {
+                    "id": 131,
+                    "w": "row",
+                    "d": "The answers are listed in a row."
+                },
+                {
+                    "id": 132,
+                    "w": "rude",
+                    "d": "It's rude to interrupt someone while they are talking."
+                },
+                {
+                    "id": 133,
+                    "w": "share",
+                    "d": "Let's share our snacks with one another."
+                },
+                {
+                    "id": 134,
+                    "w": "sick",
+                    "d": "She feels sick. I think she has the flu."
+                },
+                {
+                    "id": 135,
+                    "w": "sink",
+                    "d": "The sink is broken. Be careful!"
+                },
+                {
+                    "id": 136,
+                    "w": "steal",
+                    "d": "Be careful, that dog might steal your food."
+                },
+                {
+                    "id": 137,
+                    "w": "subtraction",
+                    "d": "Subtraction means taking away numbers."
+                },
+                {
+                    "id": 138,
+                    "w": "swimming pool",
+                    "d": "This hotel has a big swimming pool."
+                },
+                {
+                    "id": 139,
+                    "w": "tablet",
+                    "d": "The pink tablet is the most beautiful."
+                },
+                {
+                    "id": 140,
+                    "w": "take away",
+                    "d": "If you take away three from five, you get two."
+                },
+                {
+                    "id": 141,
+                    "w": "take turns",
+                    "d": "Don't fight. Take turns!"
+                },
+                {
+                    "id": 142,
+                    "w": "test score",
+                    "d": "Liz improved her math test score."
+                },
+                {
+                    "id": 143,
+                    "w": "thirsty",
+                    "d": "We need water because we are thirsty."
+                },
+                {
+                    "id": 144,
+                    "w": "thoughtful",
+                    "d": "She gave me a thoughtful gift for my birthday."
+                },
+                {
+                    "id": 145,
+                    "w": "tired",
+                    "d": "Let me sleep. I am tired."
+                },
+                {
+                    "id": 146,
+                    "w": "traffic lights",
+                    "d": "The traffic lights turned red, so we stopped."
+                },
+                {
+                    "id": 147,
+                    "w": "visit",
+                    "d": "I want to visit my grandparents this weekend."
+                },
+                {
+                    "id": 148,
+                    "w": "wash",
+                    "d": "Please wash these dishes!"
+                }
+            ]
+        }

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" stroke="#2563EB" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="50" cy="50" r="45" fill="#EFF6FF" stroke="none" />
+  <path d="M50 20 V45" stroke="#3B82F6" stroke-width="6"/>
+  <path d="M50 20 L30 60 H70 L50 20 Z" fill="#DBEAFE" stroke="#2563EB" stroke-width="3"/>
+  <circle cx="45" cy="50" r="3" fill="#60A5FA" stroke="none"/>
+  <circle cx="55" cy="40" r="2" fill="#60A5FA" stroke="none"/>
+  <circle cx="50" cy="30" r="2" fill="#60A5FA" stroke="none"/>
+  <text x="50" y="85" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#1E40AF" font-weight="bold">SCIENCE</text>
+</svg>
