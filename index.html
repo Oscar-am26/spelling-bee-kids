@@ -555,6 +555,12 @@
                             </div>
                         </div>
 
+                        <!-- Botón SIGUIENTE dentro del panel (visible al completar) -->
+                        <button id="ph-next-btn" onclick="nextWord()"
+                            class="hidden w-full bg-blue-500 hover:bg-blue-600 text-white font-black py-3.5 rounded-2xl shadow-lg border-b-4 border-blue-700 active:border-b-0 active:translate-y-1 transition-all text-xl uppercase tracking-wide shrink-0">
+                            SIGUIENTE →
+                        </button>
+
                     </div>
 
                     <!-- Comprobar -->
@@ -2380,6 +2386,8 @@
             ph.wordOk   = false;
             ph.active   = true;
             document.getElementById('action-btn').classList.add('hidden');
+            const phNext = document.getElementById('ph-next-btn');
+            if (phNext) phNext.classList.add('hidden');
             renderPhSlots();
             renderPhKeyboard();
             setPhStatus('type');
@@ -2660,12 +2668,9 @@
 
             speak(wordOk ? 'Perfect! Excellent pronunciation!' : 'Well done! Keep practicing your pronunciation!');
 
-            // Mostrar botón SIGUIENTE
-            const btn = document.getElementById('action-btn');
-            btn.classList.remove('hidden', 'bg-green-500', 'border-b-green-700');
-            btn.classList.add('bg-blue-500', 'border-b-blue-700');
-            btn.innerText = 'SIGUIENTE →';
-            btn.onclick   = nextWord;
+            // Mostrar botón SIGUIENTE dentro del panel fonético
+            const phNext = document.getElementById('ph-next-btn');
+            if (phNext) phNext.classList.remove('hidden');
         }
 
         // ---- Estado / barras visuales ----
@@ -2684,7 +2689,7 @@
 
             if (phase === 'type') {
                 bar.style.cssText = 'background:#f1f5f9;color:#475569';
-                bar.innerHTML = `<i class="fas fa-keyboard opacity-60 mr-1"></i>Escribe la letra <strong style="color:#3b82f6;font-size:1.3em">${cur}</strong>`;
+                bar.innerHTML = `<i class="fas fa-keyboard opacity-60 mr-1"></i>¿Cuál es la siguiente letra?`;
 
             } else if (phase === 'pronounce') {
                 bar.style.cssText = 'background:#fff7ed;color:#92400e';
