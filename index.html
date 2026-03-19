@@ -178,6 +178,41 @@
         /* ---- PTT ---- */
         .ptt-active { animation: mic-pulse 0.6s ease-out infinite; }
         .ptt-ready  { background: #16a34a !important; border-color: #15803d !important; }
+
+        /* ---- Phonics Letter Slots ---- */
+        .ph-slot {
+            width: clamp(34px, 9vw, 50px);
+            height: clamp(42px, 11vw, 60px);
+            border-radius: 10px;
+            border-bottom: 4px solid rgba(0,0,0,0.15);
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 900; font-size: clamp(15px, 4vw, 22px);
+            transition: all 0.25s cubic-bezier(0.175,0.885,0.32,1.275);
+        }
+        @keyframes slot-pop {
+            0%   { transform: scale(1); }
+            40%  { transform: scale(1.25); }
+            100% { transform: scale(1); }
+        }
+        .ph-slot.pop { animation: slot-pop 0.35s ease-out; }
+
+        /* ---- Phonics A-Z Keyboard ---- */
+        .ph-key {
+            height: clamp(30px, 6.5vw, 44px);
+            border-radius: 8px;
+            border-bottom: 3px solid rgba(0,0,0,0.22);
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 900; font-size: clamp(12px, 3vw, 18px);
+            color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+            cursor: pointer; user-select: none; -webkit-user-select: none;
+            touch-action: manipulation;
+            transition: transform 0.07s, border-bottom-width 0.07s, filter 0.12s;
+        }
+        .ph-key:active { transform: translateY(2px); border-bottom-width: 1px; }
+        .ph-key.correct-flash { filter: brightness(1.3); transform: scale(1.15) translateY(0); transition: none; }
+        .ph-key.wrong-flash   { filter: brightness(0.6); transition: none; }
     </style>
 </head>
 
@@ -440,11 +475,15 @@
                 <!-- Zona de Control -->
                 <div class="pt-12 px-3 pb-3 bg-white border-t border-slate-100 flex flex-col gap-2 shrink-0">
 
-                    <!-- 2 modos de entrada -->
-                    <div class="grid grid-cols-2 rounded-xl overflow-hidden border-2 border-slate-200 text-xs font-bold shrink-0">
+                    <!-- 3 modos de entrada -->
+                    <div class="grid grid-cols-3 rounded-xl overflow-hidden border-2 border-slate-200 text-xs font-bold shrink-0">
                         <button id="tab-keyboard" onclick="switchInputMode('keyboard')"
                             class="py-2 flex items-center justify-center gap-1.5 bg-white text-slate-700 border-r border-slate-200 transition-all">
                             <i class="fas fa-keyboard"></i>Teclado
+                        </button>
+                        <button id="tab-phonics" onclick="switchInputMode('phonics')"
+                            class="py-2 flex items-center justify-center gap-1.5 text-slate-400 transition-all hover:bg-slate-50 border-r border-slate-200">
+                            <i class="fas fa-spell-check"></i>Fonética
                         </button>
                         <button id="tab-ptt" onclick="switchInputMode('ptt')"
                             class="py-2 flex items-center justify-center gap-1.5 text-slate-400 transition-all hover:bg-slate-50">
@@ -470,11 +509,52 @@
                             <span class="text-slate-300 text-xl">...</span>
                         </div>
                         <p id="voice-interim" class="text-center text-sm text-slate-400 italic min-h-[18px] leading-none transition-all"></p>
-                        <button id="mic-btn"
-                            class="w-full bg-red-500 text-white font-black py-4 rounded-2xl shadow border-b-4 border-red-700 transition-all text-base flex items-center justify-center gap-3 select-none touch-none">
-                            <i id="mic-icon" class="fas fa-microphone text-2xl"></i>
-                            <span id="mic-label">Toca para activar el micrófono</span>
-                        </button>
+                        <div class="flex gap-2">
+                            <button id="mic-btn"
+                                class="flex-1 bg-red-500 text-white font-black py-4 rounded-2xl shadow border-b-4 border-red-700 transition-all text-base flex items-center justify-center gap-3 select-none touch-none">
+                                <i id="mic-icon" class="fas fa-microphone text-2xl"></i>
+                                <span id="mic-label">Toca para activar el micrófono</span>
+                            </button>
+                            <button onclick="backspaceLetter()" title="Borrar última letra"
+                                class="bg-slate-200 hover:bg-slate-300 text-slate-600 font-black px-4 rounded-2xl shadow border-b-4 border-slate-300 transition-all text-xl select-none shrink-0">
+                                ⌫
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- PANEL: Fonética — Escribe + Pronuncia letra a letra -->
+                    <div id="phonics-panel" class="hidden flex-col gap-1.5">
+
+                        <!-- Slots de letras -->
+                        <div id="ph-slots" class="flex flex-wrap justify-center gap-1.5 py-1 min-h-[52px] items-center"></div>
+
+                        <!-- Barra de estado -->
+                        <div id="ph-status" class="rounded-xl py-2 px-3 bg-slate-100 text-center font-bold text-sm text-slate-600"></div>
+
+                        <!-- Indicador de micrófono activo -->
+                        <div id="ph-mic-bar" class="hidden items-center gap-2 py-1.5 px-3 bg-red-50 rounded-xl border border-red-200">
+                            <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse shrink-0"></div>
+                            <span class="text-red-600 font-bold text-xs flex-1" id="ph-mic-text">Escuchando…</span>
+                            <span class="text-red-400 font-mono text-xs font-bold" id="ph-timer">5s</span>
+                        </div>
+
+                        <!-- Resultado de pronunciación (flash breve) -->
+                        <div id="ph-pron-result" class="hidden text-center font-bold text-xs py-1.5 px-3 rounded-xl"></div>
+
+                        <!-- Teclado A-Z generado por JS -->
+                        <div id="ph-keyboard" class="grid gap-1" style="grid-template-columns:repeat(9,1fr)"></div>
+
+                        <!-- Panel: Di la palabra completa (aparece al terminar todas las letras) -->
+                        <div id="ph-say-word" class="hidden flex-col items-center gap-1 bg-yellow-50 rounded-xl py-2.5 px-3 border-2 border-yellow-300">
+                            <span class="text-xl">🎤</span>
+                            <span class="font-black text-yellow-800 text-sm text-center leading-tight">¡Ahora di la palabra completa!</span>
+                            <span class="font-bold text-yellow-600 text-xl tracking-widest uppercase" id="ph-word-target"></span>
+                            <div id="ph-word-listening" class="flex items-center gap-1.5 text-red-500 font-bold text-xs">
+                                <div class="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></div>
+                                Escuchando…
+                            </div>
+                        </div>
+
                     </div>
 
                     <!-- Comprobar -->
@@ -989,6 +1069,7 @@
             voiceLettersCollected = [];
             if (pttActive) stopDictation();
             if (voiceSpellingActive) stopVoiceSpelling(false);
+            if (ph.active) { ph.active = false; clearPhTimers(); stopPhRec(); }
             updateModeDisplay();
             input.classList.remove('text-green-600', 'text-red-500', 'bg-green-50', 'bg-red-50', 'bg-orange-50', 'text-orange-500');
 
@@ -996,6 +1077,8 @@
             actionBtn.classList.remove('bg-blue-500', 'border-b-blue-700', 'hidden');
             actionBtn.classList.add('bg-green-500', 'border-b-green-700');
             actionBtn.onclick = checkAnswer;
+            // En modo fonética el botón se oculta; el sistema avanza solo
+            if (currentInputMode === 'phonics') actionBtn.classList.add('hidden');
 
             document.getElementById('feedback-icon').style.opacity = '0';
             document.getElementById('feedback-icon').style.transform = 'scale(0.5) translateY(-50%)';
@@ -1039,6 +1122,7 @@
 
             // Audio Auto
             setTimeout(() => playWord(), 600);
+            if (currentInputMode === 'phonics') initPhonics();
         }
 
         // ===============================================
@@ -1632,14 +1716,34 @@
         let currentInputMode = 'keyboard';
 
         const MODE_CONFIG = {
-            keyboard: { tab:'tab-keyboard', active:'bg-white text-slate-700 border-b-2 border-yellow-400' },
-            ptt:      { tab:'tab-ptt',      active:'bg-red-50 text-red-600 border-b-2 border-red-400'     },
+            keyboard: { tab:'tab-keyboard', active:'bg-white text-slate-700 border-b-2 border-yellow-400'       },
+            phonics:  { tab:'tab-phonics',  active:'bg-purple-50 text-purple-700 border-b-2 border-purple-400'  },
+            ptt:      { tab:'tab-ptt',      active:'bg-red-50 text-red-600 border-b-2 border-red-400'           },
+        };
+
+        // Nombres estándar de cada letra en inglés (variantes que Chrome suele transcribir)
+        const LETTER_SOUNDS = {
+            A:['ay','ai','ey','a','hey'],            B:['bee','be','b'],
+            C:['see','cee','sea','c','si'],          D:['dee','de','d'],
+            E:['ee','e'],                            F:['ef','eff','f'],
+            G:['gee','g','ji'],                      H:['aitch','h','age','eight','ache'],
+            I:['eye','i','ai'],                      J:['jay','j'],
+            K:['kay','k'],                           L:['el','l'],
+            M:['em','m'],                            N:['en','n'],
+            O:['oh','o','owe'],                      P:['pee','p'],
+            Q:['cue','queue','q','kyu'],             R:['ar','are','r'],
+            S:['ess','s','es'],                      T:['tee','tea','t'],
+            U:['you','u'],                           V:['vee','v'],
+            W:['double you','double u','w','dubliyu'],
+            X:['ex','x','x-ray','x ray','eks'],      Y:['why','y','wie'],
+            Z:['zee','zed','z'],
         };
 
         function switchInputMode(mode) {
             currentInputMode = mode;
             if (pttActive) stopDictation();
             if (voiceSpellingActive) stopVoiceSpelling(false);
+            if (ph.active) { ph.active = false; clearPhTimers(); stopPhRec(); }
 
             const input = document.getElementById('word-input');
 
@@ -1673,6 +1777,7 @@
             };
 
             hide('ptt-panel');
+            hide('phonics-panel');
             show('text-input-row', false);
             input.readOnly = false;
 
@@ -1685,6 +1790,16 @@
                 hide('text-input-row');
                 show('ptt-panel');
                 updateModeDisplay();
+            } else if (mode === 'phonics') {
+                input.value = '';
+                input.readOnly = true;
+                hide('text-input-row');
+                show('phonics-panel');
+                document.getElementById('action-btn').classList.add('hidden');
+                // Si ya hay una palabra cargada, iniciar fonética
+                if (state.playlist.length > 0 && state.currentIndex < state.playlist.length) {
+                    initPhonics();
+                }
             }
         }
 
@@ -1784,25 +1899,52 @@
             pttRecognition.maxAlternatives = 5;
 
             pttRecognition.onresult = (ev) => {
-                const interim = document.getElementById('voice-interim');
+                const interimEl = document.getElementById('voice-interim');
+                const target = state.playlist[state.currentIndex]?.w.toLowerCase() || '';
+
                 for (let i = ev.resultIndex; i < ev.results.length; i++) {
                     if (ev.results[i].isFinal) {
-                        // Limpiar interim
-                        if (interim) interim.textContent = '';
-                        // Buscar letra en los alternativas
-                        let found = false;
+                        if (interimEl) interimEl.textContent = '';
+
+                        // Recopilar todas las alternativas del resultado
+                        const transcripts = [];
                         for (let j = 0; j < ev.results[i].length; j++) {
-                            const said = ev.results[i][j].transcript.trim().toLowerCase();
-                            const letter = VOICE_MAP[said]
-                                || extractLettersPreview(said)[0]
-                                || (said.length === 1 && /[a-z]/.test(said) ? said.toUpperCase() : null);
-                            if (letter) { addLetter(letter, true); found = true; break; }
+                            transcripts.push(ev.results[i][j].transcript.trim().toLowerCase());
                         }
-                        if (!found) { flashPTTError(); }
+
+                        // 1. ¿El niño dijo la palabra completa? → auto-confirmar
+                        const wordMatch = transcripts.find(t => {
+                            const clean = t.replace(/[-'\s]/g, '');
+                            return clean === target.replace(/[-'\s]/g, '');
+                        });
+                        if (wordMatch) {
+                            document.getElementById('word-input').value = target.toUpperCase();
+                            updateModeDisplay();
+                            // Flash verde y auto-check tras breve pausa
+                            const btn = document.getElementById('mic-btn');
+                            if (btn) { btn.style.background = 'linear-gradient(135deg,#16a34a,#15803d)'; setTimeout(() => { btn.style.background = ''; }, 600); }
+                            setTimeout(() => checkAnswer(), 400);
+                            return;
+                        }
+
+                        // 2. Extraer TODAS las letras de la utterance más prometedora
+                        let bestLetters = [];
+                        for (const t of transcripts) {
+                            const letters = extractAllLetters(t);
+                            if (letters.length > bestLetters.length) bestLetters = letters;
+                        }
+
+                        if (bestLetters.length > 0) {
+                            bestLetters.forEach(l => addLetter(l, false));
+                            // Sonido solo para la última letra añadida
+                            if (bestLetters.length > 0) playLetterSound(bestLetters[bestLetters.length - 1]);
+                        } else {
+                            flashPTTError();
+                        }
                     } else {
-                        // Mostrar texto en tiempo real
+                        // Preview en tiempo real
                         const text = ev.results[i][0].transcript.trim();
-                        if (interim) interim.textContent = text ? `"${text}"` : '';
+                        if (interimEl) interimEl.textContent = text ? `"${text}"` : '';
                     }
                 }
             };
@@ -2031,6 +2173,49 @@
             voiceRecognition.start();
         }
 
+        // Extrae TODAS las letras de una utterance (para spelling bee completo)
+        // Maneja: "em ay pee ay", "m a p a", "map a", "bee eye gee"
+        function extractAllLetters(text) {
+            if (!text) return [];
+            const letters = [];
+            const words = text.trim().split(/\s+/);
+            let i = 0;
+
+            while (i < words.length) {
+                // Intento de 2 palabras primero ("double u", "x ray")
+                const two = i + 1 < words.length ? words[i] + ' ' + words[i + 1] : null;
+                if (two && VOICE_MAP[two]) {
+                    letters.push(VOICE_MAP[two]);
+                    i += 2;
+                    continue;
+                }
+                // 1 palabra exacta en el mapa
+                if (VOICE_MAP[words[i]]) {
+                    letters.push(VOICE_MAP[words[i]]);
+                    i++;
+                    continue;
+                }
+                // Letra única
+                if (words[i].length === 1 && /[a-z]/.test(words[i])) {
+                    letters.push(words[i].toUpperCase());
+                    i++;
+                    continue;
+                }
+                // Chrome transcribió varias letras como una palabra (ej: "big" → B,I,G)
+                // Solo si la palabra tiene ≤4 chars y NO es una palabra del idioma que conozcamos
+                // Intentamos mapear cada carácter
+                const wordLetters = words[i].split('').filter(c => /[a-z]/.test(c)).map(c => c.toUpperCase());
+                if (wordLetters.length >= 2 && wordLetters.length <= 4) {
+                    wordLetters.forEach(l => letters.push(l));
+                    i++;
+                    continue;
+                }
+                // Si no se puede mapear, omitir
+                i++;
+            }
+            return letters;
+        }
+
         function extractLettersPreview(text) {
             const letters = [];
             if (!text) return letters;
@@ -2147,12 +2332,402 @@
         // Enter key support
         document.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
+                if (currentInputMode === 'phonics') return; // fonética maneja su propio flujo
                 const btn = document.getElementById('action-btn');
                 if (!document.getElementById('view-game').classList.contains('hidden-screen')) {
                     btn.click();
                 }
             }
         });
+
+        // Teclado físico en modo fonética
+        document.addEventListener('keydown', (e) => {
+            if (currentInputMode !== 'phonics' || !ph.active) return;
+            if (e.ctrlKey || e.metaKey || e.altKey) return;
+            const letter = e.key.toUpperCase();
+            if (/^[A-Z]$/.test(letter)) { e.preventDefault(); handlePhKey(letter); }
+            else if (e.key === 'Backspace') e.preventDefault(); // sin borrar en fonética
+        });
+
+
+        // ===============================================
+        // 9. PHONICS MODE — Escribe + Pronuncia letra a letra
+        // ===============================================
+
+        // Estado fonético
+        let ph = {
+            active:   false,
+            letters:  [],       // ['B','E','E']
+            results:  [],       // [{letter, typed, pronounced}]
+            idx:      0,        // letra actual
+            phase:    'type',   // 'type'|'pronounce'|'word'|'done'
+            rec:      null,
+            recTimer: null,
+            timerInt: null,
+            attempts: 0,
+            MAX_ATT:  3,        // intentos de pronunciación por letra
+            wordOk:   false,
+        };
+
+        // ---- Inicializar fonética para la palabra actual ----
+        function initPhonics() {
+            const word = (state.playlist[state.currentIndex]?.w || '').toUpperCase();
+            ph.letters  = word.split('').filter(c => /[A-Z]/.test(c));
+            ph.results  = ph.letters.map(l => ({ letter: l, typed: false, pronounced: false }));
+            ph.idx      = 0;
+            ph.phase    = 'type';
+            ph.attempts = 0;
+            ph.wordOk   = false;
+            ph.active   = true;
+            document.getElementById('action-btn').classList.add('hidden');
+            renderPhSlots();
+            renderPhKeyboard();
+            setPhStatus('type');
+        }
+
+        // ---- Slots de letras ----
+        function renderPhSlots() {
+            const c = document.getElementById('ph-slots');
+            if (!c) return;
+            c.innerHTML = '';
+            ph.letters.forEach((letter, i) => {
+                const r   = ph.results[i];
+                const cur = (i === ph.idx && ph.phase !== 'word' && ph.phase !== 'done');
+                const div = document.createElement('div');
+                div.className = 'ph-slot';
+
+                if (r.pronounced) {
+                    // Verde: escrita + pronunciada ✅
+                    Object.assign(div.style, { background:'#22c55e', borderBottomColor:'#15803d', color:'white' });
+                    div.textContent = letter;
+                } else if (r.typed) {
+                    // Azul pulsante: escrita, esperando pronunciación
+                    Object.assign(div.style, { background:'#3b82f6', borderBottomColor:'#1d4ed8', color:'white', animation:'pulse 1.2s ease-in-out infinite' });
+                    div.textContent = letter;
+                } else if (cur) {
+                    // Amarillo destacado: turno actual
+                    Object.assign(div.style, { background:'white', border:'3px solid #facc15', borderBottom:'4px solid #ca8a04', color:'#b45309', boxShadow:'0 0 0 3px rgba(250,204,21,0.35)' });
+                    div.textContent = '?';
+                } else if (i < ph.idx) {
+                    // Naranja: letra pasada sin pronunciación perfecta
+                    Object.assign(div.style, { background:'#f97316', borderBottomColor:'#c2410c', color:'white' });
+                    div.textContent = letter;
+                } else {
+                    // Gris: letras futuras (ocultas)
+                    Object.assign(div.style, { background:'rgba(255,255,255,0.45)', borderBottomColor:'#e2e8f0', color:'transparent' });
+                    div.textContent = letter;
+                }
+                c.appendChild(div);
+            });
+        }
+
+        // ---- Animación pop en slot ----
+        function popPhSlot(i) {
+            const c = document.getElementById('ph-slots');
+            if (!c) return;
+            const slot = c.children[i];
+            if (!slot) return;
+            slot.classList.remove('pop');
+            void slot.offsetWidth;
+            slot.classList.add('pop');
+            setTimeout(() => slot.classList.remove('pop'), 400);
+        }
+
+        // ---- Teclado A-Z ----
+        const PH_COLORS = ['#EF4444','#F97316','#EAB308','#22C55E','#06B6D4','#3B82F6','#8B5CF6','#EC4899','#EF4444'];
+
+        function renderPhKeyboard() {
+            const c = document.getElementById('ph-keyboard');
+            if (!c) return;
+            c.innerHTML = '';
+            'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach((letter, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'ph-key';
+                btn.style.background    = PH_COLORS[i % PH_COLORS.length];
+                btn.style.borderColor   = 'rgba(0,0,0,0.2)';
+                btn.textContent         = letter;
+                btn.dataset.letter      = letter;
+                btn.addEventListener('pointerdown', (e) => { e.preventDefault(); handlePhKey(letter); });
+                c.appendChild(btn);
+            });
+        }
+
+        // ---- Manejar pulsación de letra ----
+        function handlePhKey(letter) {
+            if (!ph.active || ph.phase !== 'type') return;
+            const expected = ph.letters[ph.idx];
+
+            if (letter === expected) {
+                // ✅ Letra correcta — pasar a pronunciación
+                ph.results[ph.idx].typed = true;
+                ph.phase    = 'pronounce';
+                ph.attempts = 0;
+                renderPhSlots();
+                // Flash verde en la tecla
+                flashPhKey(letter, true);
+                setPhStatus('pronounce');
+                // TTS dice la letra → luego activa el mic
+                const letterName = LETTER_SOUNDS[letter]?.[0] || letter.toLowerCase();
+                speak(letterName).then(() => setTimeout(() => startPhLetterRec(letter), 350));
+
+            } else {
+                // ❌ Letra incorrecta
+                if (navigator.vibrate) navigator.vibrate([40, 20, 40]);
+                flashPhKey(letter, false);
+                // Flash rojo en el slot actual
+                const c = document.getElementById('ph-slots');
+                if (c && c.children[ph.idx]) {
+                    const s = c.children[ph.idx];
+                    const prevBg = s.style.background;
+                    s.style.background = '#fca5a5';
+                    setTimeout(() => { s.style.background = prevBg; }, 380);
+                }
+            }
+        }
+
+        function flashPhKey(letter, correct) {
+            document.querySelectorAll('.ph-key').forEach(k => {
+                if (k.dataset.letter !== letter) return;
+                const cls = correct ? 'correct-flash' : 'wrong-flash';
+                k.classList.add(cls);
+                setTimeout(() => k.classList.remove(cls), 320);
+            });
+        }
+
+        // ---- Reconocimiento de pronunciación por letra ----
+        function startPhLetterRec(expectedLetter) {
+            if (!ph.active || ph.phase !== 'pronounce') return;
+            clearPhTimers();
+
+            const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SR) { advancePhLetter(false); return; } // sin API → saltar
+
+            const rec = new SR();
+            rec.lang            = 'en-US';
+            rec.continuous      = false;
+            rec.interimResults  = false;
+            rec.maxAlternatives = 5;
+            ph.rec = rec;
+
+            // Temporizador visual 5s
+            let t = 5;
+            const timerEl = document.getElementById('ph-timer');
+            if (timerEl) timerEl.textContent = t + 's';
+            ph.timerInt = setInterval(() => {
+                t--;
+                if (timerEl) timerEl.textContent = t > 0 ? t + 's' : '⏰';
+            }, 1000);
+
+            // Timeout por silencio
+            ph.recTimer = setTimeout(() => {
+                stopPhRec();
+                onPhLetterFail(expectedLetter, null);
+            }, 5500);
+
+            rec.onresult = (e) => {
+                clearPhTimers();
+                const alts = [];
+                for (let i = 0; i < e.results[0].length; i++)
+                    alts.push(e.results[0][i].transcript.trim().toLowerCase());
+
+                const accepted = LETTER_SOUNDS[expectedLetter] || [];
+                const matched  = alts.some(t =>
+                    accepted.some(a => t === a || t.replace(/\s/g,'') === a.replace(/\s/g,'')
+                                    || t.includes(a) || a.includes(t))
+                );
+                stopPhRec();
+                if (matched) onPhLetterSuccess(expectedLetter);
+                else         onPhLetterFail(expectedLetter, alts[0]);
+            };
+
+            rec.onerror = (e) => {
+                clearPhTimers(); stopPhRec();
+                if (e.error !== 'no-speech') advancePhLetter(false);
+            };
+            rec.onend = () => { ph.rec = null; };
+
+            try { rec.start(); } catch { clearPhTimers(); advancePhLetter(false); }
+        }
+
+        function onPhLetterSuccess(letter) {
+            ph.results[ph.idx].pronounced = true;
+            playLetterSound(letter);
+            renderPhSlots();
+            popPhSlot(ph.idx);
+            showPhResult(true, `✅ ¡${letter}! Pronunciación correcta`);
+            setTimeout(() => { hidePhResult(); advancePhLetter(true); }, 900);
+        }
+
+        function onPhLetterFail(letter, heard) {
+            ph.attempts++;
+            const hint = LETTER_SOUNDS[letter]?.[0] || letter.toLowerCase();
+            if (ph.attempts < ph.MAX_ATT) {
+                const heardMsg = heard ? ` (escuché: "${heard}")` : '';
+                const mt = document.getElementById('ph-mic-text');
+                if (mt) mt.textContent = `Di "${hint}"${heardMsg} · ${ph.MAX_ATT - ph.attempts} intentos`;
+                showPhResult(false, `🔄 Di "${hint}" en inglés${heardMsg}`);
+                setTimeout(() => { hidePhResult(); startPhLetterRec(letter); }, 1900);
+            } else {
+                // Máx intentos — avanzar sin pronunciación
+                showPhResult(false, `💡 La letra "${letter}" se dice "${hint}"`);
+                setTimeout(() => { hidePhResult(); advancePhLetter(false); }, 2000);
+            }
+        }
+
+        function advancePhLetter(pronounced) {
+            ph.results[ph.idx].pronounced = pronounced;
+            const next = ph.idx + 1;
+            if (next >= ph.letters.length) {
+                // Todas las letras completadas → fase de palabra completa
+                ph.idx   = next;
+                ph.phase = 'word';
+                renderPhSlots();
+                setPhStatus('word');
+                // TTS dice la palabra → luego activa el mic
+                const word = state.playlist[state.currentIndex]?.w || '';
+                speak(word).then(() => setTimeout(() => startPhWordRec(), 400));
+            } else {
+                ph.idx      = next;
+                ph.phase    = 'type';
+                ph.attempts = 0;
+                renderPhSlots();
+                setPhStatus('type');
+            }
+        }
+
+        // ---- Reconocimiento de la palabra completa ----
+        function startPhWordRec() {
+            if (!ph.active || ph.phase !== 'word') return;
+            clearPhTimers();
+
+            const target = (state.playlist[state.currentIndex]?.w || '')
+                .toLowerCase().replace(/[^a-z]/g, '');
+
+            const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SR) { completePhonics(true); return; }
+
+            const rec = new SR();
+            rec.lang            = 'en-US';
+            rec.continuous      = false;
+            rec.interimResults  = false;
+            rec.maxAlternatives = 5;
+            ph.rec = rec;
+
+            ph.recTimer = setTimeout(() => { stopPhRec(); completePhonics(false); }, 8000);
+
+            rec.onresult = (e) => {
+                clearPhTimers();
+                const alts = [];
+                for (let i = 0; i < e.results[0].length; i++)
+                    alts.push(e.results[0][i].transcript.trim().toLowerCase().replace(/[^a-z]/g,''));
+                stopPhRec();
+                completePhonics(alts.some(t => t === target));
+            };
+            rec.onerror  = () => { clearPhTimers(); stopPhRec(); completePhonics(false); };
+            rec.onend    = () => { ph.rec = null; };
+            try { rec.start(); } catch { completePhonics(false); }
+        }
+
+        // ---- Completar modo fonético ----
+        function completePhonics(wordOk) {
+            ph.wordOk = wordOk;
+            ph.phase  = 'done';
+            ph.active = false;
+            clearPhTimers(); stopPhRec();
+
+            const total  = ph.letters.length;
+            const good   = ph.results.filter(r => r.pronounced).length;
+            const bonus  = Math.round((good / total) * 5) + (wordOk ? 5 : 0);
+
+            // Score
+            const pts = state.lives === 3 ? 10 : state.lives === 2 ? 7 : 4;
+            state.score += pts + bonus;
+            document.getElementById('score-display').innerText = state.score;
+
+            state.results.push({
+                word: state.playlist[state.currentIndex].w,
+                correct: true,
+                attempts: state.wordAttempts,
+                phonics: { good, total, wordOk },
+            });
+
+            renderPhSlots();
+            const wordMsg = wordOk ? '✅ palabra perfecta' : '❌ practica la palabra';
+            setPhStatus('done', `${good}/${total} letras · ${wordMsg} (+${bonus}⭐)`);
+
+            if (typeof confetti === 'function')
+                confetti({ particleCount: 90, spread: 72, origin: { y: 0.7 } });
+
+            speak(wordOk ? 'Perfect! Excellent pronunciation!' : 'Well done! Keep practicing your pronunciation!');
+
+            // Mostrar botón SIGUIENTE
+            const btn = document.getElementById('action-btn');
+            btn.classList.remove('hidden', 'bg-green-500', 'border-b-green-700');
+            btn.classList.add('bg-blue-500', 'border-b-blue-700');
+            btn.innerText = 'SIGUIENTE →';
+            btn.onclick   = nextWord;
+        }
+
+        // ---- Estado / barras visuales ----
+        function setPhStatus(phase, extra = '') {
+            const bar = document.getElementById('ph-status');
+            const mic = document.getElementById('ph-mic-bar');
+            const say = document.getElementById('ph-say-word');
+            const res = document.getElementById('ph-pron-result');
+
+            if (mic) { mic.classList.add('hidden');   mic.classList.remove('flex'); }
+            if (say) { say.classList.add('hidden');   say.classList.remove('flex'); }
+            if (res) res.classList.add('hidden');
+            if (!bar) return;
+
+            const cur = ph.letters[ph.idx] || '';
+
+            if (phase === 'type') {
+                bar.style.cssText = 'background:#f1f5f9;color:#475569';
+                bar.innerHTML = `<i class="fas fa-keyboard opacity-60 mr-1"></i>Escribe la letra <strong style="color:#3b82f6;font-size:1.3em">${cur}</strong>`;
+
+            } else if (phase === 'pronounce') {
+                bar.style.cssText = 'background:#fff7ed;color:#92400e';
+                const hint = LETTER_SOUNDS[cur]?.[0] || cur.toLowerCase();
+                bar.innerHTML = `🔤 Di en inglés: <strong style="color:#ea580c;font-size:1.4em">${cur}</strong>`;
+                if (mic) { mic.classList.remove('hidden'); mic.classList.add('flex'); }
+                const mt = document.getElementById('ph-mic-text');
+                if (mt) mt.textContent = `Di "${hint}" · ${ph.MAX_ATT} intentos`;
+
+            } else if (phase === 'word') {
+                bar.style.cssText = 'background:#fefce8;color:#713f12';
+                bar.innerHTML = `🌟 ¡Todas las letras! Ahora di la palabra completa`;
+                if (say) { say.classList.remove('hidden'); say.classList.add('flex'); }
+                const wt = document.getElementById('ph-word-target');
+                if (wt) wt.textContent = state.playlist[state.currentIndex]?.w || '';
+
+            } else if (phase === 'done') {
+                bar.style.cssText = 'background:#f0fdf4;color:#15803d';
+                bar.innerHTML = `✅ ¡Completado! ${extra}`;
+            }
+        }
+
+        // ---- Feedback visual de pronunciación ----
+        function showPhResult(ok, msg) {
+            const el = document.getElementById('ph-pron-result');
+            if (!el) return;
+            el.className = `text-center font-bold text-xs py-1.5 px-3 rounded-xl ${ok ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`;
+            el.textContent = msg;
+            el.classList.remove('hidden');
+        }
+        function hidePhResult() {
+            const el = document.getElementById('ph-pron-result');
+            if (el) el.classList.add('hidden');
+        }
+
+        // ---- Helpers ----
+        function clearPhTimers() {
+            clearTimeout(ph.recTimer);
+            clearInterval(ph.timerInt);
+        }
+        function stopPhRec() {
+            if (ph.rec) { try { ph.rec.stop(); } catch(e) {} ph.rec = null; }
+        }
 
     </script>
 
