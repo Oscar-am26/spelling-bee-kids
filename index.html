@@ -118,13 +118,6 @@
         }
         .flash-red { animation: flash-red 0.5s ease-in-out; }
 
-        @keyframes mic-pulse {
-            0%,100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.5); }
-            60%     { box-shadow: 0 0 0 12px rgba(239,68,68,0); }
-        }
-        .mic-active {
-            animation: mic-pulse 1s ease-out infinite;
-        }
         @keyframes ping-once {
             0%   { transform: scale(1); opacity: 1; }
             80%  { transform: scale(1.4); opacity: 0; }
@@ -174,10 +167,6 @@
         }
         .piano-key:hover  { opacity: 0.85; }
         .piano-key:active, .piano-key.pressed { transform: translateY(3px); border-bottom-width: 1px; }
-
-        /* ---- PTT ---- */
-        .ptt-active { animation: mic-pulse 0.6s ease-out infinite; }
-        .ptt-ready  { background: #16a34a !important; border-color: #15803d !important; }
 
         /* ---- Phonics Letter Slots ---- */
         .ph-slot {
@@ -412,12 +401,6 @@
             <div id="game-card"
                 class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl flex-1 flex flex-col overflow-hidden border-4 border-white relative z-10 mb-2">
 
-                <!-- Cuenta regresiva de voz -->
-                <div id="voice-countdown" class="hidden absolute inset-0 z-50 flex flex-col items-center justify-center bg-black/50 rounded-3xl backdrop-blur-sm">
-                    <div id="countdown-number" class="text-8xl font-black text-white leading-none" style="text-shadow:0 4px 24px rgba(0,0,0,0.6)">3</div>
-                    <div id="countdown-text" class="text-xl font-bold text-white/90 mt-3 tracking-wide">Prepárate...</div>
-                </div>
-
                 <!-- Barra Progreso -->
                 <div class="w-full h-3 bg-slate-100">
                     <div id="game-progress"
@@ -475,19 +458,15 @@
                 <!-- Zona de Control -->
                 <div class="pt-12 px-3 pb-3 bg-white border-t border-slate-100 flex flex-col gap-2 shrink-0">
 
-                    <!-- 3 modos de entrada -->
-                    <div class="grid grid-cols-3 rounded-xl overflow-hidden border-2 border-slate-200 text-xs font-bold shrink-0">
+                    <!-- 2 modos de entrada -->
+                    <div class="grid grid-cols-2 rounded-xl overflow-hidden border-2 border-slate-200 text-xs font-bold shrink-0">
                         <button id="tab-keyboard" onclick="switchInputMode('keyboard')"
                             class="py-2 flex items-center justify-center gap-1.5 bg-white text-slate-700 border-r border-slate-200 transition-all">
                             <i class="fas fa-keyboard"></i>Teclado
                         </button>
-                        <button id="tab-phonics" onclick="switchInputMode('phonics')"
+                        <button id="tab-battle" onclick="switchInputMode('battle')"
                             class="py-2 flex items-center justify-center gap-1.5 text-slate-400 transition-all hover:bg-slate-50 border-r border-slate-200">
-                            <i class="fas fa-spell-check"></i>Fonética
-                        </button>
-                        <button id="tab-ptt" onclick="switchInputMode('ptt')"
-                            class="py-2 flex items-center justify-center gap-1.5 text-slate-400 transition-all hover:bg-slate-50">
-                            <i class="fas fa-microphone"></i>Voz
+                            ⚔️ Batalla
                         </button>
                     </div>
 
@@ -502,65 +481,29 @@
                         </div>
                     </div>
 
-                    <!-- PANEL: Dictado por voz continuo -->
-                    <div id="ptt-panel" class="hidden flex-col gap-1.5">
-                        <div id="ptt-word-display"
-                            class="text-center text-3xl font-black tracking-[0.2em] text-slate-700 bg-slate-100 rounded-2xl py-2 min-h-[52px] flex items-center justify-center uppercase shadow-inner">
-                            <span class="text-slate-300 text-xl">...</span>
-                        </div>
-                        <p id="voice-interim" class="text-center text-sm text-slate-400 italic min-h-[18px] leading-none transition-all"></p>
-                        <div class="flex gap-2">
-                            <button id="mic-btn"
-                                class="flex-1 bg-red-500 text-white font-black py-4 rounded-2xl shadow border-b-4 border-red-700 transition-all text-base flex items-center justify-center gap-3 select-none touch-none">
-                                <i id="mic-icon" class="fas fa-microphone text-2xl"></i>
-                                <span id="mic-label">Toca para activar el micrófono</span>
-                            </button>
-                            <button onclick="backspaceLetter()" title="Borrar última letra"
-                                class="bg-slate-200 hover:bg-slate-300 text-slate-600 font-black px-4 rounded-2xl shadow border-b-4 border-slate-300 transition-all text-xl select-none shrink-0">
-                                ⌫
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- PANEL: Fonética — Escribe + Pronuncia letra a letra -->
-                    <div id="phonics-panel" class="hidden flex-col gap-1.5">
-
-                        <!-- Slots de letras -->
-                        <div id="ph-slots" class="flex flex-wrap justify-center gap-1.5 py-1 min-h-[52px] items-center"></div>
-
-                        <!-- Barra de estado -->
-                        <div id="ph-status" class="rounded-xl py-2 px-3 bg-slate-100 text-center font-bold text-sm text-slate-600"></div>
-
-                        <!-- Indicador de micrófono activo -->
-                        <div id="ph-mic-bar" class="hidden items-center gap-2 py-1.5 px-3 bg-red-50 rounded-xl border border-red-200">
-                            <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse shrink-0"></div>
-                            <span class="text-red-600 font-bold text-xs flex-1" id="ph-mic-text">Escuchando…</span>
-                            <span class="text-red-400 font-mono text-xs font-bold" id="ph-timer">5s</span>
-                        </div>
-
-                        <!-- Resultado de pronunciación (flash breve) -->
-                        <div id="ph-pron-result" class="hidden text-center font-bold text-xs py-1.5 px-3 rounded-xl"></div>
-
-                        <!-- Teclado A-Z generado por JS -->
-                        <div id="ph-keyboard" class="grid gap-1" style="grid-template-columns:repeat(9,1fr)"></div>
-
-                        <!-- Panel: Di la palabra completa (aparece al terminar todas las letras) -->
-                        <div id="ph-say-word" class="hidden flex-col items-center gap-1 bg-yellow-50 rounded-xl py-2.5 px-3 border-2 border-yellow-300">
-                            <span class="text-xl">🎤</span>
-                            <span class="font-black text-yellow-800 text-sm text-center leading-tight">¡Ahora di la palabra completa!</span>
-                            <span class="font-bold text-yellow-600 text-xl tracking-widest uppercase" id="ph-word-target"></span>
-                            <div id="ph-word-listening" class="flex items-center gap-1.5 text-red-500 font-bold text-xs">
-                                <div class="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></div>
-                                Escuchando…
+                    <!-- Panel Batalla -->
+                    <div id="battle-panel" class="hidden flex-col gap-2 w-full">
+                        <!-- Barra de vida de Entropión -->
+                        <div class="flex items-center gap-2 px-1">
+                            <span class="text-xs font-black text-red-400 shrink-0">ENTROPIÓN</span>
+                            <div class="flex-1 h-3 bg-slate-800 rounded-full overflow-hidden border border-red-900">
+                                <div id="entropia-hp-bar" class="h-full bg-gradient-to-r from-red-600 to-orange-400 rounded-full transition-all duration-300" style="width:100%"></div>
                             </div>
+                            <span id="entropia-hp-text" class="text-xs font-bold text-red-400 shrink-0 w-8 text-right">100</span>
                         </div>
-
-                        <!-- Botón SIGUIENTE dentro del panel (visible al completar) -->
-                        <button id="ph-next-btn" onclick="nextWord()"
-                            class="hidden w-full bg-blue-500 hover:bg-blue-600 text-white font-black py-3.5 rounded-2xl shadow-lg border-b-4 border-blue-700 active:border-b-0 active:translate-y-1 transition-all text-xl uppercase tracking-wide shrink-0">
+                        <!-- Canvas del enemigo -->
+                        <canvas id="entropia-canvas" width="320" height="140" class="w-full rounded-2xl" style="max-height:140px;background:#0f0f1a"></canvas>
+                        <!-- Slots de letras -->
+                        <div id="battle-slots" class="flex flex-wrap justify-center gap-1.5 py-0.5 min-h-[44px] items-center"></div>
+                        <!-- Resultado / feedback rápido -->
+                        <div id="battle-result" class="hidden text-center font-bold text-xs py-1 px-3 rounded-xl"></div>
+                        <!-- Teclado A-Z -->
+                        <div id="battle-keyboard" class="grid gap-1" style="grid-template-columns:repeat(9,1fr)"></div>
+                        <!-- Botón siguiente -->
+                        <button id="battle-next-btn" onclick="nextWord()"
+                            class="hidden w-full bg-blue-500 hover:bg-blue-600 text-white font-black py-3 rounded-2xl shadow-lg border-b-4 border-blue-700 active:border-b-0 active:translate-y-1 transition-all text-lg uppercase tracking-wide shrink-0">
                             SIGUIENTE →
                         </button>
-
                     </div>
 
                     <!-- Comprobar -->
@@ -759,9 +702,8 @@
 
         // ===============================================
         // ===============================================
-        // CONFIG - ElevenLabs TTS (cambia aquí la API key o el voice ID)
+        // CONFIG - ElevenLabs TTS (la API key vive en .env — no poner aquí)
         // ===============================================
-        const ELEVENLABS_API_KEY  = "sk_cb37c33bf27d3843e3a3514978dd045363623d9f846d2181";
         const ELEVENLABS_MODEL    = "eleven_turbo_v2_5";
         let   activeVoiceId       = "XrExE9yKIg1WjnnlVkGX"; // Matilda por defecto
         let   activeTTSEngine     = "elevenlabs"; // "elevenlabs" | "browser"
@@ -814,7 +756,7 @@
 
         function confirmBackToDojos() {
             if (confirm("¿Salir del nivel actual y regresar a los Dojos?")) {
-                if (voiceSpellingActive) stopVoiceSpelling(false);
+                if (battle && battle.active) { battle.active = false; if (entRAF) { cancelAnimationFrame(entRAF); entRAF = null; } }
                 if (currentAudio) { currentAudio.pause(); currentAudio = null; }
                 if (synth.speaking) synth.cancel();
                 switchView('view-dojo');
@@ -1072,10 +1014,7 @@
             input.value = '';
             input.readOnly = (currentInputMode !== 'keyboard');
             input.disabled = false;
-            voiceLettersCollected = [];
-            if (pttActive) stopDictation();
-            if (voiceSpellingActive) stopVoiceSpelling(false);
-            if (ph.active) { ph.active = false; clearPhTimers(); stopPhRec(); }
+            if (battle && battle.active) { battle.active = false; }
             updateModeDisplay();
             input.classList.remove('text-green-600', 'text-red-500', 'bg-green-50', 'bg-red-50', 'bg-orange-50', 'text-orange-500');
 
@@ -1083,8 +1022,8 @@
             actionBtn.classList.remove('bg-blue-500', 'border-b-blue-700', 'hidden');
             actionBtn.classList.add('bg-green-500', 'border-b-green-700');
             actionBtn.onclick = checkAnswer;
-            // En modo fonética el botón se oculta; el sistema avanza solo
-            if (currentInputMode === 'phonics') actionBtn.classList.add('hidden');
+            // En modo batalla el botón se oculta; el sistema avanza solo
+            if (currentInputMode === 'battle') actionBtn.classList.add('hidden');
 
             document.getElementById('feedback-icon').style.opacity = '0';
             document.getElementById('feedback-icon').style.transform = 'scale(0.5) translateY(-50%)';
@@ -1128,7 +1067,7 @@
 
             // Audio Auto
             setTimeout(() => playWord(), 600);
-            if (currentInputMode === 'phonics') initPhonics();
+            if (currentInputMode === 'battle') initBattle();
         }
 
         // ===============================================
@@ -1226,11 +1165,10 @@
 
             try {
                 const res = await fetch(
-                    `https://api.elevenlabs.io/v1/text-to-speech/${activeVoiceId}`,
+                    `/api/tts/${activeVoiceId}`,
                     {
                         method: 'POST',
                         headers: {
-                            'xi-api-key': ELEVENLABS_API_KEY,
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
@@ -1723,33 +1661,12 @@
 
         const MODE_CONFIG = {
             keyboard: { tab:'tab-keyboard', active:'bg-white text-slate-700 border-b-2 border-yellow-400'       },
-            phonics:  { tab:'tab-phonics',  active:'bg-purple-50 text-purple-700 border-b-2 border-purple-400'  },
-            ptt:      { tab:'tab-ptt',      active:'bg-red-50 text-red-600 border-b-2 border-red-400'           },
-        };
-
-        // Nombres estándar de cada letra en inglés (variantes que Chrome suele transcribir)
-        const LETTER_SOUNDS = {
-            A:['ay','ai','ey','a','hey'],            B:['bee','be','b'],
-            C:['see','cee','sea','c','si'],          D:['dee','de','d'],
-            E:['ee','e'],                            F:['ef','eff','f'],
-            G:['gee','g','ji'],                      H:['aitch','h','age','eight','ache'],
-            I:['eye','i','ai'],                      J:['jay','j'],
-            K:['kay','k'],                           L:['el','l'],
-            M:['em','m'],                            N:['en','n'],
-            O:['oh','o','owe'],                      P:['pee','p'],
-            Q:['cue','queue','q','kyu'],             R:['ar','are','r'],
-            S:['ess','s','es'],                      T:['tee','tea','t'],
-            U:['you','u'],                           V:['vee','v'],
-            W:['double you','double u','w','dubliyu'],
-            X:['ex','x','x-ray','x ray','eks'],      Y:['why','y','wie'],
-            Z:['zee','zed','z'],
+            battle:   { tab:'tab-battle',   active:'bg-red-50 text-red-700 border-b-2 border-red-400'           },
         };
 
         function switchInputMode(mode) {
             currentInputMode = mode;
-            if (pttActive) stopDictation();
-            if (voiceSpellingActive) stopVoiceSpelling(false);
-            if (ph.active) { ph.active = false; clearPhTimers(); stopPhRec(); }
+            if (battle && battle.active) { battle.active = false; if (entRAF) { cancelAnimationFrame(entRAF); entRAF = null; } }
 
             const input = document.getElementById('word-input');
 
@@ -1782,29 +1699,21 @@
                 el.classList.remove('flex');
             };
 
-            hide('ptt-panel');
-            hide('phonics-panel');
+            hide('battle-panel');
             show('text-input-row', false);
             input.readOnly = false;
 
             if (mode === 'keyboard') {
                 input.focus();
-            } else if (mode === 'ptt') {
-                input.value = '';
-                voiceLettersCollected = [];
-                input.readOnly = true;
-                hide('text-input-row');
-                show('ptt-panel');
-                updateModeDisplay();
-            } else if (mode === 'phonics') {
+            } else if (mode === 'battle') {
                 input.value = '';
                 input.readOnly = true;
                 hide('text-input-row');
-                show('phonics-panel');
+                show('battle-panel');
                 document.getElementById('action-btn').classList.add('hidden');
-                // Si ya hay una palabra cargada, iniciar fonética
+                // Si ya hay una palabra cargada, iniciar batalla
                 if (state.playlist.length > 0 && state.currentIndex < state.playlist.length) {
-                    initPhonics();
+                    initBattle();
                 }
             }
         }
@@ -1871,144 +1780,6 @@
             setTimeout(() => el.style.opacity = '', 130);
         }
 
-        // ---- Dictado continuo (toggle) ----
-        let pttRecognition = null;
-        let pttActive = false; // true = micrófono escuchando
-
-        function setupPTT() {
-            const btn = document.getElementById('mic-btn');
-            if (!btn) return;
-
-            const toggle = (e) => {
-                e.preventDefault();
-                if (currentInputMode !== 'ptt') return;
-                if (pttActive) {
-                    stopDictation();
-                } else {
-                    startDictation();
-                }
-            };
-
-            btn.addEventListener('click',      toggle);
-            btn.addEventListener('touchstart', toggle, { passive: false });
-        }
-
-        function startDictation() {
-            const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SR) { alert('Tu navegador no soporta voz. Usa Google Chrome.'); return; }
-
-            pttActive = true;
-            pttRecognition = new SR();
-            pttRecognition.lang = 'en-US';
-            pttRecognition.continuous = true;
-            pttRecognition.interimResults = true;
-            pttRecognition.maxAlternatives = 5;
-
-            pttRecognition.onresult = (ev) => {
-                const interimEl = document.getElementById('voice-interim');
-                const target = state.playlist[state.currentIndex]?.w.toLowerCase() || '';
-
-                for (let i = ev.resultIndex; i < ev.results.length; i++) {
-                    if (ev.results[i].isFinal) {
-                        if (interimEl) interimEl.textContent = '';
-
-                        // Recopilar todas las alternativas del resultado
-                        const transcripts = [];
-                        for (let j = 0; j < ev.results[i].length; j++) {
-                            transcripts.push(ev.results[i][j].transcript.trim().toLowerCase());
-                        }
-
-                        // 1. ¿El niño dijo la palabra completa? → auto-confirmar
-                        const wordMatch = transcripts.find(t => {
-                            const clean = t.replace(/[-'\s]/g, '');
-                            return clean === target.replace(/[-'\s]/g, '');
-                        });
-                        if (wordMatch) {
-                            document.getElementById('word-input').value = target.toUpperCase();
-                            updateModeDisplay();
-                            // Flash verde y auto-check tras breve pausa
-                            const btn = document.getElementById('mic-btn');
-                            if (btn) { btn.style.background = 'linear-gradient(135deg,#16a34a,#15803d)'; setTimeout(() => { btn.style.background = ''; }, 600); }
-                            setTimeout(() => checkAnswer(), 400);
-                            return;
-                        }
-
-                        // 2. Extraer TODAS las letras de la utterance más prometedora
-                        let bestLetters = [];
-                        for (const t of transcripts) {
-                            const letters = extractAllLetters(t);
-                            if (letters.length > bestLetters.length) bestLetters = letters;
-                        }
-
-                        if (bestLetters.length > 0) {
-                            bestLetters.forEach(l => addLetter(l, false));
-                            // Sonido solo para la última letra añadida
-                            if (bestLetters.length > 0) playLetterSound(bestLetters[bestLetters.length - 1]);
-                        } else {
-                            flashPTTError();
-                        }
-                    } else {
-                        // Preview en tiempo real
-                        const text = ev.results[i][0].transcript.trim();
-                        if (interimEl) interimEl.textContent = text ? `"${text}"` : '';
-                    }
-                }
-            };
-
-            pttRecognition.onerror = (e) => {
-                if (e.error === 'no-speech' || e.error === 'aborted') return;
-                stopDictation();
-            };
-
-            // Auto-reiniciar: el navegador corta continuous tras ~60s de silencio
-            pttRecognition.onend = () => {
-                if (pttActive) {
-                    try { pttRecognition.start(); } catch(err) { stopDictation(); }
-                } else {
-                    setPTTUI(false);
-                }
-            };
-
-            pttRecognition.start();
-            setPTTUI(true);
-        }
-
-        function stopDictation() {
-            pttActive = false;
-            const interim = document.getElementById('voice-interim');
-            if (interim) interim.textContent = '';
-            if (pttRecognition) try { pttRecognition.stop(); } catch(err) {}
-            setPTTUI(false);
-        }
-
-        function setPTTUI(active) {
-            const btn   = document.getElementById('mic-btn');
-            const icon  = document.getElementById('mic-icon');
-            const label = document.getElementById('mic-label');
-            if (!btn) return;
-            if (active) {
-                btn.classList.add('ptt-active');
-                btn.style.background = 'linear-gradient(135deg,#dc2626,#b91c1c)';
-                btn.style.borderColor = '#7f1d1d';
-                if (icon)  icon.className    = 'fas fa-circle text-xl animate-pulse';
-                if (label) label.textContent = 'Escuchando · di una letra · toca para parar';
-            } else {
-                btn.classList.remove('ptt-active');
-                btn.style.background = '';
-                btn.style.borderColor = '';
-                if (icon)  icon.className    = 'fas fa-microphone text-xl';
-                if (label) label.textContent = 'Toca para activar el micrófono';
-            }
-        }
-
-        function flashPTTError() {
-            const btn = document.getElementById('mic-btn');
-            if (!btn) return;
-            const prev = btn.style.background;
-            btn.style.background = '#fca5a5';
-            setTimeout(() => { btn.style.background = prev; }, 350);
-        }
-
         // ---- Age selection ----
         function setStudentAge(age) {
             if (age > 0) localStorage.setItem('kb_age', age);
@@ -2017,313 +1788,10 @@
             switchInputMode('keyboard');
         }
 
-        // ===============================================
-        // 8. DELETREO POR VOZ (Web Speech Recognition)
-        // ===============================================
-
-        // Mapeo fonético → letra (inglés + español)
-        const VOICE_MAP = {
-            // Una letra
-            'a':'A', 'b':'B', 'c':'C', 'd':'D', 'e':'E', 'f':'F', 'g':'G', 'h':'H', 'i':'I',
-            'j':'J', 'k':'K', 'l':'L', 'm':'M', 'n':'N', 'o':'O', 'p':'P', 'q':'Q', 'r':'R',
-            's':'S', 't':'T', 'u':'U', 'v':'V', 'w':'W', 'x':'X', 'y':'Y', 'z':'Z',
-            // Inglés fonético (en-US) con variantes comunes
-            'ay':'A', 'ai':'A', 'ey':'A', 'hey':'A',
-            'bee':'B', 'be':'B',
-            'cee':'C', 'see':'C', 'sea':'C',
-            'dee':'D', 'the':'D', 'de':'D',
-            'ee':'E',
-            'ef':'F', 'eff':'F',
-            'gee':'G',
-            'aitch':'H', 'edge':'H', 'eight':'H',
-            'eye':'I',
-            'jay':'J',
-            'kay':'K',
-            'el':'L',
-            'em':'M',
-            'en':'N', 'and':'N',
-            'oh':'O', 'owe':'O',
-            'pee':'P',
-            'cue':'Q', 'q':'Q', 'queue':'Q',
-            'ar':'R', 'are':'R',
-            'ess':'S', 'yes':'S',
-            'tee':'T', 'tea':'T', 't':'T',
-            'you':'U',
-            'vee':'V',
-            'double u':'W', 'double you':'W', 'w':'W',
-            'ex':'X', 'x':'X',
-            'why':'Y',
-            'zee':'Z', 'zed':'Z',
-            // Mapeos explícitos para resolver confusiones T vs D
-            'letter t':'T', 'letter d':'D',
-            't for tommy':'T', 'd for dog':'D',
-            // Español fonético
-            'be':'B','se':'C','ce':'C','de':'D','efe':'F','fe':'F','ge':'G','hache':'H',
-            'jota':'J','ka':'K','ele':'L','eme':'M','ene':'N','pe':'P','cu':'Q',
-            'erre':'R','ese':'S','te':'T','ve':'V','uve':'V','doble ve':'W',
-            'doble uve':'W','equis':'X','ye':'Y','i griega':'Y','zeta':'Z',
-            // Alfabeto NATO
-            'alpha':'A','bravo':'B','charlie':'C','delta':'D','echo':'E','foxtrot':'F',
-            'golf':'G','hotel':'H','india':'I','juliet':'J','kilo':'K','lima':'L',
-            'mike':'M','november':'N','oscar':'O','papa':'P','quebec':'Q','romeo':'R',
-            'sierra':'S','tango':'T','uniform':'U','victor':'V','whiskey':'W',
-            'x-ray':'X','yankee':'Y','zulu':'Z'
-        };
-
-        let voiceRecognition = null;
-        let voiceSpellingActive = false;
-        let voiceLettersCollected = [];
-
-        function toggleVoiceSpelling() {
-            if (voiceSpellingActive) {
-                stopVoiceSpelling(false);
-            } else {
-                startVoiceSpelling();
-            }
-        }
-
-        function startVoiceSpelling() {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) {
-                alert('Tu navegador no soporta reconocimiento de voz. Usa Google Chrome.');
-                return;
-            }
-            voiceLettersCollected = [];
-            document.getElementById('word-input').value = '';
-            setMicUI('waiting');
-            showVoiceCountdown(() => doStartVoiceRecognition(SpeechRecognition));
-        }
-
-        function showVoiceCountdown(callback) {
-            const overlay = document.getElementById('voice-countdown');
-            const numEl   = document.getElementById('countdown-number');
-            const textEl  = document.getElementById('countdown-text');
-            if (!overlay) { callback(); return; }
-
-            // Hacerlo pantalla completa y más vibrante
-            overlay.classList.remove('hidden', 'bg-black/50');
-            overlay.classList.add('fixed', 'inset-0', 'z-[100]', 'bg-slate-900/80', 'backdrop-blur-md');
-            
-            const steps = [
-                { n: '3', t: 'Prepárate...', s: 800 },
-                { n: '2', t: '¡Ya casi!', s: 800 },
-                { n: '1', t: '¡LISTO!', s: 800 },
-                { n: '🎤', t: '¡DELETREA AHORA!', s: 1000 }
-            ];
-            
-            let i = 0;
-            const updateStep = () => {
-                const step = steps[i];
-                numEl.textContent = step.n;
-                textEl.textContent = step.t;
-                numEl.classList.remove('scale-150', 'opacity-0');
-                numEl.classList.add('scale-100', 'opacity-100', 'animate-ping-once');
-                
-                // Si es el último paso "¡Deletrea!", iniciamos el reconocimiento un poco antes
-                if (i === steps.length - 1) {
-                    callback(); 
-                    setTimeout(() => {
-                        overlay.classList.add('hidden');
-                        overlay.classList.remove('fixed', 'inset-0', 'z-[100]', 'bg-slate-900/80', 'backdrop-blur-md');
-                        overlay.classList.add('absolute'); // Reset original
-                    }, step.s);
-                } else {
-                    setTimeout(() => {
-                        numEl.classList.add('scale-150', 'opacity-0');
-                        i++;
-                        updateStep();
-                    }, step.s);
-                }
-            };
-            
-            updateStep();
-        }
-
-        function doStartVoiceRecognition(SpeechRecognition) {
-            voiceRecognition = new SpeechRecognition();
-            voiceRecognition.lang = 'en-US';
-            voiceRecognition.continuous = true;
-            voiceRecognition.interimResults = true;
-            voiceRecognition.maxAlternatives = 3;
-
-            voiceRecognition.onresult = (e) => {
-                for (let i = e.resultIndex; i < e.results.length; i++) {
-                    if (e.results[i].isFinal) {
-                        processVoiceTranscript(e.results[i][0].transcript.trim().toLowerCase());
-                    }
-                }
-                let interimText = '';
-                for (let i = e.results.length - 1; i >= 0; i--) {
-                    if (!e.results[i].isFinal) {
-                        interimText = e.results[i][0].transcript.trim().toLowerCase();
-                        break;
-                    }
-                }
-                const preview = interimText ? extractLettersPreview(interimText) : [];
-                document.getElementById('word-input').value = [...voiceLettersCollected, ...preview].join('');
-            };
-
-            voiceRecognition.onerror = (e) => {
-                if (e.error === 'no-speech') return;
-                stopVoiceSpelling(false);
-            };
-
-            voiceRecognition.onend = () => {
-                if (voiceSpellingActive) {
-                    try { voiceRecognition.start(); } catch(err) {}
-                }
-            };
-
-            voiceSpellingActive = true;
-            setMicUI(true);
-            voiceRecognition.start();
-        }
-
-        // Extrae TODAS las letras de una utterance (para spelling bee completo)
-        // Maneja: "em ay pee ay", "m a p a", "map a", "bee eye gee"
-        function extractAllLetters(text) {
-            if (!text) return [];
-            const letters = [];
-            const words = text.trim().split(/\s+/);
-            let i = 0;
-
-            while (i < words.length) {
-                // Intento de 2 palabras primero ("double u", "x ray")
-                const two = i + 1 < words.length ? words[i] + ' ' + words[i + 1] : null;
-                if (two && VOICE_MAP[two]) {
-                    letters.push(VOICE_MAP[two]);
-                    i += 2;
-                    continue;
-                }
-                // 1 palabra exacta en el mapa
-                if (VOICE_MAP[words[i]]) {
-                    letters.push(VOICE_MAP[words[i]]);
-                    i++;
-                    continue;
-                }
-                // Letra única
-                if (words[i].length === 1 && /[a-z]/.test(words[i])) {
-                    letters.push(words[i].toUpperCase());
-                    i++;
-                    continue;
-                }
-                // Chrome transcribió varias letras como una palabra (ej: "big" → B,I,G)
-                // Solo si la palabra tiene ≤4 chars y NO es una palabra del idioma que conozcamos
-                // Intentamos mapear cada carácter
-                const wordLetters = words[i].split('').filter(c => /[a-z]/.test(c)).map(c => c.toUpperCase());
-                if (wordLetters.length >= 2 && wordLetters.length <= 4) {
-                    wordLetters.forEach(l => letters.push(l));
-                    i++;
-                    continue;
-                }
-                // Si no se puede mapear, omitir
-                i++;
-            }
-            return letters;
-        }
-
-        function extractLettersPreview(text) {
-            const letters = [];
-            if (!text) return letters;
-            const words = text.split(/\s+/);
-            let i = 0;
-            while (i < words.length) {
-                const two = i + 1 < words.length ? words[i] + ' ' + words[i+1] : null;
-                if (two && VOICE_MAP[two]) {
-                    letters.push(VOICE_MAP[two]);
-                    i += 2;
-                } else if (VOICE_MAP[words[i]]) {
-                    letters.push(VOICE_MAP[words[i]]);
-                    i++;
-                } else if (words[i].length === 1 && /[a-z]/.test(words[i])) {
-                    letters.push(words[i].toUpperCase());
-                    i++;
-                } else {
-                    i++;
-                }
-            }
-            return letters;
-        }
-
-        function processVoiceTranscript(said) {
-            const currentItem = state.playlist[state.currentIndex];
-            const currentWord = currentItem.w.toLowerCase();
-            const normalizedSaid = said.replace(/\s/g, '').toLowerCase();
-            if (normalizedSaid === currentWord || normalizedSaid === currentWord.replace(/[-$']/g, '')) {
-                voiceLettersCollected = currentWord.toUpperCase().split('').filter(c => /[A-Z]/.test(c));
-                document.getElementById('word-input').value = voiceLettersCollected.join('');
-                return;
-            }
-            if (VOICE_MAP[said]) {
-                voiceLettersCollected.push(VOICE_MAP[said]);
-                return;
-            }
-            if (said.length === 1 && /[a-z]/.test(said)) {
-                voiceLettersCollected.push(said.toUpperCase());
-                return;
-            }
-            const words = said.split(/\s+/);
-            let matched = false;
-            for (let i = 0; i < words.length - 1; i++) {
-                const two = words[i] + ' ' + words[i+1];
-                if (VOICE_MAP[two]) {
-                    voiceLettersCollected.push(VOICE_MAP[two]);
-                    matched = true;
-                    i++;
-                }
-            }
-            if (!matched) {
-                words.forEach(w => {
-                    const letter = VOICE_MAP[w] || (w.length === 1 && /[a-z]/.test(w) ? w.toUpperCase() : null);
-                    if (letter) voiceLettersCollected.push(letter);
-                });
-            }
-        }
-            
-        function stopVoiceSpelling(submit) {
-            voiceSpellingActive = false;
-            // Ocultar countdown si estaba activo
-            const overlay = document.getElementById('voice-countdown');
-            if (overlay) overlay.classList.add('hidden');
-            if (voiceRecognition) {
-                try { voiceRecognition.stop(); } catch(e) {}
-                voiceRecognition = null;
-            }
-            setMicUI(false);
-            if (submit && voiceLettersCollected.length > 0) {
-                setTimeout(() => checkAnswer(), 200);
-            }
-        }
-
-        function setMicUI(state) {
-            const btn   = document.getElementById('mic-btn');
-            const icon  = document.getElementById('mic-icon');
-            const label = document.getElementById('mic-label');
-            if (!btn) return;
-            btn.classList.remove('mic-active','bg-red-500','bg-red-600','bg-red-700',
-                'hover:bg-red-600','border-red-700','border-red-900','opacity-70');
-            if (state === true) {
-                btn.classList.add('mic-active','bg-red-700','border-red-900');
-                icon.className    = 'fas fa-stop-circle text-xl';
-                label.textContent = 'Escuchando... (tocar para detener)';
-            } else if (state === 'waiting') {
-                btn.classList.add('bg-red-600','border-red-800','opacity-70');
-                icon.className    = 'fas fa-clock text-xl';
-                label.textContent = 'Espera la cuenta regresiva...';
-            } else {
-                btn.classList.add('bg-red-500','hover:bg-red-600','border-red-700');
-                icon.className    = 'fas fa-microphone text-xl';
-                label.textContent = 'Tocar para escuchar';
-            }
-        }
-
         // Init
         window.onload = () => {
             loadVoices();
-            setupPTT();
-
-            // Reset voiceLettersCollected on new word
-            const origLoadWord = loadWord;
+            entInit();
 
             // Age modal on first visit
             const savedAge = parseInt(localStorage.getItem('kb_age') || '0');
@@ -2338,7 +1806,7 @@
         // Enter key support
         document.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
-                if (currentInputMode === 'phonics') return; // fonética maneja su propio flujo
+                if (currentInputMode === 'battle') return; // batalla maneja su propio flujo
                 const btn = document.getElementById('action-btn');
                 if (!document.getElementById('view-game').classList.contains('hidden-screen')) {
                     btn.click();
@@ -2346,92 +1814,384 @@
             }
         });
 
-        // Teclado físico en modo fonética
-        document.addEventListener('keydown', (e) => {
-            if (currentInputMode !== 'phonics' || !ph.active) return;
-            if (e.ctrlKey || e.metaKey || e.altKey) return;
-            const letter = e.key.toUpperCase();
-            if (/^[A-Z]$/.test(letter)) { e.preventDefault(); handlePhKey(letter); }
-            else if (e.key === 'Backspace') e.preventDefault(); // sin borrar en fonética
-        });
-
-
         // ===============================================
-        // 9. PHONICS MODE — Escribe + Pronuncia letra a letra
+        // MODO BATALLA — Entropión
         // ===============================================
 
-        // Estado fonético
-        let ph = {
-            active:   false,
-            letters:  [],       // ['B','E','E']
-            results:  [],       // [{letter, typed, pronounced}]
-            idx:      0,        // letra actual
-            phase:    'type',   // 'type'|'pronounce'|'word'|'done'
-            rec:      null,
-            recTimer: null,
-            timerInt: null,
-            attempts: 0,
-            MAX_ATT:  3,        // intentos de pronunciación por letra
-            wordOk:   false,
+        let battle = {
+            active: false,
+            letters: [],
+            results: [],
+            idx: 0,
+            phase: 'type',
         };
 
-        // ---- Inicializar fonética para la palabra actual ----
-        function initPhonics() {
-            const word = (state.playlist[state.currentIndex]?.w || '').toUpperCase();
-            ph.letters  = word.split('').filter(c => /[A-Z]/.test(c));
-            ph.results  = ph.letters.map(l => ({ letter: l, typed: false, pronounced: false }));
-            ph.idx      = 0;
-            ph.phase    = 'type';
-            ph.attempts = 0;
-            ph.wordOk   = false;
-            ph.active   = true;
-            document.getElementById('action-btn').classList.add('hidden');
-            const phNext = document.getElementById('ph-next-btn');
-            if (phNext) phNext.classList.add('hidden');
-            renderPhSlots();
-            renderPhKeyboard();
-            setPhStatus('type');
+        // ---- Canvas Entropión ----
+        let entCanvas, entCtx, entRAF;
+        const ent = {
+            hp: 100, maxHp: 100,
+            particles: [],
+            lightnings: [],
+            phase: 'idle',
+            phaseT: 0,
+            scale: 1, opacity: 1,
+            anger: 0,
+            cx: 160, cy: 70,
+        };
+
+        function entInit() {
+            entCanvas = document.getElementById('entropia-canvas');
+            if (!entCanvas) return;
+            entCtx = entCanvas.getContext('2d');
+            ent.cx = entCanvas.width / 2;
+            ent.cy = entCanvas.height / 2;
+            ent.particles = [];
+            for (let i = 0; i < 80; i++) ent.particles.push(newParticle(true));
+            ent.lightnings = [];
+            ent.phase = 'idle';
+            ent.hp = ent.maxHp = 100;
+            ent.scale = 1; ent.opacity = 1; ent.anger = 0;
+            if (entRAF) cancelAnimationFrame(entRAF);
+            entLoop();
         }
 
-        // ---- Slots de letras ----
-        function renderPhSlots() {
-            const c = document.getElementById('ph-slots');
+        function newParticle(init) {
+            const angle = Math.random() * Math.PI * 2;
+            const r = init ? Math.random() * 55 + 5 : 0;
+            return {
+                x: ent.cx + Math.cos(angle) * r,
+                y: ent.cy + Math.sin(angle) * r,
+                vx: (Math.random() - 0.5) * 1.4,
+                vy: (Math.random() - 0.5) * 1.4,
+                life: Math.random() * 120 + 40,
+                maxLife: 0,
+                size: Math.random() * 3 + 1,
+                hue: Math.random() * 40 + 240,
+                burst: false,
+            };
+        }
+
+        function entLoop() {
+            if (!entCtx) return;
+            entRAF = requestAnimationFrame(entLoop);
+            const t = Date.now() / 1000;
+            const w = entCanvas.width, h = entCanvas.height;
+
+            entCtx.clearRect(0, 0, w, h);
+
+            if (ent.phase === 'explode') { drawExplosion(t); return; }
+            if (ent.phase === 'win')     { drawWin(t); return; }
+
+            const idle_pulse = 1 + Math.sin(t * 2.1) * 0.06;
+            const anger_boost = 1 + ent.anger * 0.07;
+            const effective_scale = ent.scale * idle_pulse * anger_boost;
+
+            entCtx.save();
+            entCtx.globalAlpha = ent.opacity;
+            entCtx.translate(ent.cx, ent.cy);
+            entCtx.scale(effective_scale, effective_scale);
+            entCtx.translate(-ent.cx, -ent.cy);
+
+            const coreR = 30 + ent.anger * 3;
+            const grad = entCtx.createRadialGradient(ent.cx, ent.cy, 0, ent.cx, ent.cy, coreR * 2);
+            grad.addColorStop(0, `hsla(270,80%,15%,0.95)`);
+            grad.addColorStop(0.4, `hsla(260,70%,8%,0.85)`);
+            grad.addColorStop(1, `hsla(240,60%,5%,0)`);
+            entCtx.beginPath();
+            entCtx.arc(ent.cx, ent.cy, coreR * 2, 0, Math.PI * 2);
+            entCtx.fillStyle = grad;
+            entCtx.fill();
+
+            entCtx.beginPath();
+            for (let a = 0; a < Math.PI * 2; a += 0.18) {
+                const wobble = coreR + Math.sin(a * 4 + t * 3) * 7 + Math.cos(a * 2.5 + t * 1.7) * 5;
+                const px = ent.cx + Math.cos(a) * wobble;
+                const py = ent.cy + Math.sin(a) * wobble;
+                a === 0 ? entCtx.moveTo(px, py) : entCtx.lineTo(px, py);
+            }
+            entCtx.closePath();
+            entCtx.fillStyle = `hsla(270,70%,12%,0.7)`;
+            entCtx.fill();
+            entCtx.strokeStyle = `hsla(280,80%,40%,0.5)`;
+            entCtx.lineWidth = 1.5;
+            entCtx.stroke();
+
+            const eyeOff = 9 + ent.anger * 1.5;
+            const eyeGlow = ent.phase === 'taunt' ? 'hsla(0,100%,60%,0.9)' : 'hsla(40,100%,60%,0.85)';
+            [[-eyeOff, -5], [eyeOff, -5]].forEach(([ex, ey]) => {
+                const eg = entCtx.createRadialGradient(ent.cx+ex, ent.cy+ey, 0, ent.cx+ex, ent.cy+ey, 7);
+                eg.addColorStop(0, eyeGlow);
+                eg.addColorStop(1, 'transparent');
+                entCtx.beginPath();
+                entCtx.arc(ent.cx+ex, ent.cy+ey, 7, 0, Math.PI*2);
+                entCtx.fillStyle = eg;
+                entCtx.fill();
+                entCtx.beginPath();
+                entCtx.arc(ent.cx+ex, ent.cy+ey, 2.5, 0, Math.PI*2);
+                entCtx.fillStyle = '#1a0a0a';
+                entCtx.fill();
+            });
+
+            ent.particles.forEach(p => {
+                const life_ratio = p.life / (p.maxLife || 160);
+                const alpha = Math.min(life_ratio * 2, 1) * 0.8;
+                entCtx.beginPath();
+                entCtx.arc(p.x, p.y, p.size * (p.burst ? life_ratio : 1), 0, Math.PI*2);
+                entCtx.fillStyle = `hsla(${p.hue},70%,55%,${alpha})`;
+                entCtx.fill();
+                p.x += p.vx; p.y += p.vy; p.life--;
+                if (!p.burst) {
+                    const dx = ent.cx - p.x, dy = ent.cy - p.y;
+                    const dist = Math.sqrt(dx*dx+dy*dy);
+                    if (dist > 5) { p.vx += dx/dist * 0.04; p.vy += dy/dist * 0.04; }
+                    p.vx *= 0.98; p.vy *= 0.98;
+                }
+                if (p.life <= 0) Object.assign(p, newParticle(false), { maxLife: p.maxLife || 160, life: 120 + Math.random()*80 });
+            });
+
+            ent.lightnings = ent.lightnings.filter(l => l.life > 0);
+            ent.lightnings.forEach(l => {
+                drawLightning(entCtx, l.x1, l.y1, l.x2, l.y2, l.life / l.maxLife);
+                l.life--;
+            });
+            entCtx.restore();
+
+            if (ent.phase === 'hurt' || ent.phase === 'taunt') {
+                ent.phaseT--;
+                if (ent.phaseT <= 0) ent.phase = 'idle';
+            }
+        }
+
+        function drawLightning(ctx, x1, y1, x2, y2, alpha) {
+            ctx.save();
+            ctx.globalAlpha = alpha * 0.9;
+            ctx.strokeStyle = `hsla(200,100%,80%,${alpha})`;
+            ctx.lineWidth = 1.5;
+            ctx.shadowColor = 'cyan';
+            ctx.shadowBlur = 8;
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            const segments = 6;
+            for (let i = 1; i <= segments; i++) {
+                const t = i / segments;
+                const bx = x1 + (x2-x1)*t + (Math.random()-0.5)*20;
+                const by = y1 + (y2-y1)*t + (Math.random()-0.5)*20;
+                ctx.lineTo(bx, by);
+            }
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        function addLightnings(count) {
+            for (let i = 0; i < count; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const r1 = 20, r2 = 55 + Math.random() * 30;
+                ent.lightnings.push({
+                    x1: ent.cx + Math.cos(angle) * r1,
+                    y1: ent.cy + Math.sin(angle) * r1,
+                    x2: ent.cx + Math.cos(angle + (Math.random()-0.5)*1.2) * r2,
+                    y2: ent.cy + Math.sin(angle + (Math.random()-0.5)*1.2) * r2,
+                    life: 8 + Math.floor(Math.random()*8), maxLife: 16,
+                });
+            }
+        }
+
+        function drawExplosion(t) {
+            const prog = Math.min((Date.now() - ent._explodeStart) / 1200, 1);
+            entCtx.clearRect(0, 0, entCanvas.width, entCanvas.height);
+            ent.particles.forEach(p => {
+                if (!p.burst) return;
+                const alpha = (1 - prog) * 0.9;
+                entCtx.beginPath();
+                entCtx.arc(p.x, p.y, p.size * (1 - prog * 0.5), 0, Math.PI*2);
+                entCtx.fillStyle = `hsla(${p.hue},80%,65%,${alpha})`;
+                entCtx.fill();
+                p.x += p.vx; p.y += p.vy;
+                p.vx *= 0.95; p.vy *= 0.95;
+            });
+            if (prog < 0.15) {
+                entCtx.fillStyle = `rgba(255,255,255,${0.6 - prog*4})`;
+                entCtx.fillRect(0, 0, entCanvas.width, entCanvas.height);
+            }
+            if (prog >= 1) {
+                cancelAnimationFrame(entRAF);
+                entCtx.clearRect(0, 0, entCanvas.width, entCanvas.height);
+            }
+        }
+
+        function drawWin(t) {
+            const prog = Math.min((Date.now() - ent._winStart) / 800, 1);
+            entCtx.fillStyle = `rgba(0,0,0,${prog * 0.85})`;
+            entCtx.fillRect(0, 0, entCanvas.width, entCanvas.height);
+            entCtx.save();
+            const s = 1 + prog * 2.5;
+            entCtx.translate(ent.cx, ent.cy);
+            entCtx.scale(s, s);
+            entCtx.translate(-ent.cx, -ent.cy);
+            const grad = entCtx.createRadialGradient(ent.cx, ent.cy, 0, ent.cx, ent.cy, 70);
+            grad.addColorStop(0, `hsla(270,80%,20%,${0.8 * (1-prog*0.3)})`);
+            grad.addColorStop(1, 'transparent');
+            entCtx.beginPath();
+            entCtx.arc(ent.cx, ent.cy, 70, 0, Math.PI*2);
+            entCtx.fillStyle = grad;
+            entCtx.fill();
+            entCtx.restore();
+            if (prog > 0.5) {
+                entCtx.save();
+                entCtx.globalAlpha = (prog - 0.5) * 2;
+                entCtx.fillStyle = '#ff4444';
+                entCtx.font = 'bold 22px sans-serif';
+                entCtx.textAlign = 'center';
+                entCtx.textBaseline = 'middle';
+                entCtx.shadowColor = '#ff0000';
+                entCtx.shadowBlur = 15;
+                entCtx.fillText('¡ENTROPIÓN GANA!', ent.cx, ent.cy);
+                entCtx.restore();
+            }
+        }
+
+        function entropionHurt(dmg) {
+            ent.hp = Math.max(0, ent.hp - dmg);
+            ent.phase = 'hurt'; ent.phaseT = 18;
+            ent.scale = 0.88;
+            setTimeout(() => { ent.scale = 1; }, 200);
+            addLightnings(5);
+            updateEntHpBar();
+        }
+
+        function entropionTaunt() {
+            ent.anger = Math.min(5, ent.anger + 1);
+            ent.phase = 'taunt'; ent.phaseT = 22;
+            ent.scale = 1.15;
+            setTimeout(() => { ent.scale = 1; }, 300);
+        }
+
+        function entropionExplode() {
+            ent.phase = 'explode';
+            ent._explodeStart = Date.now();
+            ent.particles.forEach(p => {
+                p.burst = true;
+                const angle = Math.atan2(p.y - ent.cy, p.x - ent.cx);
+                const speed = 2 + Math.random() * 5;
+                p.vx = Math.cos(angle) * speed;
+                p.vy = Math.sin(angle) * speed;
+                p.hue = 30 + Math.random() * 60;
+                p.size = 2 + Math.random() * 4;
+            });
+            addLightnings(12);
+        }
+
+        function entropionWinAnim() {
+            ent.phase = 'win';
+            ent._winStart = Date.now();
+        }
+
+        function updateEntHpBar() {
+            const bar = document.getElementById('entropia-hp-bar');
+            const txt = document.getElementById('entropia-hp-text');
+            if (bar) bar.style.width = Math.max(0, ent.hp / ent.maxHp * 100) + '%';
+            if (txt) txt.textContent = Math.max(0, Math.round(ent.hp));
+            if (bar) {
+                if (ent.hp > 60) {
+                    bar.style.background = 'linear-gradient(to right, #dc2626, #f97316)';
+                } else if (ent.hp > 30) {
+                    bar.style.background = 'linear-gradient(to right, #b91c1c, #dc2626)';
+                } else {
+                    bar.style.background = 'linear-gradient(to right, #7f1d1d, #991b1b)';
+                }
+            }
+        }
+
+        // ---- Sonidos de batalla (Web Audio) ----
+        function playBattleHit() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const buf = ctx.createBuffer(1, ctx.sampleRate * 0.12, ctx.sampleRate);
+                const d = buf.getChannelData(0);
+                for (let i = 0; i < d.length; i++) {
+                    const t2 = i / ctx.sampleRate;
+                    d[i] = Math.sin(2*Math.PI*(800-t2*3000)*t2) * Math.exp(-t2*20) * 0.4;
+                }
+                const src = ctx.createBufferSource();
+                src.buffer = buf;
+                src.connect(ctx.destination);
+                src.start();
+                setTimeout(() => ctx.close(), 300);
+            } catch(e) {}
+        }
+
+        function playBattleMiss() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain); gain.connect(ctx.destination);
+                osc.frequency.setValueAtTime(180, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.18);
+                gain.gain.setValueAtTime(0.25, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+                osc.start(); osc.stop(ctx.currentTime + 0.22);
+                setTimeout(() => ctx.close(), 400);
+            } catch(e) {}
+        }
+
+        // ---- Teclado de batalla A-Z ----
+        const BATTLE_COLORS = ['#EF4444','#F97316','#EAB308','#22C55E','#06B6D4','#3B82F6','#8B5CF6','#EC4899','#EF4444'];
+
+        function renderBattleKeyboard() {
+            const c = document.getElementById('battle-keyboard');
             if (!c) return;
             c.innerHTML = '';
-            ph.letters.forEach((letter, i) => {
-                const r   = ph.results[i];
-                const cur = (i === ph.idx && ph.phase !== 'word' && ph.phase !== 'done');
+            'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach((letter, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'ph-key';
+                btn.style.background  = BATTLE_COLORS[i % BATTLE_COLORS.length];
+                btn.style.borderColor = 'rgba(0,0,0,0.2)';
+                btn.textContent       = letter;
+                btn.dataset.letter    = letter;
+                btn.addEventListener('pointerdown', (e) => { e.preventDefault(); handleBattleKey(letter); });
+                c.appendChild(btn);
+            });
+        }
+
+        function flashBattleKey(letter, correct) {
+            document.querySelectorAll('#battle-keyboard .ph-key').forEach(k => {
+                if (k.dataset.letter !== letter) return;
+                const cls = correct ? 'correct-flash' : 'wrong-flash';
+                k.classList.add(cls);
+                setTimeout(() => k.classList.remove(cls), 320);
+            });
+        }
+
+        // ---- Slots de batalla ----
+        function renderBattleSlots() {
+            const c = document.getElementById('battle-slots');
+            if (!c) return;
+            c.innerHTML = '';
+            battle.letters.forEach((letter, i) => {
+                const r = battle.results[i];
+                const cur = (i === battle.idx && battle.phase === 'type');
                 const div = document.createElement('div');
                 div.className = 'ph-slot';
-
-                if (r.pronounced) {
-                    // Verde: escrita + pronunciada ✅
+                if (r && r.correct === true) {
                     Object.assign(div.style, { background:'#22c55e', borderBottomColor:'#15803d', color:'white' });
                     div.textContent = letter;
-                } else if (r.typed) {
-                    // Azul pulsante: escrita, esperando pronunciación
-                    Object.assign(div.style, { background:'#3b82f6', borderBottomColor:'#1d4ed8', color:'white', animation:'pulse 1.2s ease-in-out infinite' });
-                    div.textContent = letter;
-                } else if (cur) {
-                    // Amarillo destacado: turno actual
-                    Object.assign(div.style, { background:'white', border:'3px solid #facc15', borderBottom:'4px solid #ca8a04', color:'#b45309', boxShadow:'0 0 0 3px rgba(250,204,21,0.35)' });
-                    div.textContent = '?';
-                } else if (i < ph.idx) {
-                    // Naranja: letra pasada sin pronunciación perfecta
+                } else if (r && r.correct === false) {
                     Object.assign(div.style, { background:'#f97316', borderBottomColor:'#c2410c', color:'white' });
                     div.textContent = letter;
+                } else if (cur) {
+                    Object.assign(div.style, { background:'white', border:'3px solid #facc15', borderBottom:'4px solid #ca8a04', color:'#b45309', boxShadow:'0 0 0 3px rgba(250,204,21,0.35)' });
+                    div.textContent = '?';
                 } else {
-                    // Gris: letras futuras (ocultas)
-                    Object.assign(div.style, { background:'rgba(255,255,255,0.45)', borderBottomColor:'#e2e8f0', color:'transparent' });
+                    Object.assign(div.style, { background:'rgba(255,255,255,0.2)', borderBottomColor:'#e2e8f0', color:'transparent' });
                     div.textContent = letter;
                 }
                 c.appendChild(div);
             });
         }
 
-        // ---- Animación pop en slot ----
-        function popPhSlot(i) {
-            const c = document.getElementById('ph-slots');
+        function popBattleSlot(i) {
+            const c = document.getElementById('battle-slots');
             if (!c) return;
             const slot = c.children[i];
             if (!slot) return;
@@ -2441,298 +2201,146 @@
             setTimeout(() => slot.classList.remove('pop'), 400);
         }
 
-        // ---- Teclado A-Z ----
-        const PH_COLORS = ['#EF4444','#F97316','#EAB308','#22C55E','#06B6D4','#3B82F6','#8B5CF6','#EC4899','#EF4444'];
-
-        function renderPhKeyboard() {
-            const c = document.getElementById('ph-keyboard');
-            if (!c) return;
-            c.innerHTML = '';
-            'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach((letter, i) => {
-                const btn = document.createElement('button');
-                btn.className = 'ph-key';
-                btn.style.background    = PH_COLORS[i % PH_COLORS.length];
-                btn.style.borderColor   = 'rgba(0,0,0,0.2)';
-                btn.textContent         = letter;
-                btn.dataset.letter      = letter;
-                btn.addEventListener('pointerdown', (e) => { e.preventDefault(); handlePhKey(letter); });
-                c.appendChild(btn);
-            });
+        // ---- Inicializar Batalla ----
+        function initBattle() {
+            const word = (state.playlist[state.currentIndex]?.w || '').toUpperCase();
+            battle.letters = word.split('').filter(c => /[A-Z]/.test(c));
+            battle.results = battle.letters.map(() => null);
+            battle.idx = 0;
+            battle.phase = 'type';
+            battle.active = true;
+            ent.hp = 100; ent.maxHp = 100;
+            ent.anger = 0; ent.scale = 1; ent.opacity = 1;
+            updateEntHpBar();
+            document.getElementById('action-btn').classList.add('hidden');
+            const nextBtn = document.getElementById('battle-next-btn');
+            if (nextBtn) nextBtn.classList.add('hidden');
+            const res = document.getElementById('battle-result');
+            if (res) res.classList.add('hidden');
+            renderBattleSlots();
+            renderBattleKeyboard();
+            if (!entCtx) entInit();
+            else {
+                ent.phase = 'idle';
+                ent.particles.forEach(p => Object.assign(p, newParticle(true)));
+                if (!entRAF) entLoop();
+            }
         }
 
-        // ---- Manejar pulsación de letra ----
-        function handlePhKey(letter) {
-            if (!ph.active || ph.phase !== 'type') return;
-            const expected = ph.letters[ph.idx];
+        // ---- Manejar tecla de batalla ----
+        function handleBattleKey(letter) {
+            if (!battle.active || battle.phase !== 'type') return;
+            const expected = battle.letters[battle.idx];
+            const dmgPerLetter = 100 / battle.letters.length;
 
             if (letter === expected) {
-                // ✅ Letra correcta — pasar a pronunciación
-                ph.results[ph.idx].typed = true;
-                ph.phase    = 'pronounce';
-                ph.attempts = 0;
-                renderPhSlots();
-                // Flash verde en la tecla
-                flashPhKey(letter, true);
-                setPhStatus('pronounce');
-                // TTS dice la letra → luego activa el mic
-                const letterName = LETTER_SOUNDS[letter]?.[0] || letter.toLowerCase();
-                speak(letterName).then(() => setTimeout(() => startPhLetterRec(letter), 350));
-
+                battle.results[battle.idx] = { letter, correct: true };
+                renderBattleSlots();
+                flashBattleKey(letter, true);
+                popBattleSlot(battle.idx);
+                entropionHurt(dmgPerLetter);
+                playBattleHit();
+                if (entCanvas) {
+                    entCanvas.style.boxShadow = '0 0 24px 6px #22c55e';
+                    setTimeout(() => { entCanvas.style.boxShadow = ''; }, 350);
+                }
+                battle.idx++;
+                if (battle.idx >= battle.letters.length) {
+                    battle.phase = 'done';
+                    battle.active = false;
+                    setTimeout(() => { entropionExplode(); completeBattle(true); }, 300);
+                } else {
+                    renderBattleSlots();
+                }
             } else {
-                // ❌ Letra incorrecta
-                if (navigator.vibrate) navigator.vibrate([40, 20, 40]);
-                flashPhKey(letter, false);
-                // Flash rojo en el slot actual
-                const c = document.getElementById('ph-slots');
-                if (c && c.children[ph.idx]) {
-                    const s = c.children[ph.idx];
-                    const prevBg = s.style.background;
-                    s.style.background = '#fca5a5';
-                    setTimeout(() => { s.style.background = prevBg; }, 380);
+                if (navigator.vibrate) navigator.vibrate([80, 40, 80]);
+                flashBattleKey(letter, false);
+                entropionTaunt();
+                playBattleMiss();
+                if (entCanvas) {
+                    entCanvas.style.boxShadow = '0 0 24px 8px #dc2626';
+                    setTimeout(() => { entCanvas.style.boxShadow = ''; }, 400);
+                }
+                const gameCard = document.getElementById('game-card');
+                if (gameCard) {
+                    gameCard.classList.remove('flash-red');
+                    void gameCard.offsetWidth;
+                    gameCard.classList.add('flash-red');
+                }
+                state.lives--;
+                updateLivesDisplay();
+                if (state.lives <= 0) {
+                    battle.active = false;
+                    battle.phase = 'done';
+                    for (let i = battle.idx; i < battle.letters.length; i++) {
+                        battle.results[i] = { letter: battle.letters[i], correct: false };
+                    }
+                    renderBattleSlots();
+                    entropionWinAnim();
+                    showBattleResult(false, `💀 ¡Entropión gana! La respuesta era: ${battle.letters.join('')}`);
+                    speak('Game over! The answer is ' + (state.playlist[state.currentIndex]?.w || ''));
+                    setTimeout(() => { completeBattle(false); }, 2500);
+                } else {
+                    const restantes = state.lives === 1 ? '1 ❤️ restante' : `${state.lives} ❤️ restantes`;
+                    showBattleResult(false, `❌ Era la letra "${expected}" · ${restantes}`);
+                    setTimeout(() => hideBattleResult(), 1600);
                 }
             }
         }
 
-        function flashPhKey(letter, correct) {
-            document.querySelectorAll('.ph-key').forEach(k => {
-                if (k.dataset.letter !== letter) return;
-                const cls = correct ? 'correct-flash' : 'wrong-flash';
-                k.classList.add(cls);
-                setTimeout(() => k.classList.remove(cls), 320);
-            });
-        }
-
-        // ---- Reconocimiento de pronunciación por letra ----
-        function startPhLetterRec(expectedLetter) {
-            if (!ph.active || ph.phase !== 'pronounce') return;
-            clearPhTimers();
-
-            const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SR) { advancePhLetter(false); return; } // sin API → saltar
-
-            const rec = new SR();
-            rec.lang            = 'en-US';
-            rec.continuous      = false;
-            rec.interimResults  = false;
-            rec.maxAlternatives = 5;
-            ph.rec = rec;
-
-            // Temporizador visual 5s
-            let t = 5;
-            const timerEl = document.getElementById('ph-timer');
-            if (timerEl) timerEl.textContent = t + 's';
-            ph.timerInt = setInterval(() => {
-                t--;
-                if (timerEl) timerEl.textContent = t > 0 ? t + 's' : '⏰';
-            }, 1000);
-
-            // Timeout por silencio
-            ph.recTimer = setTimeout(() => {
-                stopPhRec();
-                onPhLetterFail(expectedLetter, null);
-            }, 5500);
-
-            rec.onresult = (e) => {
-                clearPhTimers();
-                const alts = [];
-                for (let i = 0; i < e.results[0].length; i++)
-                    alts.push(e.results[0][i].transcript.trim().toLowerCase());
-
-                const accepted = LETTER_SOUNDS[expectedLetter] || [];
-                const matched  = alts.some(t =>
-                    accepted.some(a => t === a || t.replace(/\s/g,'') === a.replace(/\s/g,'')
-                                    || t.includes(a) || a.includes(t))
-                );
-                stopPhRec();
-                if (matched) onPhLetterSuccess(expectedLetter);
-                else         onPhLetterFail(expectedLetter, alts[0]);
-            };
-
-            rec.onerror = (e) => {
-                clearPhTimers(); stopPhRec();
-                if (e.error !== 'no-speech') advancePhLetter(false);
-            };
-            rec.onend = () => { ph.rec = null; };
-
-            try { rec.start(); } catch { clearPhTimers(); advancePhLetter(false); }
-        }
-
-        function onPhLetterSuccess(letter) {
-            ph.results[ph.idx].pronounced = true;
-            playLetterSound(letter);
-            renderPhSlots();
-            popPhSlot(ph.idx);
-            showPhResult(true, `✅ ¡${letter}! Pronunciación correcta`);
-            setTimeout(() => { hidePhResult(); advancePhLetter(true); }, 900);
-        }
-
-        function onPhLetterFail(letter, heard) {
-            ph.attempts++;
-            const hint = LETTER_SOUNDS[letter]?.[0] || letter.toLowerCase();
-            if (ph.attempts < ph.MAX_ATT) {
-                const heardMsg = heard ? ` (escuché: "${heard}")` : '';
-                const mt = document.getElementById('ph-mic-text');
-                if (mt) mt.textContent = `Di "${hint}"${heardMsg} · ${ph.MAX_ATT - ph.attempts} intentos`;
-                showPhResult(false, `🔄 Di "${hint}" en inglés${heardMsg}`);
-                setTimeout(() => { hidePhResult(); startPhLetterRec(letter); }, 1900);
-            } else {
-                // Máx intentos — avanzar sin pronunciación
-                showPhResult(false, `💡 La letra "${letter}" se dice "${hint}"`);
-                setTimeout(() => { hidePhResult(); advancePhLetter(false); }, 2000);
-            }
-        }
-
-        function advancePhLetter(pronounced) {
-            ph.results[ph.idx].pronounced = pronounced;
-            const next = ph.idx + 1;
-            if (next >= ph.letters.length) {
-                // Todas las letras completadas → fase de palabra completa
-                ph.idx   = next;
-                ph.phase = 'word';
-                renderPhSlots();
-                setPhStatus('word');
-                // TTS dice la palabra → luego activa el mic
-                const word = state.playlist[state.currentIndex]?.w || '';
-                speak(word).then(() => setTimeout(() => startPhWordRec(), 400));
-            } else {
-                ph.idx      = next;
-                ph.phase    = 'type';
-                ph.attempts = 0;
-                renderPhSlots();
-                setPhStatus('type');
-            }
-        }
-
-        // ---- Reconocimiento de la palabra completa ----
-        function startPhWordRec() {
-            if (!ph.active || ph.phase !== 'word') return;
-            clearPhTimers();
-
-            const target = (state.playlist[state.currentIndex]?.w || '')
-                .toLowerCase().replace(/[^a-z]/g, '');
-
-            const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SR) { completePhonics(true); return; }
-
-            const rec = new SR();
-            rec.lang            = 'en-US';
-            rec.continuous      = false;
-            rec.interimResults  = false;
-            rec.maxAlternatives = 5;
-            ph.rec = rec;
-
-            ph.recTimer = setTimeout(() => { stopPhRec(); completePhonics(false); }, 8000);
-
-            rec.onresult = (e) => {
-                clearPhTimers();
-                const alts = [];
-                for (let i = 0; i < e.results[0].length; i++)
-                    alts.push(e.results[0][i].transcript.trim().toLowerCase().replace(/[^a-z]/g,''));
-                stopPhRec();
-                completePhonics(alts.some(t => t === target));
-            };
-            rec.onerror  = () => { clearPhTimers(); stopPhRec(); completePhonics(false); };
-            rec.onend    = () => { ph.rec = null; };
-            try { rec.start(); } catch { completePhonics(false); }
-        }
-
-        // ---- Completar modo fonético ----
-        function completePhonics(wordOk) {
-            ph.wordOk = wordOk;
-            ph.phase  = 'done';
-            ph.active = false;
-            clearPhTimers(); stopPhRec();
-
-            const total  = ph.letters.length;
-            const good   = ph.results.filter(r => r.pronounced).length;
-            const bonus  = Math.round((good / total) * 5) + (wordOk ? 5 : 0);
-
-            // Score
-            const pts = state.lives === 3 ? 10 : state.lives === 2 ? 7 : 4;
-            state.score += pts + bonus;
-            document.getElementById('score-display').innerText = state.score;
-
-            state.results.push({
-                word: state.playlist[state.currentIndex].w,
-                correct: true,
-                attempts: state.wordAttempts,
-                phonics: { good, total, wordOk },
-            });
-
-            renderPhSlots();
-            const wordMsg = wordOk ? '✅ palabra perfecta' : '❌ practica la palabra';
-            setPhStatus('done', `${good}/${total} letras · ${wordMsg} (+${bonus}⭐)`);
-
-            if (typeof confetti === 'function')
-                confetti({ particleCount: 90, spread: 72, origin: { y: 0.7 } });
-
-            speak(wordOk ? 'Perfect! Excellent pronunciation!' : 'Well done! Keep practicing your pronunciation!');
-
-            // Mostrar botón SIGUIENTE dentro del panel fonético
-            const phNext = document.getElementById('ph-next-btn');
-            if (phNext) phNext.classList.remove('hidden');
-        }
-
-        // ---- Estado / barras visuales ----
-        function setPhStatus(phase, extra = '') {
-            const bar = document.getElementById('ph-status');
-            const mic = document.getElementById('ph-mic-bar');
-            const say = document.getElementById('ph-say-word');
-            const res = document.getElementById('ph-pron-result');
-
-            if (mic) { mic.classList.add('hidden');   mic.classList.remove('flex'); }
-            if (say) { say.classList.add('hidden');   say.classList.remove('flex'); }
-            if (res) res.classList.add('hidden');
-            if (!bar) return;
-
-            const cur = ph.letters[ph.idx] || '';
-
-            if (phase === 'type') {
-                bar.style.cssText = 'background:#f1f5f9;color:#475569';
-                bar.innerHTML = `<i class="fas fa-keyboard opacity-60 mr-1"></i>¿Cuál es la siguiente letra?`;
-
-            } else if (phase === 'pronounce') {
-                bar.style.cssText = 'background:#fff7ed;color:#92400e';
-                const hint = LETTER_SOUNDS[cur]?.[0] || cur.toLowerCase();
-                bar.innerHTML = `🔤 Di en inglés: <strong style="color:#ea580c;font-size:1.4em">${cur}</strong>`;
-                if (mic) { mic.classList.remove('hidden'); mic.classList.add('flex'); }
-                const mt = document.getElementById('ph-mic-text');
-                if (mt) mt.textContent = `Di "${hint}" · ${ph.MAX_ATT} intentos`;
-
-            } else if (phase === 'word') {
-                bar.style.cssText = 'background:#fefce8;color:#713f12';
-                bar.innerHTML = `🌟 ¡Todas las letras! Ahora di la palabra completa`;
-                if (say) { say.classList.remove('hidden'); say.classList.add('flex'); }
-                const wt = document.getElementById('ph-word-target');
-                if (wt) wt.textContent = state.playlist[state.currentIndex]?.w || '';
-
-            } else if (phase === 'done') {
-                bar.style.cssText = 'background:#f0fdf4;color:#15803d';
-                bar.innerHTML = `✅ ¡Completado! ${extra}`;
-            }
-        }
-
-        // ---- Feedback visual de pronunciación ----
-        function showPhResult(ok, msg) {
-            const el = document.getElementById('ph-pron-result');
+        function showBattleResult(ok, msg) {
+            const el = document.getElementById('battle-result');
             if (!el) return;
             el.className = `text-center font-bold text-xs py-1.5 px-3 rounded-xl ${ok ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`;
             el.textContent = msg;
             el.classList.remove('hidden');
         }
-        function hidePhResult() {
-            const el = document.getElementById('ph-pron-result');
+        function hideBattleResult() {
+            const el = document.getElementById('battle-result');
             if (el) el.classList.add('hidden');
         }
 
-        // ---- Helpers ----
-        function clearPhTimers() {
-            clearTimeout(ph.recTimer);
-            clearInterval(ph.timerInt);
+        // ---- Completar batalla ----
+        function completeBattle(won) {
+            battle.phase = 'done';
+            battle.active = false;
+            if (entRAF) { cancelAnimationFrame(entRAF); entRAF = null; }
+
+            const total = battle.letters.length;
+            const good  = battle.results.filter(r => r && r.correct).length;
+            const bonus = Math.round((good / total) * 5);
+            const pts   = state.lives === 3 ? 10 : state.lives === 2 ? 7 : 4;
+            state.score += pts + bonus;
+            document.getElementById('score-display').innerText = state.score;
+
+            state.results.push({
+                word:     state.playlist[state.currentIndex].w,
+                correct:  won,
+                attempts: state.wordAttempts,
+                battle:   { good, total },
+            });
+
+            if (won) {
+                if (typeof confetti === 'function')
+                    confetti({ particleCount: 100, spread: 80, origin: { y: 0.7 } });
+                speak('Perfect! You defeated Entropión!');
+                showBattleResult(true, `⚔️ ¡Derrotaste a Entropión! +${pts + bonus}⭐`);
+            }
+
+            setTimeout(() => {
+                hideBattleResult();
+                const nextBtn = document.getElementById('battle-next-btn');
+                if (nextBtn) nextBtn.classList.remove('hidden');
+            }, won ? 2000 : 500);
         }
-        function stopPhRec() {
-            if (ph.rec) { try { ph.rec.stop(); } catch(e) {} ph.rec = null; }
-        }
+
+        // Physical keyboard support for battle mode
+        document.addEventListener('keydown', (e) => {
+            if (currentInputMode !== 'battle' || !battle.active) return;
+            if (e.ctrlKey || e.metaKey || e.altKey) return;
+            const letter = e.key.toUpperCase();
+            if (/^[A-Z]$/.test(letter)) { e.preventDefault(); handleBattleKey(letter); }
+        });
 
     </script>
 
