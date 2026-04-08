@@ -433,7 +433,7 @@
                 </div>
 
                 <!-- Área Visual Central -->
-                <div id="game-image-area" class="min-h-0 bg-slate-50 flex items-center justify-center p-4 relative group" style="flex:1 1 0;max-height:40vh;overflow:hidden;transition:max-height 0.25s ease">
+                <div id="game-image-area" class="min-h-0 bg-slate-50 flex items-center justify-center p-4 relative group" style="flex:1 1 0;max-height:40vh;overflow:visible;transition:max-height 0.25s ease">
 
                     <!-- IMAGEN DE LA PALABRA (PNG) -->
                     <img id="word-img" src=""
@@ -515,8 +515,8 @@
                         <div id="battle-slots" class="flex flex-wrap justify-center gap-1.5 py-0.5 min-h-[44px] items-center"></div>
                         <!-- Resultado / feedback rápido -->
                         <div id="battle-result" class="hidden text-center font-bold text-xs py-1 px-3 rounded-xl"></div>
-                        <!-- Teclado A-Z -->
-                        <div id="battle-keyboard" class="grid gap-1" style="grid-template-columns:repeat(9,1fr)"></div>
+                        <!-- Teclado QWERTY -->
+                        <div id="battle-keyboard" class="flex flex-col gap-1"></div>
                         <!-- Botón siguiente -->
                         <button id="battle-next-btn" onclick="nextWord()"
                             class="hidden w-full bg-blue-500 hover:bg-blue-600 text-white font-black py-3 rounded-2xl shadow-lg border-b-4 border-blue-700 active:border-b-0 active:translate-y-1 transition-all text-lg uppercase tracking-wide shrink-0 sticky bottom-2 z-10">
@@ -2265,52 +2265,89 @@
             } catch(e) {}
         }
 
-        // ---- Teclado de batalla A-Z ----
+        // ---- Teclado de batalla QWERTY ----
+        // Color por letra (A=0, B=1 … Z=25) para que cada letra tenga siempre el mismo color
         const BATTLE_COLORS = ['#EF4444','#F97316','#EAB308','#22C55E','#06B6D4','#3B82F6','#8B5CF6','#EC4899','#EF4444'];
+        const LETTER_IDX = {};
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach((l, i) => { LETTER_IDX[l] = i; });
+
+        const QWERTY_ROWS = [
+            ['Q','W','E','R','T','Y','U','I','O','P'],
+            ['A','S','D','F','G','H','J','K','L'],
+            ['Z','X','C','V','B','N','M'],
+        ];
+
+        function makeBattleKey(label, letterVal, extraStyle = {}) {
+            const btn = document.createElement('button');
+            btn.className = 'ph-key';
+            btn.style.flex = '1';
+            if (letterVal && LETTER_IDX[letterVal] !== undefined) {
+                btn.style.background = BATTLE_COLORS[LETTER_IDX[letterVal] % BATTLE_COLORS.length];
+            } else {
+                btn.style.background = extraStyle.bg || '#475569';
+            }
+            btn.style.borderColor = 'rgba(0,0,0,0.2)';
+            if (extraStyle.fontSize) btn.style.fontSize = extraStyle.fontSize;
+            if (extraStyle.maxWidth) btn.style.maxWidth = extraStyle.maxWidth;
+            btn.textContent = label;
+            btn.dataset.letter = letterVal || label;
+            btn.addEventListener('pointerdown', (e) => { e.preventDefault(); handleBattleKey(letterVal || label); });
+            return btn;
+        }
 
         function renderBattleKeyboard() {
             const c = document.getElementById('battle-keyboard');
             if (!c) return;
             c.innerHTML = '';
+
             const word = state.playlist?.[state.currentIndex]?.w || '';
-            const needSpace = word.includes(' ');
+            const needSpace      = word.includes(' ');
             const needApostrophe = word.includes("'");
 
-            'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach((letter, i) => {
-                const btn = document.createElement('button');
-                btn.className = 'ph-key';
-                btn.style.background  = BATTLE_COLORS[i % BATTLE_COLORS.length];
-                btn.style.borderColor = 'rgba(0,0,0,0.2)';
-                btn.textContent       = letter;
-                btn.dataset.letter    = letter;
-                btn.addEventListener('pointerdown', (e) => { e.preventDefault(); handleBattleKey(letter); });
-                c.appendChild(btn);
+            // Rows Q-P, A-L, Z-M (max-width keeps all keys same size as the 10-key top row)
+            QWERTY_ROWS.forEach(row => {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'flex justify-center gap-1';
+                row.forEach(letter => {
+                    const btn = makeBattleKey(letter, letter);
+                    btn.style.maxWidth = '42px';
+                    rowDiv.appendChild(btn);
+                });
+                c.appendChild(rowDiv);
             });
 
-            // Special keys for words with spaces or apostrophes
+            // Special keys row (always visible row 4)
+            const specialRow = document.createElement('div');
+            specialRow.className = 'flex justify-center gap-1';
+
             if (needSpace) {
                 const btn = document.createElement('button');
                 btn.className = 'ph-key';
-                btn.style.background = '#475569';
+                btn.style.flex = '4';
+                btn.style.background = '#334155';
                 btn.style.borderColor = 'rgba(0,0,0,0.2)';
-                btn.style.gridColumn = 'span 3';
-                btn.style.fontSize = '0.7rem';
-                btn.textContent = '⎵ SPACE';
+                btn.style.fontSize = '0.65rem';
+                btn.textContent = '⎵  SPACE';
                 btn.dataset.letter = ' ';
                 btn.addEventListener('pointerdown', (e) => { e.preventDefault(); handleBattleKey(' '); });
-                c.appendChild(btn);
+                specialRow.appendChild(btn);
             }
+
             if (needApostrophe) {
                 const btn = document.createElement('button');
                 btn.className = 'ph-key';
+                btn.style.flex = '2';
                 btn.style.background = '#475569';
                 btn.style.borderColor = 'rgba(0,0,0,0.2)';
-                btn.style.gridColumn = 'span 2';
-                btn.style.fontSize = '0.7rem';
-                btn.textContent = "' APOS";
+                btn.style.fontSize = '0.75rem';
+                btn.textContent = "'  ' ";
                 btn.dataset.letter = "'";
                 btn.addEventListener('pointerdown', (e) => { e.preventDefault(); handleBattleKey("'"); });
-                c.appendChild(btn);
+                specialRow.appendChild(btn);
+            }
+
+            if (needSpace || needApostrophe) {
+                c.appendChild(specialRow);
             }
         }
 
@@ -2332,19 +2369,32 @@
                 const r = battle.results[i];
                 const cur = (i === battle.idx && battle.phase === 'type');
                 const div = document.createElement('div');
+
+                // Space slot: thin word-break indicator
+                if (letter === ' ') {
+                    div.className = 'ph-slot';
+                    Object.assign(div.style, {
+                        background: 'transparent', boxShadow: 'none', border: 'none',
+                        borderBottom: r?.correct ? '3px solid #22c55e' : '2px dashed rgba(148,163,184,0.5)',
+                        width: '12px', minWidth: '12px', padding: '0',
+                    });
+                    c.appendChild(div);
+                    return;
+                }
+
                 div.className = 'ph-slot';
                 if (r && r.correct === true) {
                     Object.assign(div.style, { background:'#22c55e', borderBottomColor:'#15803d', color:'white' });
-                    div.textContent = letter;
+                    div.textContent = letter === "'" ? "'" : letter;
                 } else if (r && r.correct === false) {
                     Object.assign(div.style, { background:'#f97316', borderBottomColor:'#c2410c', color:'white' });
-                    div.textContent = letter;
+                    div.textContent = letter === "'" ? "'" : letter;
                 } else if (cur) {
                     Object.assign(div.style, { background:'white', border:'3px solid #facc15', borderBottom:'4px solid #ca8a04', color:'#b45309', boxShadow:'0 0 0 3px rgba(250,204,21,0.35)' });
                     div.textContent = '?';
                 } else {
                     Object.assign(div.style, { background:'rgba(255,255,255,0.2)', borderBottomColor:'#e2e8f0', color:'transparent' });
-                    div.textContent = letter;
+                    div.textContent = letter === "'" ? "'" : letter;
                 }
                 c.appendChild(div);
             });
@@ -2364,7 +2414,7 @@
         // ---- Inicializar Batalla ----
         function initBattle() {
             const word = (state.playlist[state.currentIndex]?.w || '').toUpperCase();
-            battle.letters = word.split('').filter(c => /[A-Z]/.test(c));
+            battle.letters = word.split('').filter(c => /[A-Z]/.test(c) || c === ' ' || c === "'");
             battle.results = battle.letters.map(() => null);
             battle.idx = 0;
             battle.phase = 'type';
