@@ -235,6 +235,10 @@
                 <i class="fas fa-star text-white text-xs"></i>
                 <span id="score-display">0</span>
             </div>
+            <button id="header-user" class="hidden bg-white/80 text-slate-600 px-2 py-1.5 rounded-lg text-xs font-black border border-white/60 flex items-center gap-1 cursor-pointer hover:bg-white transition-colors" onclick="openUserModal()">
+                <span id="header-user-bee">🐝</span>
+                <span id="header-user-name">—</span>
+            </button>
             <button onclick="toggleSettings()"
                 class="bg-slate-100 text-slate-500 p-2 rounded-full hover:bg-slate-200 transition-colors">
                 <i class="fas fa-gear text-lg"></i>
@@ -478,14 +482,23 @@
                 <!-- Zona de Control -->
                 <div class="pt-12 px-3 pb-3 bg-white border-t border-slate-100 flex flex-col gap-2 shrink-0">
 
-                    <!-- 2 modos de entrada -->
-                    <div class="grid grid-cols-2 rounded-xl overflow-hidden border-2 border-slate-200 text-xs font-bold shrink-0">
+                    <!-- IPA Fonética -->
+                    <div id="ipa-display" class="hidden text-center">
+                        <span id="ipa-text" class="font-mono text-sm text-slate-500 bg-slate-50 px-3 py-0.5 rounded-full border border-slate-200 tracking-wide"></span>
+                    </div>
+
+                    <!-- 3 modos de entrada -->
+                    <div class="grid grid-cols-3 rounded-xl overflow-hidden border-2 border-slate-200 text-xs font-bold shrink-0">
                         <button id="tab-keyboard" onclick="switchInputMode('keyboard')"
-                            class="py-2 flex items-center justify-center gap-1.5 bg-white text-slate-700 border-r border-slate-200 transition-all">
-                            <i class="fas fa-keyboard"></i>Teclado
+                            class="py-2 flex items-center justify-center gap-1 bg-white text-slate-700 border-r border-slate-200 transition-all">
+                            <i class="fas fa-keyboard text-[9px]"></i>Teclado
+                        </button>
+                        <button id="tab-torneo" onclick="switchInputMode('torneo')"
+                            class="py-2 flex items-center justify-center gap-1 text-slate-400 transition-all hover:bg-slate-50 border-r border-slate-200">
+                            🏆 Torneo
                         </button>
                         <button id="tab-battle" onclick="switchInputMode('battle')"
-                            class="py-2 flex items-center justify-center gap-1.5 text-slate-400 transition-all hover:bg-slate-50 border-r border-slate-200">
+                            class="py-2 flex items-center justify-center gap-1 text-slate-400 transition-all hover:bg-slate-50">
                             ⚔️ Batalla
                         </button>
                     </div>
@@ -522,6 +535,42 @@
                             class="hidden w-full bg-blue-500 hover:bg-blue-600 text-white font-black py-3 rounded-2xl shadow-lg border-b-4 border-blue-700 active:border-b-0 active:translate-y-1 transition-all text-lg uppercase tracking-wide shrink-0 sticky bottom-2 z-10">
                             SIGUIENTE →
                         </button>
+                    </div>
+
+                    <!-- Panel Torneo -->
+                    <div id="torneo-panel" class="hidden flex-col gap-2 w-full">
+                        <div class="flex justify-center">
+                            <div class="inline-flex items-center gap-3 bg-slate-50 border-2 border-slate-200 rounded-2xl px-5 py-2">
+                                <span class="text-3xl">🔥</span>
+                                <div class="text-center">
+                                    <div class="text-4xl font-black text-slate-600 leading-none" id="torneo-streak-count">0</div>
+                                    <div class="text-[10px] font-black text-slate-400 uppercase tracking-wider">Racha actual</div>
+                                </div>
+                                <div class="ml-1 text-center">
+                                    <div class="text-xl font-black text-slate-400" id="torneo-best-label">👑 0</div>
+                                    <div class="text-[10px] font-black text-slate-400 uppercase">Récord</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="torneo-result" class="hidden text-center font-black text-sm py-2 px-3 rounded-2xl"></div>
+                    </div>
+
+                    <!-- Panel Etimología (aparece al fallar) -->
+                    <div id="etymology-panel" class="hidden bg-amber-50 border-2 border-amber-200 rounded-2xl p-3 text-left">
+                        <div class="flex items-start gap-2">
+                            <span id="etym-flag" class="text-2xl leading-none mt-0.5">🏛️</span>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center gap-1.5 mb-0.5">
+                                    <span class="font-black text-amber-800 text-sm" id="etym-origin">Latin</span>
+                                    <span class="text-[10px] bg-amber-200 text-amber-700 px-1.5 py-0.5 rounded-full font-bold" id="etym-badge">origen</span>
+                                </div>
+                                <p class="text-xs text-amber-700 leading-snug" id="etym-rule"></p>
+                            </div>
+                        </div>
+                        <div class="mt-1.5 bg-amber-100 rounded-xl px-2.5 py-1.5 text-xs text-amber-800 leading-snug">
+                            💡 <span id="etym-tip"></span>
+                        </div>
+                        <p class="mt-1 text-xs text-amber-600">Más ejemplos: <span class="font-bold italic" id="etym-examples"></span></p>
                     </div>
 
                     <!-- Comprobar -->
@@ -726,6 +775,498 @@
 
     <!-- LOGIC -->
     <script>
+        // ===============================================
+        // 0. WORD_META — Etymology + IPA for all 433 words
+        // ===============================================
+        const WORD_META = {
+            // CERTIFICATION words
+            'animal':           {o:'Latin',      p:'/ˈænɪməl/'},
+            'armchair':         {o:'French',     p:'/ˈɑːmtʃeə/'},
+            'baby':             {o:'OldEnglish', p:''},
+            'bath':             {o:'OldEnglish', p:''},
+            'bathroom':         {o:'OldEnglish', p:''},
+            'bed':              {o:'OldEnglish', p:''},
+            'bedroom':          {o:'OldEnglish', p:''},
+            'bird':             {o:'OldEnglish', p:''},
+            'big':              {o:'OldEnglish', p:''},
+            'book':             {o:'OldEnglish', p:''},
+            'bookcase':         {o:'OldEnglish', p:''},
+            'box':              {o:'OldEnglish', p:''},
+            'boy':              {o:'OldEnglish', p:''},
+            'cake':             {o:'Norse',      p:''},
+            'cat':              {o:'OldEnglish', p:''},
+            'chair':            {o:'French',     p:''},
+            'child':            {o:'OldEnglish', p:''},
+            'clean':            {o:'OldEnglish', p:''},
+            'colour':           {o:'French',     p:'/ˈkʌlə/'},
+            'crocodile':        {o:'Greek',      p:'/ˈkrɒkədaɪl/'},
+            'cupboard':         {o:'OldEnglish', p:''},
+            'dad':              {o:'OldEnglish', p:''},
+            'desk':             {o:'Latin',      p:''},
+            'dining room':      {o:'French',     p:''},
+            'donkey':           {o:'OldEnglish', p:''},
+            'door':             {o:'OldEnglish', p:''},
+            'duck':             {o:'OldEnglish', p:''},
+            'elephant':         {o:'Greek',      p:'/ˈɛlɪfənt/'},
+            'face':             {o:'French',     p:''},
+            'family':           {o:'Latin',      p:''},
+            'flat':             {o:'OldEnglish', p:''},
+            'flower':           {o:'French',     p:''},
+            'football':         {o:'OldEnglish', p:''},
+            'fries':            {o:'OldEnglish', p:''},
+            'frog':             {o:'OldEnglish', p:''},
+            'game':             {o:'OldEnglish', p:''},
+            'garden':           {o:'French',     p:''},
+            'grandfather':      {o:'OldEnglish', p:''},
+            'grandma':          {o:'OldEnglish', p:''},
+            'grandmother':      {o:'OldEnglish', p:''},
+            'grandpa':          {o:'OldEnglish', p:''},
+            'hall':             {o:'OldEnglish', p:''},
+            'hat':              {o:'OldEnglish', p:''},
+            'hippo':            {o:'Greek',      p:'/ˈhɪpəʊ/'},
+            'home':             {o:'OldEnglish', p:''},
+            'house':            {o:'OldEnglish', p:''},
+            'lamp':             {o:'Greek',      p:''},
+            'mat':              {o:'OldEnglish', p:''},
+            'mirror':           {o:'French',     p:''},
+            'mother':           {o:'OldEnglish', p:'/ˈmʌðə/'},
+            'mum':              {o:'OldEnglish', p:''},
+            'number':           {o:'French',     p:''},
+            'orange':           {o:'Arabic',     p:'/ˈɒrɪndʒ/'},
+            'painting':         {o:'French',     p:''},
+            'pen':              {o:'Latin',      p:''},
+            'pencil':           {o:'Latin',      p:''},
+            'pet':              {o:'OldEnglish', p:''},
+            'piano':            {o:'Italian',    p:'piˈænəʊ/'},
+            'right':            {o:'OldEnglish', p:'/raɪt/'},
+            'rug':              {o:'Norse',      p:''},
+            'shoe':             {o:'OldEnglish', p:''},
+            'snake':            {o:'OldEnglish', p:''},
+            'sock':             {o:'Latin',      p:''},
+            'sofa':             {o:'Arabic',     p:'/ˈsəʊfə/'},
+            'story':            {o:'French',     p:''},
+            'sweets':           {o:'OldEnglish', p:''},
+            'table':            {o:'Latin',      p:''},
+            'teeth':            {o:'OldEnglish', p:''},
+            'today':            {o:'OldEnglish', p:''},
+            'toy':              {o:'OldEnglish', p:''},
+            'answer':           {o:'OldEnglish', p:''},
+            'afternoon':        {o:'OldEnglish', p:'/ˌɑːftəˈnuːn/'},
+            'alphabet':         {o:'Greek',      p:'/ˈælfəbɛt/'},
+            'apple':            {o:'OldEnglish', p:''},
+            'ball':             {o:'OldEnglish', p:''},
+            'beach':            {o:'OldEnglish', p:''},
+            'beautiful':        {o:'French',     p:'/ˈbjuːtɪfʊl/'},
+            'bee':              {o:'OldEnglish', p:''},
+            'boot':             {o:'French',     p:''},
+            'brother':          {o:'OldEnglish', p:'/ˈbrʌðə/'},
+            'brown':            {o:'OldEnglish', p:''},
+            'car':              {o:'Latin',      p:''},
+            'chicken':          {o:'OldEnglish', p:''},
+            'children':         {o:'OldEnglish', p:''},
+            'chocolate':        {o:'Spanish',    p:'/ˈtʃɒklət/'},
+            'class':            {o:'Latin',      p:''},
+            'cousin':           {o:'French',     p:'/ˈkʌzən/'},
+            'cow':              {o:'OldEnglish', p:''},
+            'crayon':           {o:'French',     p:''},
+            'do':               {o:'OldEnglish', p:''},
+            'dog':              {o:'OldEnglish', p:''},
+            'eraser':           {o:'Latin',      p:''},
+            'evening':          {o:'OldEnglish', p:''},
+            'fantastic':        {o:'Greek',      p:'fænˈtæstɪk/'},
+            'favourite':        {o:'French',     p:'/ˈfeɪvərɪt/'},
+            'find':             {o:'OldEnglish', p:''},
+            'food':             {o:'OldEnglish', p:''},
+            'friend':           {o:'OldEnglish', p:'/frɛnd/'},
+            'giraffe':          {o:'Arabic',     p:'/dʒɪˈrɑːf/'},
+            'good':             {o:'OldEnglish', p:''},
+            'guitar':           {o:'Spanish',    p:'/ɡɪˈtɑː/'},
+            'hair':             {o:'OldEnglish', p:''},
+            'happy':            {o:'OldEnglish', p:''},
+            'have':             {o:'OldEnglish', p:''},
+            'honey':            {o:'OldEnglish', p:'/ˈhʌni/'},
+            'jeans':            {o:'French',     p:''},
+            'jellyfish':        {o:'OldEnglish', p:''},
+            'kite':             {o:'OldEnglish', p:''},
+            'learn':            {o:'OldEnglish', p:''},
+            'lesson':           {o:'French',     p:'/ˈlɛsən/'},
+            'listen':           {o:'OldEnglish', p:'/ˈlɪsən/'},
+            'little':           {o:'OldEnglish', p:'/ˈlɪtəl/'},
+            'lunch':            {o:'French',     p:''},
+            'meat':             {o:'OldEnglish', p:''},
+            'morning':          {o:'OldEnglish', p:'/ˈmɔːnɪŋ/'},
+            'mouse':            {o:'OldEnglish', p:''},
+            'music':            {o:'Greek',      p:'/ˈmjuːzɪk/'},
+            'name':             {o:'OldEnglish', p:''},
+            'park':             {o:'French',     p:''},
+            'person':           {o:'Latin',      p:''},
+            'picture':          {o:'Latin',      p:'/ˈpɪktʃə/'},
+            'please':           {o:'French',     p:'/pliːz/'},
+            'polar bear':       {o:'Greek',      p:''},
+            'question':         {o:'Latin',      p:'/ˈkwɛstʃən/'},
+            'rain':             {o:'OldEnglish', p:''},
+            'scary':            {o:'OldEnglish', p:''},
+            'school':           {o:'Greek',      p:'/skuːl/'},
+            'sea':              {o:'OldEnglish', p:''},
+            'sing':             {o:'OldEnglish', p:''},
+            'sister':           {o:'OldEnglish', p:''},
+            'skateboard':       {o:'OldEnglish', p:''},
+            'small':            {o:'OldEnglish', p:''},
+            'sorry':            {o:'OldEnglish', p:''},
+            'talk':             {o:'OldEnglish', p:''},
+            'teddy bear':       {o:'OldEnglish', p:''},
+            'thing':            {o:'OldEnglish', p:''},
+            'tiger':            {o:'Latin',      p:'/ˈtaɪɡə/'},
+            'try':              {o:'French',     p:''},
+            'ugly':             {o:'Norse',      p:'/ˈʌɡli/'},
+            'want':             {o:'Norse',      p:''},
+            // SCIENCE words
+            'absorbent':        {o:'Latin',      p:'/əbˈzɔːbənt/'},
+            'adapted':          {o:'Latin',      p:'/əˈdæptɪd/'},
+            'aquatic':          {o:'Latin',      p:'/əˈkwætɪk/'},
+            'arctic tundra':    {o:'Greek',      p:''},
+            'birth':            {o:'OldEnglish', p:''},
+            'blond hair':       {o:'French',     p:''},
+            'cactus':           {o:'Latin',      p:''},
+            'camel':            {o:'Hebrew',     p:''},
+            'clam':             {o:'OldEnglish', p:''},
+            'climb':            {o:'OldEnglish', p:''},
+            'cold':             {o:'OldEnglish', p:''},
+            'conditions':       {o:'Latin',      p:''},
+            'cool':             {o:'OldEnglish', p:''},
+            'coral':            {o:'Latin',      p:''},
+            'crawl':            {o:'Norse',      p:''},
+            'dark':             {o:'OldEnglish', p:''},
+            'desert':           {o:'Latin',      p:''},
+            'dies':             {o:'Latin',      p:''},
+            'dry':              {o:'OldEnglish', p:''},
+            'eagle':            {o:'French',     p:''},
+            'environment':      {o:'French',     p:'/ɪnˈvaɪrənmənt/'},
+            'fins':             {o:'OldEnglish', p:''},
+            'flexible':         {o:'Latin',      p:'/ˈflɛksɪbəl/'},
+            'forest':           {o:'French',     p:''},
+            'grows':            {o:'OldEnglish', p:''},
+            'habitats':         {o:'Latin',      p:''},
+            'height':           {o:'OldEnglish', p:''},
+            'hot':              {o:'OldEnglish', p:''},
+            'inherit':          {o:'Latin',      p:''},
+            'lakes':            {o:'OldEnglish', p:''},
+            'land':             {o:'OldEnglish', p:''},
+            'large':            {o:'French',     p:''},
+            'length':           {o:'OldEnglish', p:''},
+            'light':            {o:'OldEnglish', p:''},
+            'lizard':           {o:'French',     p:''},
+            'logs':             {o:'OldEnglish', p:''},
+            'mass':             {o:'Latin',      p:''},
+            'minerals':         {o:'Latin',      p:''},
+            'move':             {o:'French',     p:''},
+            'nutrients':        {o:'Latin',      p:'/ˈnjuːtriənts/'},
+            'oceans':           {o:'Latin',      p:''},
+            'offspring':        {o:'OldEnglish', p:''},
+            'plants':           {o:'Latin',      p:''},
+            'predators':        {o:'Latin',      p:'/ˈprɛdətəz/'},
+            'properties':       {o:'Latin',      p:''},
+            'reproduction':     {o:'Latin',      p:'/ˌriːprəˈdʌkʃən/'},
+            'rigid':            {o:'Latin',      p:''},
+            'rivers':           {o:'Latin',      p:''},
+            'roots':            {o:'OldEnglish', p:''},
+            'senses':           {o:'Latin',      p:''},
+            'shallow':          {o:'OldEnglish', p:''},
+            'shells':           {o:'OldEnglish', p:''},
+            'shelter':          {o:'OldEnglish', p:''},
+            'size':             {o:'French',     p:''},
+            'snail':            {o:'OldEnglish', p:''},
+            'soil':             {o:'French',     p:''},
+            'source':           {o:'French',     p:''},
+            'stem':             {o:'OldEnglish', p:''},
+            'stick insect':     {o:'OldEnglish', p:''},
+            'survive':          {o:'French',     p:''},
+            'swim':             {o:'OldEnglish', p:''},
+            'tadpole':          {o:'OldEnglish', p:''},
+            'tail':             {o:'OldEnglish', p:''},
+            'temperatures':     {o:'Latin',      p:'/ˈtɛmprɪtʃəz/'},
+            'terrestrial':      {o:'Latin',      p:'/tɪˈrɛstriəl/'},
+            'texture':          {o:'Latin',      p:''},
+            'tropical rainforest':{o:'Latin',    p:''},
+            'warm':             {o:'OldEnglish', p:''},
+            'waterproof':       {o:'OldEnglish', p:''},
+            'wet':              {o:'OldEnglish', p:''},
+            'windy':            {o:'OldEnglish', p:''},
+            'attract':          {o:'Latin',      p:''},
+            'brick':            {o:'Dutch',      p:''},
+            'bulb':             {o:'Latin',      p:''},
+            'burn':             {o:'OldEnglish', p:''},
+            'change':           {o:'Latin',      p:''},
+            'chemical':         {o:'Greek',      p:'/ˈkɛmɪkəl/'},
+            'clay':             {o:'OldEnglish', p:''},
+            'concrete':         {o:'Latin',      p:''},
+            'cotton':           {o:'Arabic',     p:''},
+            'curved':           {o:'Latin',      p:''},
+            'daytime':          {o:'OldEnglish', p:''},
+            'direction':        {o:'Latin',      p:''},
+            'earth':            {o:'OldEnglish', p:''},
+            'electricity':      {o:'Greek',      p:'/ɪˌlɛkˈtrɪsɪti/'},
+            'energy':           {o:'Greek',      p:'/ˈɛnədʒi/'},
+            'fabric':           {o:'Latin',      p:''},
+            'firefly':          {o:'OldEnglish', p:''},
+            'flashlight':       {o:'OldEnglish', p:''},
+            'floodlight':       {o:'OldEnglish', p:''},
+            'force':            {o:'Latin',      p:''},
+            'freezing':         {o:'OldEnglish', p:''},
+            'friction':         {o:'Latin',      p:''},
+            'glass':            {o:'OldEnglish', p:''},
+            'gravity':          {o:'Latin',      p:'/ˈɡrævɪti/'},
+            'ground':           {o:'OldEnglish', p:''},
+            'hard':             {o:'OldEnglish', p:''},
+            'hypothesis':       {o:'Greek',      p:'/haɪˈpɒθɪsɪs/'},
+            'investigation':    {o:'Latin',      p:'/ɪnˌvɛstɪˈɡeɪʃən/'},
+            'iron':             {o:'OldEnglish', p:''},
+            'irreversible':     {o:'Latin',      p:'/ˌɪrɪˈvɜːsɪbəl/'},
+            'leather':          {o:'OldEnglish', p:''},
+            'lightning':        {o:'OldEnglish', p:''},
+            'magnetism':        {o:'Greek',      p:'/ˈmæɡnɪtɪzəm/'},
+            'manufactured':     {o:'Latin',      p:''},
+            'materials':        {o:'Latin',      p:'/məˈtɪəriəlz/'},
+            'measure':          {o:'French',     p:''},
+            'melting':          {o:'OldEnglish', p:''},
+            'metal':            {o:'Latin',      p:''},
+            'moon':             {o:'OldEnglish', p:''},
+            'natural':          {o:'Latin',      p:''},
+            'observe':          {o:'Latin',      p:''},
+            'oil':              {o:'Latin',      p:''},
+            'plastic':          {o:'Greek',      p:''},
+            'polyester':        {o:'Greek',      p:''},
+            'predict':          {o:'Latin',      p:''},
+            'produce':          {o:'Latin',      p:''},
+            'record':           {o:'Latin',      p:''},
+            'resistance':       {o:'Latin',      p:''},
+            'result':           {o:'Latin',      p:''},
+            'reversible':       {o:'Latin',      p:''},
+            'rock':             {o:'French',     p:''},
+            'rough':            {o:'OldEnglish', p:''},
+            'runny':            {o:'OldEnglish', p:''},
+            'sand':             {o:'OldEnglish', p:''},
+            'scientist':        {o:'Latin',      p:''},
+            'see':              {o:'OldEnglish', p:''},
+            'sky':              {o:'Norse',      p:''},
+            'slow down':        {o:'OldEnglish', p:''},
+            'smooth':           {o:'OldEnglish', p:''},
+            'soft':             {o:'OldEnglish', p:''},
+            'speed up':         {o:'OldEnglish', p:''},
+            'squeeze':          {o:'OldEnglish', p:''},
+            'star':             {o:'OldEnglish', p:''},
+            'steel':            {o:'OldEnglish', p:''},
+            'straight':         {o:'OldEnglish', p:''},
+            'streetlight':      {o:'OldEnglish', p:''},
+            'stretch':          {o:'OldEnglish', p:''},
+            'strong':           {o:'OldEnglish', p:''},
+            'sun':              {o:'OldEnglish', p:''},
+            'transparent':      {o:'Latin',      p:'/trænsˈpærənt/'},
+            'weak':             {o:'OldEnglish', p:''},
+            'wool':             {o:'OldEnglish', p:''},
+            // CONTENT words
+            'airplane':         {o:'Latin',      p:''},
+            'amphibians':       {o:'Greek',      p:'/æmˈfɪbiənz/'},
+            'balloon':          {o:'Italian',    p:''},
+            'berries':          {o:'OldEnglish', p:''},
+            'boat':             {o:'OldEnglish', p:''},
+            'body':             {o:'OldEnglish', p:''},
+            'bus':              {o:'Latin',      p:''},
+            'cable car':        {o:'Latin',      p:''},
+            'calm':             {o:'French',     p:''},
+            'candle':           {o:'OldEnglish', p:''},
+            'closed':           {o:'French',     p:''},
+            'coffee':           {o:'Arabic',     p:''},
+            'communication':    {o:'Latin',      p:'/kəˌmjuːnɪˈkeɪʃən/'},
+            'cream':            {o:'French',     p:''},
+            'creep':            {o:'OldEnglish', p:''},
+            'ear':              {o:'OldEnglish', p:''},
+            'egg':              {o:'Norse',      p:''},
+            'e-mail':           {o:'Latin',      p:''},
+            'escape':           {o:'French',     p:''},
+            'eye':              {o:'OldEnglish', p:''},
+            'feathers':         {o:'OldEnglish', p:''},
+            'fierce':           {o:'French',     p:''},
+            'fight':            {o:'OldEnglish', p:''},
+            'flow':             {o:'OldEnglish', p:''},
+            'freezer':          {o:'OldEnglish', p:''},
+            'fruit':            {o:'Latin',      p:''},
+            'fur':              {o:'French',     p:''},
+            'gas':              {o:'Dutch',      p:''},
+            'gentle':           {o:'Latin',      p:''},
+            'gills':            {o:'Norse',      p:''},
+            'head':             {o:'OldEnglish', p:''},
+            'heat':             {o:'OldEnglish', p:''},
+            'horse':            {o:'OldEnglish', p:''},
+            'hunt':             {o:'OldEnglish', p:''},
+            'ice':              {o:'OldEnglish', p:''},
+            'ice pop':          {o:'OldEnglish', p:''},
+            'icicle':           {o:'OldEnglish', p:''},
+            'internet':         {o:'Latin',      p:''},
+            'kettle':           {o:'Norse',      p:''},
+            'leg':              {o:'Norse',      p:''},
+            'letters':          {o:'Latin',      p:''},
+            'liquid':           {o:'Latin',      p:''},
+            'mammals':          {o:'Latin',      p:''},
+            'melt':             {o:'OldEnglish', p:''},
+            'mixture':          {o:'Latin',      p:''},
+            'motorcycle':       {o:'Greek',      p:'/ˈməʊtəsaɪkəl/'},
+            'mouth':            {o:'OldEnglish', p:''},
+            'news':             {o:'OldEnglish', p:''},
+            'open':             {o:'OldEnglish', p:''},
+            'pasta':            {o:'Italian',    p:''},
+            'patient':          {o:'Latin',      p:'/ˈpeɪʃənt/'},
+            'peck':             {o:'OldEnglish', p:''},
+            'pinecone':         {o:'OldEnglish', p:''},
+            'plastic bag':      {o:'Greek',      p:''},
+            'popcorn':          {o:'OldEnglish', p:''},
+            'pour':             {o:'French',     p:''},
+            'radio':            {o:'Latin',      p:''},
+            'salad':            {o:'French',     p:''},
+            'salt':             {o:'OldEnglish', p:''},
+            'scales':           {o:'Norse',      p:''},
+            'skin':             {o:'Norse',      p:''},
+            'smart':            {o:'OldEnglish', p:''},
+            'solid':            {o:'Latin',      p:''},
+            'squawk':           {o:'OldEnglish', p:''},
+            'steam':            {o:'OldEnglish', p:''},
+            'sugar':            {o:'Arabic',     p:''},
+            'tea':              {o:'Chinese',    p:''},
+            'text message':     {o:'Latin',      p:''},
+            'travel':           {o:'French',     p:''},
+            'truck':            {o:'OldEnglish', p:''},
+            'vegetables':       {o:'Latin',      p:'/ˈvɛdʒɪtəbəlz/'},
+            'wings':            {o:'OldEnglish', p:''},
+            'worm':             {o:'OldEnglish', p:''},
+            'arm':              {o:'OldEnglish', p:''},
+            'arrive':           {o:'French',     p:''},
+            'ask':              {o:'OldEnglish', p:''},
+            'baker':            {o:'OldEnglish', p:''},
+            'bathtub':          {o:'OldEnglish', p:''},
+            'bored':            {o:'French',     p:''},
+            'cafeteria':        {o:'Spanish',    p:'/ˌkæfɪˈtɪəriə/'},
+            'camera':           {o:'Latin',      p:''},
+            'cell phone':       {o:'Latin',      p:''},
+            'check':            {o:'French',     p:''},
+            'classroom':        {o:'OldEnglish', p:''},
+            'clean up':         {o:'OldEnglish', p:''},
+            'clerk':            {o:'French',     p:''},
+            'clock':            {o:'Dutch',      p:''},
+            'column':           {o:'Latin',      p:''},
+            'computer':         {o:'Latin',      p:'/kəmˈpjuːtə/'},
+            'cook':             {o:'OldEnglish', p:''},
+            'couch':            {o:'French',     p:''},
+            'crossing guard':   {o:'OldEnglish', p:''},
+            'crosswalk':        {o:'OldEnglish', p:''},
+            'crowded':          {o:'OldEnglish', p:''},
+            'dig up':           {o:'OldEnglish', p:''},
+            'dirty':            {o:'OldEnglish', p:''},
+            'double-digit number':{o:'Latin',    p:''},
+            'enter':            {o:'Latin',      p:''},
+            'foot':             {o:'OldEnglish', p:''},
+            'full':             {o:'OldEnglish', p:''},
+            'grab':             {o:'Norse',      p:''},
+            'greedy':           {o:'OldEnglish', p:''},
+            'hand':             {o:'OldEnglish', p:''},
+            'headphones':       {o:'Greek',      p:''},
+            'hide':             {o:'OldEnglish', p:''},
+            'hungry':           {o:'OldEnglish', p:''},
+            'invite':           {o:'Latin',      p:''},
+            'jar':              {o:'Arabic',     p:''},
+            'kitchen':          {o:'OldEnglish', p:''},
+            'knee':             {o:'OldEnglish', p:''},
+            'knock':            {o:'OldEnglish', p:''},
+            'laptop':           {o:'OldEnglish', p:''},
+            'left':             {o:'OldEnglish', p:''},
+            'let go':           {o:'OldEnglish', p:''},
+            'librarian':        {o:'Latin',      p:''},
+            'lifeguard':        {o:'OldEnglish', p:''},
+            'litter':           {o:'French',     p:''},
+            'living room':      {o:'OldEnglish', p:''},
+            'minus sign':       {o:'Latin',      p:''},
+            'nose':             {o:'OldEnglish', p:''},
+            'pass':             {o:'French',     p:''},
+            'polite':           {o:'Latin',      p:''},
+            'poor':             {o:'French',     p:''},
+            'principal':        {o:'Latin',      p:''},
+            'put away':         {o:'OldEnglish', p:''},
+            'row':              {o:'OldEnglish', p:''},
+            'rude':             {o:'Latin',      p:''},
+            'share':            {o:'OldEnglish', p:''},
+            'sick':             {o:'OldEnglish', p:''},
+            'sink':             {o:'OldEnglish', p:''},
+            'steal':            {o:'OldEnglish', p:''},
+            'subtraction':      {o:'Latin',      p:''},
+            'swimming pool':    {o:'OldEnglish', p:''},
+            'tablet':           {o:'Latin',      p:''},
+            'take away':        {o:'OldEnglish', p:''},
+            'take turns':       {o:'OldEnglish', p:''},
+            'test score':       {o:'Latin',      p:''},
+            'thirsty':          {o:'OldEnglish', p:''},
+            'thoughtful':       {o:'OldEnglish', p:''},
+            'tired':            {o:'OldEnglish', p:''},
+            'traffic lights':   {o:'French',     p:''},
+            'visit':            {o:'Latin',      p:''},
+            'wash':             {o:'OldEnglish', p:''},
+        };
+
+        // ===============================================
+        // ORIGIN_RULES — per-origin etymology info
+        // ===============================================
+        const ORIGIN_RULES = {
+            'Latin':      {flag:'🏛️', name:'Latín',         rule:'Terminaciones -tion, -ment, -al, -ible son de origen latino',     tip:'El sonido /ʃən/ al final se escribe "-tion" en inglés (nation, question)', ex:['question','animal','number']},
+            'Greek':      {flag:'🏺', name:'Griego',         rule:'PH = sonido /f/ · CH = sonido /k/ · Y = sonido /ɪ/ o /aɪ/',      tip:'"ph" suena como /f/: photo, elephant · "ch" suena /k/: school, chorus',   ex:['school','elephant','alphabet']},
+            'French':     {flag:'🥐', name:'Francés',        rule:'Letras finales frecuentemente silenciosas, -our, -eur comunes',    tip:'Muchas palabras con "-our" y "-eur" vienen del francés: colour, favour',   ex:['colour','favourite','beautiful']},
+            'OldEnglish': {flag:'⚔️', name:'Inglés Antiguo', rule:'Palabras cortas y comunes · -ck, -gh, -ng son muy frecuentes',     tip:'La combinación "gh" puede ser silenciosa: right, night, light, might',     ex:['right','book','dog']},
+            'Norse':      {flag:'⚓', name:'Nórdico',        rule:'Los vikingos trajeron palabras cotidianas al inglés',              tip:'sky, egg, leg, knife, window son palabras de origen vikingo',             ex:['sky','egg','ugly']},
+            'Arabic':     {flag:'🌙', name:'Árabe',          rule:'Palabras árabes llegaron al inglés vía español o italiano',        tip:'El prefijo "al-" árabe se fusionó en palabras: algebra, alcohol, almanac', ex:['orange','sugar','coffee']},
+            'Spanish':    {flag:'🌶️', name:'Español',        rule:'Palabras españolas (a veces del náhuatl) mantienen su escritura',  tip:'chocolate viene del náhuatl "xocolātl" vía el español',                   ex:['chocolate','guitar','cafeteria']},
+            'Italian':    {flag:'🍕', name:'Italiano',       rule:'Palabras italianas: música, bellas artes y gastronomía',           tip:'Los términos musicales en inglés vienen del italiano: piano, forte, solo', ex:['piano','pasta','balloon']},
+            'Dutch':      {flag:'🌷', name:'Holandés',       rule:'Palabras holandesas llegaron al inglés por el comercio marítimo',  tip:'brick, clock, gas son palabras del holandés',                             ex:['brick','gas','clock']},
+            'Hebrew':     {flag:'✡️', name:'Hebreo',         rule:'Palabras hebreas llegaron al inglés a través del latín bíblico',   tip:'camel viene del hebreo antiguo "gamal"',                                  ex:['camel']},
+            'Chinese':    {flag:'🍵', name:'Chino',          rule:'Pocas palabras chinas entraron al inglés, principalmente vía té',  tip:'"tea" viene del chino "tê" a través del portugués en el siglo XVII',      ex:['tea']},
+        };
+
+        // ===============================================
+        // Etymology + IPA functions
+        // ===============================================
+        function getWordMeta(word) {
+            return WORD_META[word.toLowerCase()] || null;
+        }
+
+        function showIPA(word) {
+            const meta = getWordMeta(word);
+            const el   = document.getElementById('ipa-display');
+            const txt  = document.getElementById('ipa-text');
+            if (!el || !txt) return;
+            if (meta && meta.p) {
+                txt.innerHTML = meta.p.replace(/ə/g, '<span style="color:#f97316;font-weight:bold">ə</span>');
+                el.classList.remove('hidden');
+            } else {
+                el.classList.add('hidden');
+            }
+        }
+
+        function showEtymology(word) {
+            const meta = getWordMeta(word);
+            if (!meta) return;
+            const rule = ORIGIN_RULES[meta.o];
+            if (!rule) return;
+            const panel = document.getElementById('etymology-panel');
+            if (!panel) return;
+            document.getElementById('etym-flag').textContent    = rule.flag;
+            document.getElementById('etym-origin').textContent  = rule.name;
+            document.getElementById('etym-badge').textContent   = meta.o;
+            document.getElementById('etym-rule').textContent    = rule.rule;
+            document.getElementById('etym-tip').textContent     = rule.tip;
+            document.getElementById('etym-examples').textContent = rule.ex.join(', ');
+            panel.classList.remove('hidden');
+        }
+
+        function hideEtymology() {
+            document.getElementById('etymology-panel')?.classList.add('hidden');
+        }
+
         // ===============================================
         // 1. DATA (BASE DE DATOS COMPLETA)
         // ===============================================
@@ -1056,7 +1597,7 @@
             const actionBtn = document.getElementById('action-btn');
 
             input.value = '';
-            input.readOnly = (currentInputMode !== 'keyboard');
+            input.readOnly = (currentInputMode !== 'keyboard' && currentInputMode !== 'torneo');
             input.disabled = false;
             if (battle && battle.active) { battle.active = false; }
             updateModeDisplay();
@@ -1109,10 +1650,15 @@
             const pct = (state.currentIndex / state.playlist.length) * 100;
             document.getElementById('game-progress').style.width = `${pct}%`;
 
+            // IPA + Etymology reset
+            showIPA(current.w);
+            hideEtymology();
+
             // Audio Auto
             metricsWordStart();   // inicia cronómetro para todos los modos
             setTimeout(() => playWord(), 600);
             if (currentInputMode === 'battle') initBattle();
+            if (currentInputMode === 'torneo') { /* torneo uses standard keyboard flow */ }
         }
 
         // ===============================================
@@ -1359,6 +1905,9 @@
 
                 state.results.push({ word: current.w, correct: true, attempts: state.wordAttempts });
 
+                // Torneo mode: register correct
+                if (currentInputMode === 'torneo') torneoCorrect();
+
                 speak("Great job!");
                 if (typeof confetti === 'function') {
                     confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
@@ -1395,12 +1944,18 @@
                     state.results.push({ word: current.w, correct: false, attempts: state.wordAttempts });
                     speak("The answer is " + current.w);
 
+                    // Torneo mode: reset streak on failure
+                    if (currentInputMode === 'torneo') torneoReset();
+
                     setTimeout(() => {
                         input.classList.remove('text-red-500', 'bg-red-50');
                         input.classList.add('text-orange-600', 'bg-orange-50');
                         input.value = current.w;
                         input.disabled = true;
                         feedback.style.opacity = '0';
+
+                        // Show etymology panel
+                        showEtymology(current.w);
 
                         btn.innerText = "SIGUIENTE →";
                         btn.classList.remove('bg-green-500', 'border-b-green-700');
@@ -1409,6 +1964,8 @@
                     }, 1500);
 
                 } else {
+                    // Torneo mode: reset streak even on partial failure
+                    if (currentInputMode === 'torneo') torneoReset();
                     speak("Try again");
                     setTimeout(() => {
                         input.classList.remove('text-red-500', 'bg-red-50');
@@ -1715,6 +2272,7 @@
 
         const MODE_CONFIG = {
             keyboard: { tab:'tab-keyboard', active:'bg-white text-slate-700 border-b-2 border-yellow-400'       },
+            torneo:   { tab:'tab-torneo',   active:'bg-orange-100 text-orange-700 border-orange-200'            },
             battle:   { tab:'tab-battle',   active:'bg-red-50 text-red-700 border-b-2 border-red-400'           },
         };
 
@@ -1754,10 +2312,18 @@
             };
 
             hide('battle-panel');
+            hide('torneo-panel');
             show('text-input-row', false);
             input.readOnly = false;
 
             if (mode === 'keyboard') {
+                input.focus();
+                document.getElementById('action-btn').classList.remove('hidden');
+            } else if (mode === 'torneo') {
+                show('torneo-panel');
+                show('text-input-row', false);
+                document.getElementById('action-btn').classList.remove('hidden');
+                initTorneo();
                 input.focus();
             } else if (mode === 'battle') {
                 input.value = '';
@@ -1847,11 +2413,9 @@
             loadVoices();
             entInit();
 
-            // Age modal on first visit
+            // Age modal is now handled by onUserReady() after user selection
             const savedAge = parseInt(localStorage.getItem('kb_age') || '0');
-            if (!savedAge) {
-                document.getElementById('age-modal').classList.remove('hidden');
-            } else {
+            if (savedAge) {
                 const mode = savedAge <= 7 ? 'touch' : savedAge <= 10 ? 'piano' : 'keyboard';
                 switchInputMode(mode);
             }
@@ -2557,42 +3121,50 @@
         });
 
         // ================================================
-        // GAMIFICACIÓN PERSISTENTE
-        // Racha Diaria + Karate Bee Evolution
+        // SISTEMA DE USUARIOS Y GAMIFICACIÓN PERSISTENTE
         // ================================================
         const STORAGE = {
             get(k, def) { try { const v = localStorage.getItem('kb_' + k); return v !== null ? JSON.parse(v) : def; } catch { return def; } },
             set(k, v)   { try { localStorage.setItem('kb_' + k, JSON.stringify(v)); } catch {} }
         };
 
+        function getCurrentUser() { return STORAGE.get('current_user', ''); }
+        function setCurrentUser(name) { STORAGE.set('current_user', name); }
+        function getUsers() { return STORAGE.get('users', []); }
+        function addUser(name) { const u = getUsers(); if (!u.includes(name)) { u.push(name); STORAGE.set('users', u); } }
+
+        function getUserData(key, def) { const u = getCurrentUser(); return u ? STORAGE.get('u_' + u + '_' + key, def) : def; }
+        function setUserData(key, val) { const u = getCurrentUser(); if (u) STORAGE.set('u_' + u + '_' + key, val); }
+
         const BEE_BELTS = [
-            { min: 0,    max: 100,       name: 'Blanco',   bg: '#f8fafc', border: '#94a3b8', text: '#475569', emoji: '🤍', barColor: '#94a3b8' },
-            { min: 101,  max: 300,       name: 'Amarillo', bg: '#fef9c3', border: '#ca8a04', text: '#713f12', emoji: '💛', barColor: '#eab308' },
-            { min: 301,  max: 600,       name: 'Verde',    bg: '#dcfce7', border: '#16a34a', text: '#14532d', emoji: '💚', barColor: '#22c55e' },
-            { min: 601,  max: 1000,      name: 'Negro',    bg: '#1e293b', border: '#64748b', text: '#f1f5f9', emoji: '🖤', barColor: '#475569' },
-            { min: 1001, max: Infinity,  name: 'Dorado',   bg: '#fef3c7', border: '#d97706', text: '#78350f', emoji: '🏆', barColor: '#f59e0b' },
+            { min: 0,    max: 100,      name: 'Blanco',   bg: '#f8fafc', border: '#94a3b8', text: '#475569', emoji: '🐣', barColor: '#94a3b8',  label: 'Abeja Bebé'      },
+            { min: 101,  max: 300,      name: 'Amarillo', bg: '#fef9c3', border: '#ca8a04', text: '#713f12', emoji: '🐝', barColor: '#eab308',  label: 'Abeja Estudiante'},
+            { min: 301,  max: 600,      name: 'Verde',    bg: '#dcfce7', border: '#16a34a', text: '#14532d', emoji: '⚔️', barColor: '#22c55e',  label: 'Abeja Guerrera'  },
+            { min: 601,  max: 1000,     name: 'Negro',    bg: '#1e293b', border: '#64748b', text: '#f1f5f9', emoji: '🥋', barColor: '#475569',  label: 'Abeja Maestra'   },
+            { min: 1001, max: Infinity, name: 'Dorado',   bg: '#fef3c7', border: '#d97706', text: '#78350f', emoji: '👑', barColor: '#f59e0b',  label: 'Abeja Legendaria'},
         ];
 
         function getBeeLevel() {
-            const total = STORAGE.get('total_score', 0);
+            const total = getUserData('score', 0);
             return BEE_BELTS.find(b => total >= b.min && total <= b.max) || BEE_BELTS[0];
         }
 
         function addToTotalScore(pts) {
-            const prev  = STORAGE.get('total_score', 0);
+            const prev  = getUserData('score', 0);
             const prevL = BEE_BELTS.find(b => prev >= b.min && prev <= b.max) || BEE_BELTS[0];
             const next  = prev + pts;
-            STORAGE.set('total_score', next);
+            setUserData('score', next);
             const nextL = BEE_BELTS.find(b => next >= b.min && next <= b.max) || BEE_BELTS[0];
             if (prevL.name !== nextL.name) {
-                showToast(`🎉 ¡Evolucionaste a Cinturón ${nextL.emoji} <span style="color:${nextL.border}">${nextL.name}</span>!`, 4000);
+                if (typeof confetti === 'function') confetti({ particleCount: 150, spread: 100, origin: { y: 0.5 } });
+                showToast(`🎉 ¡EVOLUCIONASTE! ${nextL.emoji} ${nextL.label} · Cinturón ${nextL.name}`, 5000);
             }
             updateBeeDisplay();
         }
 
         function updateBeeDisplay() {
             const level = getBeeLevel();
-            const total = STORAGE.get('total_score', 0);
+            const user  = getCurrentUser();
 
             // Home belt badge
             const badge = document.getElementById('home-bee-belt');
@@ -2600,11 +3172,19 @@
                 badge.textContent = `${level.emoji} ${level.name}`;
                 Object.assign(badge.style, { background: level.bg, borderColor: level.border, color: level.text });
             }
+
+            // Header user indicator
+            const headerBee  = document.getElementById('header-user-bee');
+            const headerName = document.getElementById('header-user-name');
+            const headerUser = document.getElementById('header-user');
+            if (headerBee)  headerBee.textContent  = level.emoji;
+            if (headerName) headerName.textContent = user || '—';
+            if (headerUser) headerUser.classList.toggle('hidden', !user);
         }
 
         function updateWinBeltDisplay() {
-            const level = getBeeLevel();
-            const total = STORAGE.get('total_score', 0);
+            const level    = getBeeLevel();
+            const total    = getUserData('score', 0);
             const nextBelt = BEE_BELTS.find(b => b.min > total);
 
             const label = document.getElementById('win-belt-label');
@@ -2612,43 +3192,43 @@
             const cur   = document.getElementById('win-belt-current');
             const nxt   = document.getElementById('win-belt-next');
 
-            if (label) {
-                label.textContent = `${level.emoji} ${level.name}`;
-                Object.assign(label.style, { background: level.bg, borderColor: level.border, color: level.text });
-            }
-            if (bar) bar.style.background = level.barColor;
+            if (label) { label.textContent = `${level.emoji} ${level.label}`; Object.assign(label.style, { background: level.bg, borderColor: level.border, color: level.text }); }
+            if (bar)   bar.style.background = level.barColor;
 
             if (nextBelt) {
                 const pct = Math.min(100, Math.round(((total - level.min) / (nextBelt.min - level.min)) * 100));
                 if (bar) bar.style.width = pct + '%';
-                if (cur) cur.textContent = total + ' pts';
-                if (nxt) nxt.textContent = `→ ${nextBelt.emoji} ${nextBelt.name}: ${nextBelt.min} pts`;
+                if (cur) cur.textContent  = total + ' pts';
+                if (nxt) nxt.textContent  = `→ ${nextBelt.emoji} ${nextBelt.name}: ${nextBelt.min} pts`;
             } else {
                 if (bar) bar.style.width = '100%';
-                if (cur) cur.textContent = total + ' pts';
-                if (nxt) nxt.textContent = '🏆 ¡Nivel máximo!';
+                if (cur) cur.textContent  = total + ' pts';
+                if (nxt) nxt.textContent  = '👑 ¡Nivel máximo alcanzado!';
             }
         }
 
         function checkDailyStreak() {
             const today     = new Date().toDateString();
-            const lastPlay  = STORAGE.get('last_play', '');
-            let streak      = STORAGE.get('streak', 0);
+            const lastPlay  = getUserData('last_play', '');
+            let streak      = getUserData('streak', 0);
+            let bestStreak  = getUserData('best_streak', 0);
             if (lastPlay !== today) {
                 const yesterday = new Date(Date.now() - 86400000).toDateString();
                 streak = (lastPlay === yesterday) ? streak + 1 : 1;
-                STORAGE.set('streak', streak);
-                STORAGE.set('last_play', today);
+                if (streak > bestStreak) { bestStreak = streak; setUserData('best_streak', bestStreak); }
+                setUserData('streak', streak);
+                setUserData('last_play', today);
             }
             return streak;
         }
 
         function updateStreakDisplay() {
-            const streak = STORAGE.get('streak', 0);
-            const el = document.getElementById('home-streak');
+            const streak = getUserData('streak', 0);
+            const best   = getUserData('best_streak', 0);
+            const el     = document.getElementById('home-streak');
             if (!el) return;
             if (streak >= 1) {
-                el.textContent = streak === 1 ? '🔥 Día 1' : `🔥 ${streak} días seguidos`;
+                el.innerHTML = streak === 1 ? '🔥 Día 1' : `🔥 ${streak} días seguidos${best > streak ? ` · 👑 Récord: ${best}` : ''}`;
                 el.classList.remove('hidden');
             }
         }
@@ -2663,14 +3243,151 @@
             toast._t = setTimeout(() => toast.classList.add('hidden'), duration);
         }
 
-        // Init on load
-        window.addEventListener('DOMContentLoaded', () => {
+        // ---- User modal functions ----
+        function openUserModal() {
+            const users = getUsers();
+            const list  = document.getElementById('user-list');
+            if (list) {
+                if (users.length > 0) {
+                    list.classList.remove('hidden');
+                    list.innerHTML = users.map(u =>
+                        `<button onclick="selectUser('${u}')" class="w-full text-left px-3 py-2 bg-orange-50 hover:bg-orange-100 border-2 border-orange-200 rounded-xl font-bold text-orange-700 flex items-center gap-2 transition-colors">
+                            <span>${getBeeEmoji(u)}</span> ${u}
+                        </button>`
+                    ).join('');
+                } else {
+                    list.classList.add('hidden');
+                }
+            }
+            const input = document.getElementById('user-name-input');
+            if (input) { input.value = ''; input.focus(); }
+            document.getElementById('user-modal').classList.remove('hidden');
+        }
+
+        function getBeeEmoji(userName) {
+            const score = STORAGE.get('u_' + userName + '_score', 0);
+            return (BEE_BELTS.find(b => score >= b.min && score <= b.max) || BEE_BELTS[0]).emoji;
+        }
+
+        function selectUser(name) {
+            setCurrentUser(name);
+            document.getElementById('user-modal').classList.add('hidden');
+            onUserReady();
+        }
+
+        function confirmUserName() {
+            const input = document.getElementById('user-name-input');
+            const name  = (input?.value || '').trim().toUpperCase();
+            if (!name) { input?.focus(); return; }
+            addUser(name);
+            setCurrentUser(name);
+            document.getElementById('user-modal').classList.add('hidden');
+            const streak = getUserData('streak', 0);
+            if (streak >= 2) showToast(`🔥 ¡Hola ${name}! Llevas ${streak} días seguidos. ¡No rompas tu racha!`, 4000);
+            onUserReady();
+        }
+
+        function onUserReady() {
             checkDailyStreak();
             updateBeeDisplay();
             updateStreakDisplay();
+            updateWinBeltDisplay();
+            const savedAge = parseInt(localStorage.getItem('kb_age') || '0');
+            if (!savedAge) {
+                document.getElementById('age-modal')?.classList.remove('hidden');
+            }
+        }
+
+        // ---- Torneo state & functions ----
+        let torneo = { streak: 0, bestThisLevel: 0 };
+
+        function initTorneo() {
+            torneo.streak = 0;
+            torneo.bestThisLevel = getUserData('best_torneo_streak', 0);
+            updateTorneoDisplay();
+        }
+
+        function updateTorneoDisplay() {
+            const s = document.getElementById('torneo-streak-count');
+            const b = document.getElementById('torneo-best-label');
+            if (s) s.textContent = torneo.streak;
+            if (b) b.textContent = `👑 ${torneo.bestThisLevel}`;
+            const counter = document.getElementById('torneo-streak-count')?.parentElement?.parentElement;
+            if (counter) {
+                const colors = torneo.streak >= 10 ? ['bg-red-50','border-red-400','text-red-600'] :
+                               torneo.streak >= 5  ? ['bg-orange-50','border-orange-300','text-orange-500'] :
+                               ['bg-slate-50','border-slate-200','text-slate-600'];
+                counter.className = `inline-flex items-center gap-3 rounded-2xl px-5 py-2 border-2 ${colors.join(' ')}`;
+            }
+        }
+
+        function torneoCorrect() {
+            torneo.streak++;
+            if (torneo.streak > torneo.bestThisLevel) {
+                torneo.bestThisLevel = torneo.streak;
+                if (torneo.streak > (getUserData('best_torneo_streak', 0))) {
+                    setUserData('best_torneo_streak', torneo.streak);
+                }
+            }
+            updateTorneoDisplay();
+            showTorneoResult(true, `🔥 +1 · Racha: ${torneo.streak}`);
+            if (typeof confetti === 'function' && torneo.streak % 5 === 0)
+                confetti({ particleCount: 60, spread: 70, origin: { y: 0.7 } });
+        }
+
+        function torneoReset() {
+            torneo.streak = 0;
+            updateTorneoDisplay();
+            const card = document.getElementById('game-card');
+            if (card) { card.classList.remove('flash-red'); void card.offsetWidth; card.classList.add('flash-red'); }
+            if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 100]);
+        }
+
+        function showTorneoResult(ok, msg) {
+            const el = document.getElementById('torneo-result');
+            if (!el) return;
+            el.className = `text-center font-black text-sm py-2 px-3 rounded-2xl ${ok ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`;
+            el.textContent = msg;
+            el.classList.remove('hidden');
+            setTimeout(() => el.classList.add('hidden'), 1500);
+        }
+
+        // Init on load
+        window.addEventListener('DOMContentLoaded', () => {
+            const user = getCurrentUser();
+            if (!user) {
+                openUserModal();
+            } else {
+                checkDailyStreak();
+                updateBeeDisplay();
+                updateStreakDisplay();
+                const streak = getUserData('streak', 0);
+                if (streak >= 2) showToast(`🔥 ¡Hola ${user}! Llevas ${streak} días seguidos. ¡No rompas tu racha!`, 4000);
+                const savedAge = parseInt(localStorage.getItem('kb_age') || '0');
+                if (!savedAge) document.getElementById('age-modal')?.classList.remove('hidden');
+            }
         });
 
     </script>
+
+    <!-- Modal: selección/creación de usuario -->
+    <div id="user-modal" class="hidden fixed inset-0 z-[300] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl shadow-2xl p-6 w-full max-w-xs text-center pop-in">
+            <div class="text-5xl mb-2">🐝</div>
+            <h3 class="text-2xl font-black text-slate-800 mb-1">¡Bienvenido!</h3>
+            <p class="text-slate-500 mb-4 font-medium text-sm">¿Cómo te llamas? <span class="text-xs text-slate-400">(cada persona tiene su propio progreso)</span></p>
+            <div id="user-list" class="hidden mb-3 space-y-2 max-h-36 overflow-y-auto"></div>
+            <div class="flex gap-2">
+                <input type="text" id="user-name-input"
+                    class="flex-1 text-center text-xl font-bold text-slate-700 bg-slate-100 rounded-xl py-3 px-3 border-2 border-slate-200 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100 outline-none uppercase"
+                    placeholder="Mi nombre" maxlength="16" autocomplete="off"
+                    onkeydown="if(event.key==='Enter')confirmUserName()">
+                <button onclick="confirmUserName()"
+                    class="bg-orange-400 hover:bg-orange-500 text-white font-black px-4 rounded-xl border-b-4 border-orange-600 active:border-b-0 active:translate-y-1 transition-all text-xl">✓</button>
+            </div>
+            <p class="text-slate-400 text-xs mt-3">Ideal para toda la familia 👨‍👩‍👧‍👦</p>
+        </div>
+    </div>
 
     <!-- Modal: selección de edad (primera visita) -->
     <div id="age-modal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
