@@ -502,14 +502,14 @@
                         <div id="battle-keyboard" class="grid gap-1" style="grid-template-columns:repeat(9,1fr)"></div>
                         <!-- Botón siguiente -->
                         <button id="battle-next-btn" onclick="nextWord()"
-                            class="hidden w-full bg-blue-500 hover:bg-blue-600 text-white font-black py-3 rounded-2xl shadow-lg border-b-4 border-blue-700 active:border-b-0 active:translate-y-1 transition-all text-lg uppercase tracking-wide shrink-0">
+                            class="hidden w-full bg-blue-500 hover:bg-blue-600 text-white font-black py-3 rounded-2xl shadow-lg border-b-4 border-blue-700 active:border-b-0 active:translate-y-1 transition-all text-lg uppercase tracking-wide shrink-0 sticky bottom-2 z-10">
                             SIGUIENTE →
                         </button>
                     </div>
 
                     <!-- Comprobar -->
                     <button id="action-btn" onclick="checkAnswer()"
-                        class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3.5 rounded-2xl shadow-lg border-b-4 border-green-700 active:border-b-0 active:translate-y-1 transition-all text-xl uppercase tracking-wide shrink-0">
+                        class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3.5 rounded-2xl shadow-lg border-b-4 border-green-700 active:border-b-0 active:translate-y-1 transition-all text-xl uppercase tracking-wide shrink-0 sticky bottom-2 z-10">
                         Comprobar
                     </button>
 
@@ -1250,13 +1250,15 @@
 
             const word = state.playlist[state.currentIndex].w;
 
-            // Phonetic names so ElevenLabs says the letter, not a random word
+            // Full letter names so ElevenLabs pronounces each letter clearly
             const PHONETICS = {
-                A:'ay', B:'bee', C:'see', D:'dee', E:'ee', F:'ef', G:'jee',
-                H:'aitch', I:'eye', J:'jay', K:'kay', L:'el', M:'em',
-                N:'en', O:'oh', P:'pee', Q:'cue', R:'ar', S:'ess',
-                T:'tee', U:'you', V:'vee', W:'double you', X:'ex',
-                Y:'why', Z:'zee',
+                A:'the letter A', B:'the letter B', C:'the letter C', D:'the letter D',
+                E:'the letter E', F:'the letter F', G:'the letter G', H:'the letter H',
+                I:'the letter I', J:'the letter J', K:'the letter K', L:'the letter L',
+                M:'the letter M', N:'the letter N', O:'the letter O', P:'the letter P',
+                Q:'the letter Q', R:'the letter R', S:'the letter S', T:'the letter T',
+                U:'the letter U', V:'the letter V', W:'the letter W', X:'the letter X',
+                Y:'the letter Y', Z:'the letter Z',
                 ' ':'space', '-':'hyphen', "'":"apostrophe", '.':'dot'
             };
             const letters = word.split('').map(char => {
@@ -2236,6 +2238,10 @@
             const c = document.getElementById('battle-keyboard');
             if (!c) return;
             c.innerHTML = '';
+            const word = state.playlist?.[state.currentIndex]?.w || '';
+            const needSpace = word.includes(' ');
+            const needApostrophe = word.includes("'");
+
             'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach((letter, i) => {
                 const btn = document.createElement('button');
                 btn.className = 'ph-key';
@@ -2246,6 +2252,32 @@
                 btn.addEventListener('pointerdown', (e) => { e.preventDefault(); handleBattleKey(letter); });
                 c.appendChild(btn);
             });
+
+            // Special keys for words with spaces or apostrophes
+            if (needSpace) {
+                const btn = document.createElement('button');
+                btn.className = 'ph-key';
+                btn.style.background = '#475569';
+                btn.style.borderColor = 'rgba(0,0,0,0.2)';
+                btn.style.gridColumn = 'span 3';
+                btn.style.fontSize = '0.7rem';
+                btn.textContent = '⎵ SPACE';
+                btn.dataset.letter = ' ';
+                btn.addEventListener('pointerdown', (e) => { e.preventDefault(); handleBattleKey(' '); });
+                c.appendChild(btn);
+            }
+            if (needApostrophe) {
+                const btn = document.createElement('button');
+                btn.className = 'ph-key';
+                btn.style.background = '#475569';
+                btn.style.borderColor = 'rgba(0,0,0,0.2)';
+                btn.style.gridColumn = 'span 2';
+                btn.style.fontSize = '0.7rem';
+                btn.textContent = "' APOS";
+                btn.dataset.letter = "'";
+                btn.addEventListener('pointerdown', (e) => { e.preventDefault(); handleBattleKey("'"); });
+                c.appendChild(btn);
+            }
         }
 
         function flashBattleKey(letter, correct) {
