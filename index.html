@@ -242,6 +242,11 @@
         </div>
     </header>
 
+    <!-- Toast de notificaciones -->
+    <div id="toast-notification" class="hidden fixed top-4 left-1/2 -translate-x-1/2 z-[300] bg-white rounded-2xl shadow-2xl px-5 py-3 border-4 border-yellow-400 text-center font-black text-slate-800 text-sm max-w-xs pop-in">
+        <div id="toast-content"></div>
+    </div>
+
     <!-- ÁREA PRINCIPAL -->
     <main class="flex-1 relative overflow-hidden flex flex-col items-center justify-center p-4">
 
@@ -251,20 +256,32 @@
         <div id="view-home"
             class="w-full max-w-5xl h-full flex flex-col items-center justify-center p-4 relative text-center">
 
-            <div class="animate-float mb-8 pop-in">
+            <div class="animate-float mb-4 pop-in relative">
                 <img src="assets/bee_avatar.png"
                     onerror="this.onerror=null;this.src='https://cdn-icons-png.flaticon.com/512/4693/4693156.png'"
                     alt="Karate Bee"
-                    class="w-52 h-52 sm:w-64 sm:h-64 object-contain filter drop-shadow-2xl">
+                    class="w-44 h-44 sm:w-56 sm:h-56 object-contain filter drop-shadow-2xl">
+                <!-- Belt badge -->
+                <div id="home-bee-belt"
+                    class="absolute -bottom-1 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full text-xs font-black border-2 whitespace-nowrap shadow-md"
+                    style="background:#f8fafc;border-color:#94a3b8;color:#475569">
+                    🤍 Blanco
+                </div>
+            </div>
+
+            <!-- Streak diario -->
+            <div id="home-streak"
+                class="hidden bg-white/80 backdrop-blur-sm px-5 py-1.5 rounded-full font-black text-slate-600 mb-2 shadow-sm border border-white/60 text-sm">
+                🔥 Día 1
             </div>
 
             <h1
-                class="text-6xl md:text-8xl font-black text-orange-500 tracking-tight mb-2 drop-shadow-sm leading-tight">
+                class="text-5xl md:text-7xl font-black text-orange-500 tracking-tight mb-2 drop-shadow-sm leading-tight mt-2">
                 Spelling <br> <span class="text-yellow-400">Bee</span>
             </h1>
 
             <div
-                class="bg-white/80 backdrop-blur-sm px-6 py-2 rounded-full font-bold text-slate-500 mb-12 shadow-sm border border-white">
+                class="bg-white/80 backdrop-blur-sm px-6 py-2 rounded-full font-bold text-slate-500 mb-8 shadow-sm border border-white">
                 ¡Aprende inglés como un campeón!
             </div>
 
@@ -399,7 +416,7 @@
 
 
             <div id="game-card"
-                class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl flex-1 flex flex-col overflow-hidden border-4 border-white relative z-10 mb-2">
+                class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl flex-1 flex flex-col overflow-y-auto border-4 border-white relative z-10 mb-2">
 
                 <!-- Barra Progreso -->
                 <div class="w-full h-3 bg-slate-100">
@@ -416,7 +433,7 @@
                 </div>
 
                 <!-- Área Visual Central -->
-                <div id="game-image-area" class="flex-1 bg-slate-50 flex items-center justify-center p-4 relative group" style="overflow:visible;transition:max-height 0.25s ease,min-height 0.25s ease">
+                <div id="game-image-area" class="min-h-0 bg-slate-50 flex items-center justify-center p-4 relative group" style="flex:1 1 0;max-height:40vh;overflow:hidden;transition:max-height 0.25s ease">
 
                     <!-- IMAGEN DE LA PALABRA (PNG) -->
                     <img id="word-img" src=""
@@ -643,6 +660,21 @@
                 </div>
                 <div class="h-3 bg-slate-100 rounded-full overflow-hidden">
                     <div id="results-bar" class="h-full bg-gradient-to-r from-green-400 to-emerald-500 rounded-full transition-all duration-1000 w-0"></div>
+                </div>
+            </div>
+
+            <!-- Karate Bee progress -->
+            <div id="win-belt-section" class="w-full bg-white rounded-2xl shadow-xl p-4">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-black text-slate-500 uppercase tracking-wider">Karate Bee</span>
+                    <span id="win-belt-label" class="text-xs font-black px-2 py-0.5 rounded-full border-2" style="background:#f8fafc;border-color:#94a3b8;color:#475569">🤍 Blanco</span>
+                </div>
+                <div class="h-3 bg-slate-100 rounded-full overflow-hidden">
+                    <div id="win-belt-bar" class="h-full rounded-full transition-all duration-1000 w-0" style="background:#eab308"></div>
+                </div>
+                <div class="flex justify-between text-[10px] text-slate-400 font-bold mt-1">
+                    <span id="win-belt-current">0 pts</span>
+                    <span id="win-belt-next">→ Amarillo 101 pts</span>
                 </div>
             </div>
 
@@ -1323,6 +1355,7 @@
                 const pts = state.lives === 3 ? 10 : state.lives === 2 ? 7 : 4;
                 state.score += pts;
                 document.getElementById('score-display').innerText = state.score;
+                addToTotalScore(pts);
 
                 state.results.push({ word: current.w, correct: true, attempts: state.wordAttempts });
 
@@ -1397,6 +1430,7 @@
         function showWinScreen() {
             const screen = document.getElementById('win-screen');
             screen.classList.remove('hidden');
+            setTimeout(updateWinBeltDisplay, 400);
 
             const total   = state.results.length || state.playlist.length;
             const correct = state.results.filter(r => r.correct).length;
@@ -2441,6 +2475,7 @@
             const pts   = state.lives === 3 ? 10 : state.lives === 2 ? 7 : 4;
             state.score += pts + bonus;
             document.getElementById('score-display').innerText = state.score;
+            if (won) addToTotalScore(pts + bonus);
 
             state.results.push({
                 word:     state.playlist[state.currentIndex].w,
@@ -2469,6 +2504,120 @@
             if (e.ctrlKey || e.metaKey || e.altKey) return;
             const letter = e.key.toUpperCase();
             if (/^[A-Z]$/.test(letter)) { e.preventDefault(); handleBattleKey(letter); }
+        });
+
+        // ================================================
+        // GAMIFICACIÓN PERSISTENTE
+        // Racha Diaria + Karate Bee Evolution
+        // ================================================
+        const STORAGE = {
+            get(k, def) { try { const v = localStorage.getItem('kb_' + k); return v !== null ? JSON.parse(v) : def; } catch { return def; } },
+            set(k, v)   { try { localStorage.setItem('kb_' + k, JSON.stringify(v)); } catch {} }
+        };
+
+        const BEE_BELTS = [
+            { min: 0,    max: 100,       name: 'Blanco',   bg: '#f8fafc', border: '#94a3b8', text: '#475569', emoji: '🤍', barColor: '#94a3b8' },
+            { min: 101,  max: 300,       name: 'Amarillo', bg: '#fef9c3', border: '#ca8a04', text: '#713f12', emoji: '💛', barColor: '#eab308' },
+            { min: 301,  max: 600,       name: 'Verde',    bg: '#dcfce7', border: '#16a34a', text: '#14532d', emoji: '💚', barColor: '#22c55e' },
+            { min: 601,  max: 1000,      name: 'Negro',    bg: '#1e293b', border: '#64748b', text: '#f1f5f9', emoji: '🖤', barColor: '#475569' },
+            { min: 1001, max: Infinity,  name: 'Dorado',   bg: '#fef3c7', border: '#d97706', text: '#78350f', emoji: '🏆', barColor: '#f59e0b' },
+        ];
+
+        function getBeeLevel() {
+            const total = STORAGE.get('total_score', 0);
+            return BEE_BELTS.find(b => total >= b.min && total <= b.max) || BEE_BELTS[0];
+        }
+
+        function addToTotalScore(pts) {
+            const prev  = STORAGE.get('total_score', 0);
+            const prevL = BEE_BELTS.find(b => prev >= b.min && prev <= b.max) || BEE_BELTS[0];
+            const next  = prev + pts;
+            STORAGE.set('total_score', next);
+            const nextL = BEE_BELTS.find(b => next >= b.min && next <= b.max) || BEE_BELTS[0];
+            if (prevL.name !== nextL.name) {
+                showToast(`🎉 ¡Evolucionaste a Cinturón ${nextL.emoji} <span style="color:${nextL.border}">${nextL.name}</span>!`, 4000);
+            }
+            updateBeeDisplay();
+        }
+
+        function updateBeeDisplay() {
+            const level = getBeeLevel();
+            const total = STORAGE.get('total_score', 0);
+
+            // Home belt badge
+            const badge = document.getElementById('home-bee-belt');
+            if (badge) {
+                badge.textContent = `${level.emoji} ${level.name}`;
+                Object.assign(badge.style, { background: level.bg, borderColor: level.border, color: level.text });
+            }
+        }
+
+        function updateWinBeltDisplay() {
+            const level = getBeeLevel();
+            const total = STORAGE.get('total_score', 0);
+            const nextBelt = BEE_BELTS.find(b => b.min > total);
+
+            const label = document.getElementById('win-belt-label');
+            const bar   = document.getElementById('win-belt-bar');
+            const cur   = document.getElementById('win-belt-current');
+            const nxt   = document.getElementById('win-belt-next');
+
+            if (label) {
+                label.textContent = `${level.emoji} ${level.name}`;
+                Object.assign(label.style, { background: level.bg, borderColor: level.border, color: level.text });
+            }
+            if (bar) bar.style.background = level.barColor;
+
+            if (nextBelt) {
+                const pct = Math.min(100, Math.round(((total - level.min) / (nextBelt.min - level.min)) * 100));
+                if (bar) bar.style.width = pct + '%';
+                if (cur) cur.textContent = total + ' pts';
+                if (nxt) nxt.textContent = `→ ${nextBelt.emoji} ${nextBelt.name}: ${nextBelt.min} pts`;
+            } else {
+                if (bar) bar.style.width = '100%';
+                if (cur) cur.textContent = total + ' pts';
+                if (nxt) nxt.textContent = '🏆 ¡Nivel máximo!';
+            }
+        }
+
+        function checkDailyStreak() {
+            const today     = new Date().toDateString();
+            const lastPlay  = STORAGE.get('last_play', '');
+            let streak      = STORAGE.get('streak', 0);
+            if (lastPlay !== today) {
+                const yesterday = new Date(Date.now() - 86400000).toDateString();
+                streak = (lastPlay === yesterday) ? streak + 1 : 1;
+                STORAGE.set('streak', streak);
+                STORAGE.set('last_play', today);
+            }
+            return streak;
+        }
+
+        function updateStreakDisplay() {
+            const streak = STORAGE.get('streak', 0);
+            const el = document.getElementById('home-streak');
+            if (!el) return;
+            if (streak >= 1) {
+                el.textContent = streak === 1 ? '🔥 Día 1' : `🔥 ${streak} días seguidos`;
+                el.classList.remove('hidden');
+            }
+        }
+
+        function showToast(html, duration = 3000) {
+            const toast   = document.getElementById('toast-notification');
+            const content = document.getElementById('toast-content');
+            if (!toast || !content) return;
+            content.innerHTML = html;
+            toast.classList.remove('hidden');
+            clearTimeout(toast._t);
+            toast._t = setTimeout(() => toast.classList.add('hidden'), duration);
+        }
+
+        // Init on load
+        window.addEventListener('DOMContentLoaded', () => {
+            checkDailyStreak();
+            updateBeeDisplay();
+            updateStreakDisplay();
         });
 
     </script>
