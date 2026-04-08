@@ -1078,6 +1078,7 @@
             document.getElementById('game-progress').style.width = `${pct}%`;
 
             // Audio Auto
+            metricsWordStart();   // inicia cronómetro para todos los modos
             setTimeout(() => playWord(), 600);
             if (currentInputMode === 'battle') initBattle();
         }
@@ -1205,8 +1206,8 @@
             }
         }
 
-        function playWord()       { speak(state.playlist[state.currentIndex].w); }
-        function playDefinition() { speak(state.playlist[state.currentIndex].d); }
+        function playWord()       { const w = state.playlist?.[state.currentIndex]?.w; if (w) speak(w); }
+        function playDefinition() { const d = state.playlist?.[state.currentIndex]?.d; if (d) speak(d); }
 
         // ── Spelling button state ────────────────────────────
         let spellingSession = 0;      // incrementa en cada llamada para invalidar loops viejos
@@ -1309,6 +1310,8 @@
 
             if (userVal === correctVal) {
                 // ✅ CORRECTO
+                metricsKeyPress(0);
+                metricsSaveWord(current.w, true);
                 input.disabled = true;
                 input.classList.add('text-green-600', 'bg-green-50');
                 feedback.innerHTML = '<i class="fas fa-check-circle text-4xl text-green-500"></i>';
@@ -1352,6 +1355,8 @@
 
                 if (state.lives <= 0) {
                     // Sin vidas: revelar respuesta
+                    metricsError(0, current.w[0]?.toUpperCase() || '?', userVal[0]?.toUpperCase() || '?');
+                    metricsSaveWord(current.w, false);
                     state.results.push({ word: current.w, correct: false, attempts: state.wordAttempts });
                     speak("The answer is " + current.w);
 
@@ -1490,10 +1495,10 @@
             const correct    = state.results.filter(r => r.correct).length;
             const pct        = total > 0 ? Math.round((correct / total) * 100) : 0;
             const levelScore = state.score - state.levelStartScore;
-            const catLabels  = { certification: 'Certificacion Escolar', science: 'Ciencias', content: 'Contenido General', custom: 'Entrenamiento Personalizado' };
+            const catLabels  = { certification: 'Certificación Escolar', science: 'Ciencias', content: 'Contenido General', custom: 'Entrenamiento Personalizado' };
             const levelNum   = state.currentLevelStart !== undefined ? Math.floor(state.currentLevelStart / 10) + 1 : 1;
             const catLabel   = catLabels[state.currentCategory] || state.currentCategory || 'Spelling Bee';
-            const studentName = (document.getElementById('cert-name')?.value || '').trim() || 'Campeon';
+            const studentName = (document.getElementById('cert-name')?.value || '').trim() || 'Campeón';
             const isGold     = pct === 100;
             const dateStr    = new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
             const medal      = isGold ? 'MEDALLA DE ORO' : 'MEDALLA DE PLATA';
@@ -1594,7 +1599,7 @@
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(14);
             doc.setTextColor(100, 60, 0);
-            doc.text('¡Felicitaciones Campeon!', cx, 55, { align: 'center' });
+            doc.text('¡Felicitaciones Campeón!', cx, 55, { align: 'center' });
 
             // Texto "Este certificado se otorga a:"
             doc.setFont('helvetica', 'normal');
@@ -1939,7 +1944,9 @@
             const section = document.getElementById('cognitive-section');
             const report  = document.getElementById('cognitive-report');
             if (!section || !report) return;
-            if (!r || !metrics.session_data.length) { section.classList.add('hidden'); return; }
+            // Solo mostrar si hay al menos 2 palabras con datos de tiempo de reacción
+            const hasData = r && metrics.session_data.filter(d => d.rt !== null).length >= 2;
+            if (!hasData) { section.classList.add('hidden'); return; }
             section.classList.remove('hidden');
 
             const card = (lbl, val, sub, bg, txt) =>
@@ -2170,6 +2177,9 @@
         function fogStop() {
             if (fog.raf) { cancelAnimationFrame(fog.raf); fog.raf = null; }
             if (fog.canvas) { fog.ctx && fog.ctx.clearRect(0,0,fog.w,fog.h); fog.canvas.style.display='none'; }
+            fog.phase   = 'idle';
+            fog.density = 0;
+            fog.target  = 0;
         }
         function updateFogBar() {
             const bar = document.getElementById('fog-bar');
@@ -2183,10 +2193,16 @@
         }
 
         // ---- Sonidos de batalla (Web Audio) ----
+        function _getBattleACtx() {
+            if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (_audioCtx.state === 'suspended') _audioCtx.resume();
+            return _audioCtx;
+        }
+
         function playBattleHit() {
             try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const buf = ctx.createBuffer(1, ctx.sampleRate * 0.12, ctx.sampleRate);
+                const ctx = _getBattleACtx();
+                const buf = ctx.createBuffer(1, Math.round(ctx.sampleRate * 0.12), ctx.sampleRate);
                 const d = buf.getChannelData(0);
                 for (let i = 0; i < d.length; i++) {
                     const t2 = i / ctx.sampleRate;
@@ -2196,14 +2212,13 @@
                 src.buffer = buf;
                 src.connect(ctx.destination);
                 src.start();
-                setTimeout(() => ctx.close(), 300);
             } catch(e) {}
         }
 
         function playBattleMiss() {
             try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = ctx.createOscillator();
+                const ctx = _getBattleACtx();
+                const osc  = ctx.createOscillator();
                 const gain = ctx.createGain();
                 osc.connect(gain); gain.connect(ctx.destination);
                 osc.frequency.setValueAtTime(180, ctx.currentTime);
@@ -2211,7 +2226,6 @@
                 gain.gain.setValueAtTime(0.25, ctx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
                 osc.start(); osc.stop(ctx.currentTime + 0.22);
-                setTimeout(() => ctx.close(), 400);
             } catch(e) {}
         }
 
