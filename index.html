@@ -1235,6 +1235,7 @@
         }
 
         const ipaCache = {};
+        let ipaCurrentWord = '';
 
         function renderIPA(txt, el, ipa) {
             txt.innerHTML = ipa.replace(/ə/g, '<span style="color:#f97316;font-weight:bold">ə</span>');
@@ -1242,6 +1243,7 @@
         }
 
         async function showIPA(word) {
+            ipaCurrentWord = word;
             const meta = getWordMeta(word);
             const el   = document.getElementById('ipa-display');
             const txt  = document.getElementById('ipa-text');
@@ -1264,11 +1266,13 @@
                 const ipa  = data[0]?.phonetics?.find(p => p.text)?.text
                           || data[0]?.phonetic
                           || null;
-                ipaCache[key] = ipa;
+                ipaCache[key] = ipa || null;
+                // Solo mostrar si la palabra sigue siendo la actual
+                if (ipaCurrentWord !== word) return;
                 if (ipa) { renderIPA(txt, el, ipa); } else { el.classList.add('hidden'); }
             } catch(e) {
                 ipaCache[key] = null;
-                el.classList.add('hidden');
+                if (ipaCurrentWord === word) el.classList.add('hidden');
             }
         }
 
