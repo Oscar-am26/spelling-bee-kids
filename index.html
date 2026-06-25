@@ -484,7 +484,7 @@
 
                     <!-- IPA Fonética -->
                     <div id="ipa-display" class="hidden text-center">
-                        <span id="ipa-text" class="font-mono text-sm text-slate-500 bg-slate-50 px-3 py-0.5 rounded-full border border-slate-200 tracking-wide"></span>
+                        <span id="ipa-text" class="font-mono text-sm text-slate-500 bg-slate-50 px-3 py-0.5 rounded-lg border border-slate-200 tracking-wide inline-block max-w-full break-words"></span>
                     </div>
 
                     <!-- 3 modos de entrada -->
@@ -1234,48 +1234,22 @@
             return WORD_META[word.toLowerCase()] || null;
         }
 
-        const ipaCache = {};
-        let ipaCurrentWord = '';
+        const IPA_DATA = {"animal":"/ˈænɪməl/","armchair":"/ˈɑː(ɹ)mtʃɛə(ɹ)/","baby":"/ˈbeɪbi/","bath":"/bɐːθ/","bathroom":"/ˈbæθ.ɹuːm/","bed":"/bed/","bedroom":"/ˈbɛdɹʊm/","bird":"/bɜd/","big":"/bɪɡ/","book":"/buːk/","bookcase":"[ˈbʊkːeɪs]","box":"/bɒks/","boy":"/bɔːə/","cake":"/keɪk/","cat":"/kat/","chair":"/t͡ʃɛə(ɹ)/","child":"/t͡ʃaɪld/","clean":"/kleːn/","colour":"/ˈkʌl.ə(ɹ)/","crocodile":"/ˈkɹɒkədaɪl/","cupboard":"/ˈkʌbəd/","dad":"/dæd/","desk":"/dɛsk/","dining room":"/ˈdaɪnɪŋ(ɡ)/ /ɹuːm/","donkey":"/ˈdɒŋki/","door":"/dɔː/","duck":"/dʌk/","elephant":"/ˈɛləfənt/","face":"/feɪs/","family":"/ˈfɛm(ɘ)li/","flat":"/flæt/","flower":"/ˈflaʊ.ə/","football":"[fʷʊʔt̚bɑɫ]","fries":"/fɹaɪz/","frog":"/fɹɒɡ/","game":"/ɡeɪm/","garden":"/ˈɡɑːdn̩/","grandfather":"/ˈɡɹæn(d)ˌfɑːðə(r)/","grandma":"/ˈɡɹænmɑː/","grandmother":"/ˈɡɹæn(d)ˌmʌðə(r)/","grandpa":"/ˈɡɹæmpɑː/","hall":"/hɔːl/","hat":"[hat]","hippo":"/ˈhɪpəʊ/","home":"/(h)əʊm/","house":"/hʌʊs/","lamp":"/læmp/","mat":"/mæt/","mirror":"/ˈmɘ.ɹɘ/","mother":"/ˈmʌðə(ɹ)/","mum":"/mʌm/","number":"/ˈnʌmbə/","orange":"/ˈɔɹɪ̈nd͡ʒ/","painting":"/ˈpeɪn.tɪŋ/","pen":"/pɛn/","pencil":"/ˈpɛnsɪl/","pet":"/pɛt/","piano":"/piˈænoʊ/","right":"/ˈɹaɪt/","rug":"/ɹʌɡ/","shoe":"/ʃuː/","snake":"/ˈsneɪk/","sock":"/sɒk/","sofa":"/ˈsəʊfə/","story":"/ˈstɔː.ɹi/","sweets":"/swiːt/","table":"/ˈteɪbəl/","teeth":"/tiːθ/","today":"/təˈdeɪ/","toy":"/tɔɪ/","answer":"/ˈan.sə/","afternoon":"/af.təɾˈnʉːn/","alphabet":"/ˈæl.fə.bɛt/","apple":"/ˈæp.əl/","ball":"/bɔːl/","beach":"/biːt͡ʃ/","beautiful":"/ˈbjuːtɪfəl/","bee":"/ˈbiː/","boot":"/buːt/","brother":"/ˈbɹɐðɘ(ɹ)/","brown":"/bɹaʊn/","car":"/kɑː/","chicken":"/ˈt͡ʃɪkɪn/","children":"[ˈt͡ʃʊld̠ɹ̠ ̝ʷən]","chocolate":"/ˈt͡ʃɔk(ə)lət/","class":"/klas/","cousin":"/ˈkʌz.n̩/","cow":"/kaʊ/","crayon":"/ˈkɹeɪ.ɒ̃/","do":"/dʉː/","dog":"/dɑɡ/","eraser":"/ɪˈɹeɪzə/","evening":"/ˈivnɪŋ/","fantastic":"/fænˈtæstɪk/","favourite":"/ˈfeɪv.ɹɪt/","find":"/faɪnd/","food":"/fuːd/","friend":"/fɹɛnd/","giraffe":"/dʒɪˈɹɑːf/","good":"/ɡʊ(d)/","guitar":"/ɡɪˈtɑː(ɹ)/","hair":"/heː/","happy":"/ˈhæpiː/","have":"/hæv/","honey":"/ˈhʌni/","jeans":"/d͡ʒiːnz/","jellyfish":"/ˈdʒɛliˌfɪʃ/","kite":"/kaɪt/","learn":"/lɜːn/","lesson":"/ˈlɛsn̩/","listen":"/ˈlɪs.ən/","little":"/ˈlɪ.ɾɫ̩/","lunch":"/lʌnt͡ʃ/","meat":"/miːt/","morning":"/ˈmɔːnɪŋ/","mouse":"/maʊs/","music":"/ˈmjuːzɪk/","name":"/neɪm/","park":"[paːk]","person":"/ˈpɜːsən/","picture":"/ˈpɪktʃə/","please":"/pliːz/","polar bear":"/ˈpəʊ̯lə(ɹ)/ /bɛə(ɹ)/","question":"/ˈkwɛstjən/","rain":"/ɹeɪn/","scary":"/ˈskɛəɹi/","school":"/skuːl/","sea":"/siː/","sing":"/sɪŋ/","sister":"/ˈsɪs.tə/","skateboard":"/ˈskeɪtbɔːrd/","small":"/smoːl/","sorry":"/ˈsɔɹi/","talk":"/toːk/","teddy bear":"/ˈtɛdi/ /bɛr/","thing":"/θɪŋ/","tiger":"/ˈtaɪɡə/","try":"/tɹaɪ/","ugly":"/ˈʌɡli/","want":"/wɔnt/","absorbent":"/əbˈsɔː.bn̩t/","adapted":"/əˈdæptɪd/","aquatic":"/ɘˈkwɔ.tɘk/","birth":"/bɜːθ/","blond hair":"/blɒnd/ /hɛr/","cactus":"/ˈkæktəs/","camel":"/ˈkæməl/","clam":"/klæm/","climb":"/klaɪm/","cold":"/kɔʊld/","conditions":"/kənˈdɪʃənz/","cool":"/kuːl/","coral":"/ˈkɒɹəl/","crawl":"/kɹɔl/","dark":"/dɑːk/","desert":"/dɪˈzɜːt/","dies":"/daɪz/","dry":"/dɹaɪ/","eagle":"/ˈiːɡəl/","environment":"/-mɪnt/","fins":"/fɪnz/","flexible":"/ˈflɛk.sə.bəl/","forest":"/ˈfɒɹɪst/","grows":"/ɡɹəʊz/","habitats":"/ˈhæbɪtæt/","height":"/haɪt/","hot":"/hɒt/","inherit":"/ɪnˈhɛɹɪt/","lakes":"/leɪks/","land":"/lænd/","large":"/ˈlɑːd͡ʒ/","length":"/lɛn(t)θ/","light":"/lʌɪt/","lizard":"/ˈlɪz.əd/","logs":"/lɑɡz/","mass":"/mæs/","minerals":"/ˈmɪ.nəɹ.əl/","move":"/muːv/","nutrients":"/ˈnjuː.tɹi.ənt/","oceans":"/ˈəʊ.ʃən/","offspring":"/ˈɒfspɹɪŋ/","plants":"/plɑːnts/","predators":"/ˈpɹɛd.ə.təɹ/","properties":"/ˈpɹɒpətiz/","reproduction":"/ˌriːprəˈdʌkʃən/","rigid":"/ˈɹɪdʒɪd/","rivers":"/ˈɹɪvəz/","roots":"/ɹuːts/","senses":"/ˈsɛnsɪz/","shallow":"/ˈʃaləʊ/","shells":"/ʃɛlz/","shelter":"/ˈʃɛltə/","size":"/saɪz/","snail":"/sneɪl/","soil":"/sɔɪl/","stem":"/stɛm/","stick insect":"/stɪk/ /ˈɪnsɛkt/","survive":"/səˈvʌɪv/","swim":"/swɪm/","tadpole":"/ˈtædpoʊl/","tail":"/teɪl/","temperatures":"/ˈtɛmp(ə)ɹətʃə(ɹ)/","terrestrial":"/təˈɹɛstɹi.əl/","texture":"/ˈtɛkstʃə(ɹ)/","tropical rainforest":"/ˈtrɒpɪkl/ /ˈreɪnfɒrɪst/","warm":"/wɔːm/","waterproof":"/ˈwɔːtəpruːf/","wet":"/wɛt/","windy":"/ˈwɪndi/","attract":"/əˈtɹækt/","brick":"/bɹɪk/","bulb":"/bʌlb/","burn":"/bɜːn/","change":"/tʃeɪndʒ/","chemical":"/ˈkɛmɪkəl/","clay":"/kleɪ/","concrete":"/kɵnˈkɹiːt/","cotton":"/ˈkɒt.n̩/","curved":"/kɜːvd/","daytime":"/ˈdeɪtaɪm/","direction":"/d(a)ɪˈɹɛk.ʃən/","electricity":"/ɪˌlɛkˈtɹɪsɪti/","energy":"/ˈɛnəd͡ʒi/","fabric":"/ˈfæb.ɹɪk/","firefly":"/ˈfaɪərflaɪ/","floodlight":"/ˈflʌdlaɪt/","flashlight":"/ˈflæʃˌlaɪt/","force":"/fɔːs/","freezing":"/ˈfɹiːz.ɪŋ/","glass":"/ɡlɑːs/","friction":"/ˈfɹɪkʃən̩/","gravity":"/ˈɡɹævɪti/","ground":"/ɡɹaʊnd/","hard":"/hɑːd/","hypothesis":"/-əsəs/","investigation":"/ɪnˌvɛstəˈɡeɪʃən/","iron":"/ˈaɪən/","irreversible":"/ˌɪrɪˈvɜːsɪbl/","leather":"/ˈlɛðə/","lightning":"/ˈlaɪt.nɪŋ/","magnetism":"/ˈmæɡ.nəˌtɪz.əm/","manufactured":"/ˌmænjʊˈfæktʃəd/","materials":"/məˈtɪəɹɪəlz/","measure":"/ˈmɛʒə/","melting":"/ˈmɛltɪŋ/","metal":"/ˈmɛtəl/","natural":"/ˈnætʃəɹəl/","observe":"/əbˈzɝv/","oil":"/ɔɪl/","plastic":"/ˈplæstɪk/","polyester":"/ˌpɒliˈɛstər/","predict":"/pɹɪˈdɪkt/","produce":"/pɹəˈdjuːs/","record":"/ˈɹɛkɔːd/","resistance":"/ɹɪˈzɪstəns/","result":"/ɹɪˈzʌlt/","reversible":"/rɪˈvɜːsɪbl/","rock":"/ɹɒk/","rough":"/ɹʌf/","runny":"/ˈɹʌni/","sand":"/sænd/","scientist":"/ˈsaɪ.ən.tɪst/","see":"/siː/","sky":"/skaɪ/","slow down":"/sloʊ/ /daʊn/","smooth":"/smuːð/","soft":"/sɑft/","source":"/sɔːs/","speed up":"/spiːd/ /ʌp/","squeeze":"/skwiːz/","star":"/stɑː(ɹ)/","steel":"/stiːl/","straight":"/stɹeɪt/","streetlight":"/ˈstriːtlaɪt/","stretch":"/stɹɛtʃ/","strong":"/stɹɑŋ/","transparent":"/tɹæn(t)sˈpæɹənt/","weak":"/wiːk/","wool":"/wʊl/","airplane":"/ˈɛəpleɪn/","amphibians":"/æmˈfɪbɪən/","balloon":"/bəˈluːn/","berries":"/ˈbɛɹi/","boat":"/bəʊt/","body":"/ˈbɒdi/","bus":"/bɐs/","cable car":"/ˈkeɪbl/ /kɑːr/","calm":"/kam/","candle":"/ˈkændl̩/","closed":"/kləʊzd/","coffee":"/ˈkɑ.fi/","communication":"/kəˌmjuːnɪˈkeɪʃən/","cream":"/kɹiːm/","creep":"/kɹiːp/","ear":"/ɪə̯/","egg":"/eɪɡ/","e-mail":"/ˈiːmeɪl/","escape":"/əˈskeɪp/","eye":"/aɪ/","feathers":"/ˈfɛð.ə(ɹ)/","fierce":"/fɪəs/","fight":"[fʌɪt]","flow":"/fləʊ/","freezer":"/fɹiːzə/","fruit":"/fɹuːt/","fur":"/fɜː(ɹ)/","gas":"/ɡæs/","gentle":"/ˈdʒɛntl̩/","gills":"/ɡɪlz/","head":"/hɛd/","heat":"/hit/","horse":"/hɔːs/","hunt":"/hʌnt/","ice":"[ʌɪs]","ice pop":"/aɪs/ /pɒp/","icicle":"/ˈʌɪsəkəl/","kettle":"/ˈkɛ.təl/","leg":"/leɪɡ/","letters":"/ˈlɛtəz/","liquid":"/ˈlɪkwɪd/","mammals":"/ˈmæməl/","melt":"/mɛlt/","mixture":"/ˈmɪkstʃə/","motorcycle":"/ˈməʊtəˌsaikəl/","mouth":"/mʌʊθ/","news":"/njuːz/","open":"/ˈəʊ.pən/","pasta":"/ˈpɐːstə/","patient":"/ˈpeɪʃənt/","peck":"/pɛk/","pinecone":"/ˈpaɪnkoʊn/","plastic bag":"/ˈplæstɪk/ /bæɡ/","pour":"/pɔː/","popcorn":"/ˈpɒp.kɔː(ɹ)n/","radio":"/ˈɹeɪdiˌəʊ/","salad":"/ˈsæləd/","salt":"/sɔlt/","scales":"/skeɪlz/","skin":"/skɪn/","smart":"/smɑːt/","solid":"/ˈsɒlɪd/","squawk":"/skwɔːk/","steam":"/stiːm/","sugar":"/ˈʃʊɡə(ɹ)/","tea":"/tiː/","text message":"/tɛkst/ /ˈmɛsɪdʒ/","travel":"/ˈtɹævəl/","truck":"/tɹʌk/","vegetables":"/ˈvɛd͡ʒtəbəlz/","wings":"/wɪŋz/","worm":"/wɜːm/","arm":"/ɑːm/","arrive":"/əˈɹaɪv/","ask":"/ˈask/","baker":"/ˈbeɪ.kə(ɹ)/","bathtub":"/ˈbæθtʊb/","bored":"/bɔːd/","cafeteria":"/ˌkæfɪˈtɪəriə/","camera":"/ˈkæməɹə/","cell phone":"/sɛl/ /foʊn/","check":"/t͡ʃɛk/","classroom":"/ˈklɑːsɹʊm/","clean up":"/kliːn/ /ʌp/","clerk":"/klɐːk/","clock":"/klɒk/","column":"/ˈkɑljəm/","computer":"/kəmˈpjuːtə/","cook":"/kuːk/","couch":"/kaʊtʃ/","crossing guard":"/ˈkɹɑsɪŋ/ /ɡɑːd/","crosswalk":"/ˈkrɔːswɔːk/","crowded":"/ˈkɹaʊdɪd/","dig up":"/dɪɡ/ /ap/","dirty":"/ˈdɜːti/","double-digit number":"/ˈdʌb.əl/ /ˈdɪdʒɪt/ /ˈnʌmbə/","enter":"/ˈɛntə(ɹ)/","foot":"[fʊt̚]","full":"/fʊl/","grab":"/ɡɹæb/","greedy":"/ˈɡɹiːdi/","hand":"/hænd/","headphones":"/ˈhedfəʊn/","hide":"/haɪd/","hungry":"/ˈhʌŋ.ɡɹi/","invite":"/ɪnˈvaɪt/","jar":"/dʒɐː/","kitchen":"/ˈkɪt͡ʃən/","knee":"/niː/","knock":"/nɒk/","laptop":"/ˈlæp.tɒp/","left":"/lɛft/","let go":"/lɛt/ /ɡəʉ/","librarian":"/laɪˈbɹɛɹ.i.ən/","lifeguard":"/ˈlaɪfɡɑːrd/","litter":"/ˈlɪtə(ɹ)/","living room":"/ˈlɪvɪŋ/ /ɹuːm/","minus sign":"/ˈmaɪnəs/ /saɪn/","nose":"/nəʊz/","pass":"[pʰäːs]","polite":"/pəˈlaɪt/","poor":"/poː/","principal":"/ˈpɹɪnsəpəl/","put away":"/pʊt/ /əˈweɪ/","row":"/ˈɹəʊ/","rude":"/ɹʉːd/","share":"/ʃɛə/","sick":"/sɪk/","sink":"/sɪŋk/","steal":"/stiːl/","subtraction":"/səbˈtɹækʃən/","swimming pool":"/ˈswɪmɪŋ/ /puːl/","tablet":"/ˈtæblət/","take away":"/teɪk/ /əˈweɪ/","take turns":"/teɪk/ /tɜːrnz/","test score":"/tɛst/ /skɔːr/","thirsty":"/ˈθɜː(ɹ)st.i/","thoughtful":"/ˈθɔːtfəl/","tired":"/taɪəd/","traffic lights":"/ˈtræfɪk/ /laɪts/","visit":"/ˈvɪzɪt/","wash":"/wɑʃ/","arctic tundra":"/ˈɑːrktɪk/ /ˈtʌndrə/","earth":"/ɜːθ/","moon":"/muːn/","sun":"/sʌn/","internet":"/ˈɪntəˌnɛt/"};
 
         function renderIPA(txt, el, ipa) {
             txt.innerHTML = ipa.replace(/ə/g, '<span style="color:#f97316;font-weight:bold">ə</span>');
             el.classList.remove('hidden');
         }
 
-        async function showIPA(word) {
-            ipaCurrentWord = word;
+        function showIPA(word) {
             const meta = getWordMeta(word);
             const el   = document.getElementById('ipa-display');
             const txt  = document.getElementById('ipa-text');
             if (!el || !txt) return;
-
-            // 1. Usar WORD_META si existe
-            if (meta && meta.p) { renderIPA(txt, el, meta.p); return; }
-
-            // 2. Usar caché en memoria
             const key = word.toLowerCase();
-            if (ipaCache[key]) { renderIPA(txt, el, ipaCache[key]); return; }
-            if (ipaCache[key] === null) { el.classList.add('hidden'); return; }
-
-            // 3. Consultar Dictionary API (solo primera palabra para frases)
-            const lookup = key.split(' ')[0].replace(/[^a-z]/g, '');
-            try {
-                const res  = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(lookup)}`);
-                if (!res.ok) throw new Error('not found');
-                const data = await res.json();
-                const ipa  = data[0]?.phonetics?.find(p => p.text)?.text
-                          || data[0]?.phonetic
-                          || null;
-                ipaCache[key] = ipa || null;
-                // Solo mostrar si la palabra sigue siendo la actual
-                if (ipaCurrentWord !== word) return;
-                if (ipa) { renderIPA(txt, el, ipa); } else { el.classList.add('hidden'); }
-            } catch(e) {
-                ipaCache[key] = null;
-                if (ipaCurrentWord === word) el.classList.add('hidden');
-            }
+            const ipa  = (meta && meta.p) ? meta.p : (IPA_DATA[key] || null);
+            if (ipa) { renderIPA(txt, el, ipa); } else { el.classList.add('hidden'); }
         }
-
         function showEtymology(word) {
             const meta = getWordMeta(word);
             if (!meta) return;
