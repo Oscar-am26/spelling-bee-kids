@@ -640,40 +640,13 @@
                         oninput="document.getElementById('speed-label').innerText = this.value + 'x'">
                 </div>
 
-                <!-- Voz -->
-                <div>
-                    <label class="block font-bold text-slate-600 mb-2">Voz del Sensei</label>
-                    <div class="relative mb-2">
-                        <select id="tts-voice-select"
-                            class="w-full p-3 bg-slate-50 border-2 border-slate-200 rounded-xl appearance-none font-medium text-slate-600 focus:border-yellow-400 focus:outline-none"
-                            onchange="onTTSVoiceChange()">
-                            <optgroup label="⚡ ElevenLabs (con internet)">
-                                <option value="el:XB0fDUnXU5powFXDhCwa">Charlotte — femenina, elegante</option>
-                                <option value="el:21m00Tcm4TlvDq8ikWAM">Rachel — femenina, amigable</option>
-                                <option value="el:EXAVITQu4vr4xnSDxMaL">Sarah — femenina, suave</option>
-                                <option value="el:XrExE9yKIg1WjnnlVkGX" selected>Matilda — femenina, cálida</option>
-                                <option value="el:9BWtsMINqrJLrRacOk9x">Aria — femenina, expresiva</option>
-                                <option value="el:onwK4e9ZLuTAKqWW03F9">Daniel — masculino, claro</option>
-                            </optgroup>
-                            <optgroup id="browser-voices-group" label="🌐 Voces del Navegador (sin internet)">
-                            </optgroup>
-                        </select>
-                        <i class="fas fa-chevron-down absolute right-4 top-4 text-slate-400 pointer-events-none"></i>
-                    </div>
-                    <p id="tts-engine-label" class="text-xs text-yellow-600 font-semibold">
-                        <i class="fas fa-bolt"></i> Usando ElevenLabs — requiere internet.
-                    </p>
-                    <p class="text-xs text-slate-400 mt-1">⚠️ Las voces ElevenLabs requieren plan de pago. Si no suenan, selecciona una voz del Navegador abajo.</p>
-                </div>
+
             </div>
 
-            <div class="flex gap-3 mt-8">
+            <div class="mt-8">
                 <button onclick="toggleSettings()"
                     class="flex-1 bg-slate-200 text-slate-600 font-bold py-3 rounded-xl hover:bg-slate-300 transition-colors">Cerrar</button>
-                <button onclick="previewVoice()"
-                    class="flex-1 bg-blue-100 text-blue-600 font-bold py-3 rounded-xl hover:bg-blue-200 transition-colors">
-                    <i class="fas fa-volume-up"></i> Probar
-                </button>
+
             </div>
         </div>
     </div>
