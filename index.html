@@ -1831,15 +1831,14 @@
 
             const word = state.playlist[state.currentIndex].w;
 
-            // Full letter names so ElevenLabs pronounces each letter clearly
             const PHONETICS = {
-                A:'the letter A', B:'the letter B', C:'the letter C', D:'the letter D',
-                E:'the letter E', F:'the letter F', G:'the letter G', H:'the letter H',
-                I:'the letter I', J:'the letter J', K:'the letter K', L:'the letter L',
-                M:'the letter M', N:'the letter N', O:'the letter O', P:'the letter P',
-                Q:'the letter Q', R:'the letter R', S:'the letter S', T:'the letter T',
-                U:'the letter U', V:'the letter V', W:'the letter W', X:'the letter X',
-                Y:'the letter Y', Z:'the letter Z',
+                A:'A', B:'B', C:'C', D:'D',
+                E:'E', F:'F', G:'G', H:'H',
+                I:'I', J:'J', K:'K', L:'L',
+                M:'M', N:'N', O:'O', P:'P',
+                Q:'Q', R:'R', S:'S', T:'T',
+                U:'U', V:'V', W:'W', X:'X',
+                Y:'Y', Z:'Z',
                 ' ':'space', '-':'hyphen', "'":"apostrophe", '.':'dot'
             };
             const letters = word.split('').map(char => {
