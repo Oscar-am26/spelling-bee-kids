@@ -1826,11 +1826,11 @@
 
             const PHONETICS = {
                 A:'ay', B:'bee', C:'see', D:'dee',
-                E:'ee', F:'ef', G:'gee', H:'aitch',
-                I:'eye', J:'jay', K:'kay', L:'el',
-                M:'em', N:'en', O:'oh', P:'pee',
-                Q:'cue', R:'ar', S:'es', T:'tee',
-                U:'you', V:'vee', W:'double-u', X:'ex',
+                E:'ee', F:'eff', G:'gee', H:'aitch',
+                I:'eye', J:'jay', K:'kay', L:'ell',
+                M:'emm', N:'enn', O:'oh', P:'pee',
+                Q:'cue', R:'arr', S:'ess', T:'tee',
+                U:'you', V:'vee', W:'double you', X:'ecks',
                 Y:'why', Z:'zee',
                 ' ':'space', '-':'hyphen', "'":"apostrophe", '.':'dot'
             };
@@ -1841,7 +1841,9 @@
 
             for (const letter of letters) {
                 if (spellingSession !== mySession) return; // otro click canceló este loop
-                await speak(letter);
+                // Usar siempre el TTS del navegador para el deletreo:
+                // ElevenLabs agrega "the letter" para textos cortos de letras.
+                await speakFallback(letter);
                 if (spellingSession !== mySession) return;
                 await new Promise(r => setTimeout(r, 350));
             }
