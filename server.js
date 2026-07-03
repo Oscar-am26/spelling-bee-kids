@@ -20,6 +20,14 @@ if (require.main === module) {
   } catch (_) {}
 }
 
+// Debug temporal
+app.get('/api/debug', (req, res) => {
+  const fs = require('fs');
+  let files = [];
+  try { files = fs.readdirSync(__dirname).slice(0, 30); } catch (e) { files = [e.message]; }
+  res.json({ __dirname, url: req.url, originalUrl: req.originalUrl, files });
+});
+
 // Servir archivos estáticos desde la raíz del proyecto
 app.use(express.static(__dirname, {
   index: 'index.html',
