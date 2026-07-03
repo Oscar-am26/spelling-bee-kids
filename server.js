@@ -20,6 +20,18 @@ if (require.main === module) {
   } catch (_) {}
 }
 
+// ── Debug temporal ───────────────────────────────────────────────────────
+app.get('/api/debug2', (req, res) => {
+  const exists = (f) => { try { fs.accessSync(path.join(__dirname, f)); return true; } catch { return false; } };
+  res.json({
+    path: req.path, url: req.url, originalUrl: req.originalUrl,
+    __dirname,
+    indexExists: exists('index.html'),
+    dbExists: exists('db.json'),
+    testRead: (() => { try { const b = fs.readFileSync(path.join(__dirname, 'db.json')); return b.length; } catch(e) { return e.message; } })()
+  });
+});
+
 // ── POST /api/verify ──────────────────────────────────────────────────────
 app.post('/api/verify', (req, res) => {
   const { code } = req.body || {};
