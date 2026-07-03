@@ -103,9 +103,34 @@ function handleTTSProxy(req, res, voiceId) {
   });
 }
 
+// ── Verificar código de acceso ─────────────────────────────────────────────
+function handleVerify(req, res) {
+  let body = '';
+  req.on('data', chunk => { body += chunk; });
+  req.on('end', () => {
+    try {
+      const { code } = JSON.parse(body);
+      const valid = process.env.ACCESS_CODE;
+      if (!valid) { res.writeHead(500, { 'Content-Type': 'application/json' }); res.end(JSON.stringify({ ok: false, error: 'ACCESS_CODE no configurado' })); return; }
+      if (!code || code.trim().toUpperCase() !== valid.trim().toUpperCase()) {
+        res.writeHead(401, { 'Content-Type': 'application/json' }); res.end(JSON.stringify({ ok: false })); return;
+      }
+      res.writeHead(200, { 'Content-Type': 'application/json' }); res.end(JSON.stringify({ ok: true }));
+    } catch (e) {
+      res.writeHead(400, { 'Content-Type': 'application/json' }); res.end(JSON.stringify({ ok: false }));
+    }
+  });
+}
+
 // ── Servidor principal ─────────────────────────────────────────────────────
 http.createServer((req, res) => {
   let urlPath = req.url.split('?')[0];
+
+  // Verificación de código de acceso: POST /api/verify
+  if (req.method === 'POST' && urlPath === '/api/verify') {
+    handleVerify(req, res);
+    return;
+  }
 
   // Endpoint proxy TTS: POST /api/tts/<voiceId>
   if (req.method === 'POST' && urlPath.startsWith('/api/tts/')) {
@@ -130,5 +155,7 @@ http.createServer((req, res) => {
 }).listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
   console.log(`Proxy TTS: POST /api/tts/<voiceId>`);
+  console.log(`Verify: POST /api/verify`);
   console.log(`API key cargada: ${ELEVENLABS_API_KEY ? 'SÍ ✓' : 'NO ✗ — revisa .env'}`);
+  console.log(`Access code: ${process.env.ACCESS_CODE ? 'SÍ ✓' : 'NO ✗ — revisa .env'}`);
 });

@@ -1,8 +1,5 @@
 {
-  "buildCommand": null,
-  "outputDirectory": ".",
   "rewrites": [
-    { "source": "/api/tts/:voiceId", "destination": "/api/tts/[voiceId]" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
 }
