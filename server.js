@@ -1,5 +1,6 @@
 const express = require('express');
 const https   = require('https');
+const fs      = require('fs');
 const path    = require('path');
 
 const app = express();
@@ -8,7 +9,6 @@ app.use(express.json());
 // Cargar .env en desarrollo local
 if (require.main === module) {
   try {
-    const fs   = require('fs');
     const lines = fs.readFileSync(path.join(__dirname, '.env'), 'utf8').split('\n');
     for (const line of lines) {
       const t = line.trim();
@@ -20,29 +20,20 @@ if (require.main === module) {
   } catch (_) {}
 }
 
-// Servir archivos estáticos desde la raíz del proyecto
-app.use(express.static(__dirname, {
-  index: 'index.html',
-  setHeaders: (res, filePath) => {
-    if (filePath.endsWith('.json')) res.setHeader('Cache-Control', 'no-cache');
-  }
-}));
-
-// POST /api/verify — validar código de acceso
+// ── POST /api/verify ──────────────────────────────────────────────────────
 app.post('/api/verify', (req, res) => {
   const { code } = req.body || {};
   const valid = process.env.ACCESS_CODE;
-  if (!valid)  return res.status(500).json({ ok: false, error: 'ACCESS_CODE no configurado' });
+  if (!valid)  return res.status(500).json({ ok: false });
   if (!code || code.trim().toUpperCase() !== valid.trim().toUpperCase())
     return res.status(401).json({ ok: false });
   res.json({ ok: true });
 });
 
-// POST /api/tts/:voiceId — proxy a ElevenLabs
+// ── POST /api/tts/:voiceId ────────────────────────────────────────────────
 app.post('/api/tts/:voiceId', (req, res) => {
   const API_KEY = process.env.ELEVENLABS_API_KEY;
   if (!API_KEY) return res.status(503).json({ error: 'TTS no configurado' });
-
   const body = JSON.stringify(req.body);
   const options = {
     hostname: 'api.elevenlabs.io',
@@ -65,7 +56,45 @@ app.post('/api/tts/:voiceId', (req, res) => {
   upstream.end();
 });
 
-// Arranque local
+// ── Archivos estáticos (handler manual — express.static no funciona en Vercel serverless) ──
+const MIME = {
+  '.html': 'text/html; charset=utf-8',
+  '.js':   'text/javascript',
+  '.css':  'text/css',
+  '.json': 'application/json',
+  '.png':  'image/png',
+  '.jpg':  'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.gif':  'image/gif',
+  '.svg':  'image/svg+xml',
+  '.ico':  'image/x-icon',
+  '.mp3':  'audio/mpeg',
+  '.wav':  'audio/wav',
+  '.webp': 'image/webp',
+  '.woff': 'font/woff',
+  '.woff2':'font/woff2',
+};
+
+app.get('*', (req, res) => {
+  // Normalizar: / → index.html
+  let urlPath = req.path === '/' ? '/index.html' : req.path;
+
+  // Seguridad: evitar path traversal
+  const filePath = path.resolve(__dirname, '.' + urlPath);
+  if (!filePath.startsWith(__dirname)) {
+    return res.status(403).end('Forbidden');
+  }
+
+  fs.readFile(filePath, (err, data) => {
+    if (err) return res.status(404).end('Not found');
+    const ext = path.extname(filePath).toLowerCase();
+    res.setHeader('Content-Type', MIME[ext] || 'application/octet-stream');
+    if (ext === '.json') res.setHeader('Cache-Control', 'no-cache');
+    res.end(data);
+  });
+});
+
+// ── Arranque local ────────────────────────────────────────────────────────
 if (require.main === module) {
   const PORT = process.env.PORT || 8000;
   app.listen(PORT, () => console.log(`http://localhost:${PORT}`));
