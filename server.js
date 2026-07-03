@@ -22,14 +22,14 @@ if (require.main === module) {
 
 // ── Debug temporal ───────────────────────────────────────────────────────
 app.get('/api/debug2', (req, res) => {
-  const size = (f) => { try { return fs.statSync(path.join(__dirname, f)).size; } catch { return null; } };
-  let files = [];
-  try { files = fs.readdirSync(__dirname); } catch(e) { files = [e.message]; }
+  const readTest = (f) => { try { return fs.readFileSync(path.join(__dirname, f)).length; } catch(e) { return e.message + ' [' + e.code + ']'; } };
   res.json({
-    __dirname, files,
-    indexSize: size('index.html'),
-    dbSize: size('db.json'),
-    assetsDir: (() => { try { return fs.readdirSync(path.join(__dirname, 'assets')).length + ' files'; } catch(e) { return e.message; } })()
+    __dirname,
+    indexRead: readTest('index.html'),
+    dbRead: readTest('db.json'),
+    manifestRead: readTest('manifest.json'),
+    catchAllPath: req.path,
+    catchAllUrl: req.url,
   });
 });
 
