@@ -1,161 +1,74 @@
-const http  = require('http');
-const https = require('https');
-const fs    = require('fs');
-const path  = require('path');
+const express = require('express');
+const https   = require('https');
+const path    = require('path');
 
-// ── Leer .env manualmente (sin dependencias externas) ──────────────────────
-function loadEnv() {
+const app = express();
+app.use(express.json());
+
+// Cargar .env en desarrollo local
+if (require.main === module) {
   try {
+    const fs   = require('fs');
     const lines = fs.readFileSync(path.join(__dirname, '.env'), 'utf8').split('\n');
     for (const line of lines) {
-      const trimmed = line.trim();
-      if (!trimmed || trimmed.startsWith('#')) continue;
-      const eqIdx = trimmed.indexOf('=');
-      if (eqIdx === -1) continue;
-      const key = trimmed.slice(0, eqIdx).trim();
-      const val = trimmed.slice(eqIdx + 1).trim();
-      if (key && val) process.env[key] = val;
+      const t = line.trim();
+      if (!t || t.startsWith('#')) continue;
+      const eq = t.indexOf('=');
+      if (eq === -1) continue;
+      process.env[t.slice(0, eq).trim()] = t.slice(eq + 1).trim();
     }
-  } catch (e) {
-    console.warn('Advertencia: no se encontró el archivo .env');
-  }
-}
-loadEnv();
-
-const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY || '';
-if (!ELEVENLABS_API_KEY) {
-  console.error('ERROR: ELEVENLABS_API_KEY no está definida en .env');
+  } catch (_) {}
 }
 
-const PORT = 8000;
-const ROOT = __dirname;
-
-const MIME = {
-  '.html': 'text/html',
-  '.js':   'text/javascript',
-  '.css':  'text/css',
-  '.json': 'application/json',
-  '.png':  'image/png',
-  '.jpg':  'image/jpeg',
-  '.gif':  'image/gif',
-  '.svg':  'image/svg+xml',
-  '.ico':  'image/x-icon',
-  '.mp3':  'audio/mpeg',
-  '.wav':  'audio/wav',
-};
-
-// ── Rate limiting básico por IP ────────────────────────────────────────────
-const rateLimitMap = new Map(); // ip → { count, resetAt }
-const RATE_LIMIT   = 60;        // máx peticiones TTS por ventana
-const RATE_WINDOW  = 60_000;    // ventana de 1 minuto (ms)
-
-function isRateLimited(ip) {
-  const now  = Date.now();
-  const entry = rateLimitMap.get(ip);
-  if (!entry || now > entry.resetAt) {
-    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_WINDOW });
-    return false;
+// Servir archivos estáticos desde la raíz del proyecto
+app.use(express.static(__dirname, {
+  index: 'index.html',
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.json')) res.setHeader('Cache-Control', 'no-cache');
   }
-  entry.count++;
-  return entry.count > RATE_LIMIT;
-}
+}));
 
-// ── Proxy hacia ElevenLabs ─────────────────────────────────────────────────
-function handleTTSProxy(req, res, voiceId) {
-  const clientIp = req.socket.remoteAddress;
-
-  if (isRateLimited(clientIp)) {
-    res.writeHead(429, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ error: 'Demasiadas peticiones. Espera un momento.' }));
-    return;
-  }
-
-  let body = '';
-  req.on('data', chunk => { body += chunk; });
-  req.on('end', () => {
-    const options = {
-      hostname: 'api.elevenlabs.io',
-      path:     `/v1/text-to-speech/${voiceId}`,
-      method:   'POST',
-      headers:  {
-        'xi-api-key':   ELEVENLABS_API_KEY,   // ← la key NUNCA sale del servidor
-        'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(body),
-      },
-    };
-
-    const upstream = https.request(options, (upRes) => {
-      res.writeHead(upRes.statusCode, {
-        'Content-Type':  upRes.headers['content-type'] || 'audio/mpeg',
-        'Cache-Control': 'no-store',
-      });
-      upRes.pipe(res);
-    });
-
-    upstream.on('error', (err) => {
-      console.error('Error proxy ElevenLabs:', err.message);
-      res.writeHead(502, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ error: 'No se pudo conectar con ElevenLabs' }));
-    });
-
-    upstream.write(body);
-    upstream.end();
-  });
-}
-
-// ── Verificar código de acceso ─────────────────────────────────────────────
-function handleVerify(req, res) {
-  let body = '';
-  req.on('data', chunk => { body += chunk; });
-  req.on('end', () => {
-    try {
-      const { code } = JSON.parse(body);
-      const valid = process.env.ACCESS_CODE;
-      if (!valid) { res.writeHead(500, { 'Content-Type': 'application/json' }); res.end(JSON.stringify({ ok: false, error: 'ACCESS_CODE no configurado' })); return; }
-      if (!code || code.trim().toUpperCase() !== valid.trim().toUpperCase()) {
-        res.writeHead(401, { 'Content-Type': 'application/json' }); res.end(JSON.stringify({ ok: false })); return;
-      }
-      res.writeHead(200, { 'Content-Type': 'application/json' }); res.end(JSON.stringify({ ok: true }));
-    } catch (e) {
-      res.writeHead(400, { 'Content-Type': 'application/json' }); res.end(JSON.stringify({ ok: false }));
-    }
-  });
-}
-
-// ── Servidor principal ─────────────────────────────────────────────────────
-http.createServer((req, res) => {
-  let urlPath = req.url.split('?')[0];
-
-  // Verificación de código de acceso: POST /api/verify
-  if (req.method === 'POST' && urlPath === '/api/verify') {
-    handleVerify(req, res);
-    return;
-  }
-
-  // Endpoint proxy TTS: POST /api/tts/<voiceId>
-  if (req.method === 'POST' && urlPath.startsWith('/api/tts/')) {
-    const voiceId = urlPath.slice('/api/tts/'.length);
-    if (!voiceId) { res.writeHead(400); res.end('Voice ID requerido'); return; }
-    handleTTSProxy(req, res, voiceId);
-    return;
-  }
-
-  // Archivos estáticos
-  if (urlPath === '/') urlPath = '/index.html';
-  const filePath    = path.join(ROOT, urlPath);
-  const ext         = path.extname(filePath);
-  const contentType = MIME[ext] || 'application/octet-stream';
-
-  fs.readFile(filePath, (err, data) => {
-    if (err) { res.writeHead(404); res.end('Not found'); return; }
-    res.writeHead(200, { 'Content-Type': contentType });
-    res.end(data);
-  });
-
-}).listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
-  console.log(`Proxy TTS: POST /api/tts/<voiceId>`);
-  console.log(`Verify: POST /api/verify`);
-  console.log(`API key cargada: ${ELEVENLABS_API_KEY ? 'SÍ ✓' : 'NO ✗ — revisa .env'}`);
-  console.log(`Access code: ${process.env.ACCESS_CODE ? 'SÍ ✓' : 'NO ✗ — revisa .env'}`);
+// POST /api/verify — validar código de acceso
+app.post('/api/verify', (req, res) => {
+  const { code } = req.body || {};
+  const valid = process.env.ACCESS_CODE;
+  if (!valid)  return res.status(500).json({ ok: false, error: 'ACCESS_CODE no configurado' });
+  if (!code || code.trim().toUpperCase() !== valid.trim().toUpperCase())
+    return res.status(401).json({ ok: false });
+  res.json({ ok: true });
 });
+
+// POST /api/tts/:voiceId — proxy a ElevenLabs
+app.post('/api/tts/:voiceId', (req, res) => {
+  const API_KEY = process.env.ELEVENLABS_API_KEY;
+  if (!API_KEY) return res.status(503).json({ error: 'TTS no configurado' });
+
+  const body = JSON.stringify(req.body);
+  const options = {
+    hostname: 'api.elevenlabs.io',
+    path: `/v1/text-to-speech/${req.params.voiceId}`,
+    method: 'POST',
+    headers: {
+      'xi-api-key':     API_KEY,
+      'Content-Type':   'application/json',
+      'Content-Length': Buffer.byteLength(body),
+    },
+  };
+  const upstream = https.request(options, (upRes) => {
+    res.setHeader('Content-Type', upRes.headers['content-type'] || 'audio/mpeg');
+    res.setHeader('Cache-Control', 'no-store');
+    res.status(upRes.statusCode);
+    upRes.pipe(res);
+  });
+  upstream.on('error', () => res.status(502).json({ error: 'Error TTS' }));
+  upstream.write(body);
+  upstream.end();
+});
+
+// Arranque local
+if (require.main === module) {
+  const PORT = process.env.PORT || 8000;
+  app.listen(PORT, () => console.log(`http://localhost:${PORT}`));
+}
+
+module.exports = app;
